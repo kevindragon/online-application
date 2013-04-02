@@ -1,0 +1,47 @@
+
+.top-buffer {
+    margin-top:20px;
+}
+
+.well-white {
+    background-color:#ffffff;
+}
+
+.top-banner {
+    background:url(/static/images/top_bg.jpg) center top repeat-x;
+    height:109px;
+}
+.top-banner .logo {
+    width:1000px;
+    margin:0px auto;
+}
+
+.navbar navbar-full-width {
+    -webkit-border-radius: 0; 
+    -moz-border-radius: 0; 
+    border-radius: 0;
+}
+.navbar .navbar-container {
+    width:940px;
+}
+
+.form-fields {
+     margin-left:-30px;
+     position:relative;
+}
+.form-fields .avatar {
+     position:absolute;
+     right:0px;
+     top:5px;
+     width:100px;
+}
+
+.applysuccess {
+     position:relative;
+}
+.applysuccess .avatar {
+     position:absolute;
+     right:0px;
+     top:5px;
+     width:100px;
+}

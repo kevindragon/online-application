@@ -1,0 +1,64 @@
+{% extends "layout.htm" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="/static/bootstrap/bootstrap-fileupload.min.css" type="text/css" />
+{% end %}
+
+{% block body %}
+{% include "header.htm" %}
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white ">
+      <h4>您的申请信息：</h4>
+      <div class="applysuccess">
+        {% if data %}
+        <div class="row-fluid top-buffer">
+          <div class="span3 text-right">姓名</div>
+          <div class="span8 offset1">{{data["name"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">性别</div>
+          <div class="span8 offset1">{{data["gender"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">身份证</div>
+          <div class="span8 offset1">{{data["id_number"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">毕业院校</div>
+          <div class="span8 offset1">{{data["university"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">专业</div>
+          <div class="span8 offset1">{{data["major"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">电子邮件</div>
+          <div class="span8 offset1">{{data["email"]}}</div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 text-right">联系电话</div>
+          <div class="span8 offset1">{{data["phone"]}}</div>
+        </div>
+        <!-- 照片 -->
+        <div class="avatar">
+          <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail">
+              <img src="/{{data["avatar"]}}" width="90" />
+            </div>
+          </div>
+        </div>
+        <div class="row-fluid top-buffer">
+          <div class="span2 offset4">
+            <input type="button" name="" value="打印" class="btn btn-large btn-primary" />
+          </div>
+        </div>
+        {% end %}
+      </div>
+    </div>
+    <div class="span3 well well-white">
+      <p>硕士研究生在线报名说明:</p>
+    </div>
+  </div>
+</div>
+{% end %}

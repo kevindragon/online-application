@@ -1,0 +1,157 @@
+{% extends "layout.htm" %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="/static/bootstrap/bootstrap-fileupload.min.css" type="text/css" />
+{% end %}
+
+{% block body %}
+{% include "header.htm" %}
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white">
+      <form action="/postinfo" class="form-horizontal" method="post" enctype="multipart/form-data" id="apply">
+        {% raw xsrf_form_html() %}
+        <fieldset>
+          <legend>硕士研究生报名表填写</legend>
+        </fieldset>
+        <div class="form-fields">
+          <!-- 姓名 -->
+          <div class="control-group cg-name">
+            <label class="control-label" for="name">姓名</label>
+            <div class="controls">
+              <input type="text" name="name" id="name" placeholder="姓名" />
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div class="control-group cg-gender">
+            <label class="control-label" for="gender">性别</label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" />
+                男
+              </label>
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" />
+                女
+              </label>
+            </div>
+          </div>
+          <!-- 身份证 -->
+          <div class="control-group cg-id_number">
+            <label class="control-label" for="id_number">身份证</label>
+            <div class="controls">
+              <input type="text" name="id_number" id="id_number" placeholder="身份证" />
+            </div>
+          </div>
+          <!-- 毕业院校 -->
+          <div class="control-group cg-university">
+            <label class="control-label" for="university">毕业院校</label>
+            <div class="controls">
+              <input type="text" name="university" id="university" placeholder="毕业院校" />
+            </div>
+          </div>
+          <!-- 专业 -->
+          <div class="control-group cg-major">
+            <label class="control-label" for="major">专业</label>
+            <div class="controls">
+              <input type="text" name="major" id="major" placeholder="专业" />
+            </div>
+          </div>
+          <!-- 电子邮件 -->
+          <div class="control-group cg-email">
+            <label class="control-label" for="email">电子邮件</label>
+            <div class="controls">
+              <input type="text" name="email" id="email" placeholder="电子邮件" />
+            </div>
+          </div>
+          <!-- 联系方式 -->
+          <div class="control-group cg-phone">
+            <label class="control-label" for="phone">联系电话</label>
+            <div class="controls">
+              <input type="text" name="phone" id="phone" placeholder="联系电话" />
+            </div>
+          </div>
+          <!-- 照片 -->
+          <div class="avatar">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="fileupload-new thumbnail">
+                <img src="/static/images/blank_avatar.jpg" width="90" />
+              </div>
+              <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+              <div>
+                <span class="btn btn-file cg-avatar">
+                  <span class="fileupload-new">选择照片</span>
+                  <span class="fileupload-exists">更换照片</span>
+                  <input type="file" name="avatar" id="avatar" />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-large btn-primary">提交报名信息</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="span3 well well-white">
+      <p>硕士研究生在线报名说明:</p>
+    </div>
+  </div>
+</div>
+{% end %}
+
+{% block jsblock %}
+<script src="/static/bootstrap/bootstrap-fileupload.min.js"></script>
+<script type="text/javascript">
+$(function(){
+$("form#apply input[type=text]").keydown(function(){
+    var ename = $(this).prop("name");
+    var e = $("div.cg-"+ename);
+    if (e.hasClass("error")) {
+        e.removeClass("error");
+    }
+});
+/* 验证输入框是否为空 */
+function validateInputEmpty(selector) {
+    var e = $("input#"+selector);
+    if (!$.trim(e.val())) {
+        $("div.cg-"+e.prop("name")).addClass("error");
+        $("input#"+e.prop("name")).focus();
+        return false;
+    }
+    return true;
+}
+$("input#gender").click(function(){
+    $("div.cg-gender").removeClass("error");
+});
+$("form#apply").submit(function(){
+    var elementsValidateEmpty = [
+        "name", "id_number", "university", "major", "email", "phone"
+    ];
+    for (var e in elementsValidateEmpty) {
+        if (!validateInputEmpty(elementsValidateEmpty[e])) {
+            return false;
+        }
+    }
+    // 验证性别是否选择
+    if (!$("input#gender:checked").val()) {
+        $("div.cg-gender").addClass("error");
+        return false;
+    }
+    // 验证身份证是否正确
+    var idNumber = $("input#id_number").val();
+    if (!/\d{17}[X\d]/.test(idNumber)) {
+        $("div.cg-id_number").addClass("error");
+        return false;
+    }
+    // 验证照片
+    if (""==$("input#avatar").val()) {
+        $(".cg-avatar").addClass("btn-danger");
+        return false;
+    }
+});
+});
+</script>
+{% end %}
