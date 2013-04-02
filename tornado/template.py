@@ -79,9 +79,10 @@ We provide the functions escape(), url_escape(), json_encode(), and squeeze()
 to all templates by default.
 
 Typical applications do not create `Template` or `Loader` instances by
-hand, but instead use the `render` and `render_string` methods of
+hand, but instead use the `~.RequestHandler.render` and
+`~.RequestHandler.render_string` methods of
 `tornado.web.RequestHandler`, which load templates automatically based
-on the ``template_path`` `Application` setting.
+on the ``template_path`` `.Application` setting.
 
 Syntax Reference
 ----------------
@@ -109,7 +110,7 @@ with ``{# ... #}``.
 ``{% autoescape *function* %}``
     Sets the autoescape mode for the current file.  This does not affect
     other files, even those referenced by ``{% include %}``.  Note that
-    autoescaping can also be configured globally, at the `Application`
+    autoescaping can also be configured globally, at the `.Application`
     or `Loader`.::
 
         {% autoescape xhtml_escape %}
@@ -179,19 +180,23 @@ with ``{# ... #}``.
     ``{% continue %}`` may be used inside the loop.
 """
 
-from __future__ import absolute_import, division, with_statement
+from __future__ import absolute_import, division, print_function, with_statement
 
-import cStringIO
 import datetime
 import linecache
-import logging
 import os.path
 import posixpath
 import re
 import threading
 
 from tornado import escape
-from tornado.util import bytes_type, ObjectDict
+from tornado.log import app_log
+from tornado.util import bytes_type, ObjectDict, exec_in, unicode_type
+
+try:
+    from cStringIO import StringIO  # py2
+except ImportError:
+    from io import StringIO  # py3
 
 _DEFAULT_AUTOESCAPE = "xhtml_escape"
 _UNSET = object()
@@ -203,6 +208,9 @@ class Template(object):
     We compile into Python from the given template_string. You can generate
     the template from variables with generate().
     """
+    # note that the constructor's signature is not extracted with
+    # autodoc because _UNSET looks like garbage.  When changing
+    # this signature update website/sphinx/template.rst too.
     def __init__(self, template_string, name="<string>", loader=None,
                  compress_whitespace=None, autoescape=_UNSET):
         self.name = name
@@ -223,13 +231,15 @@ class Template(object):
         try:
             # Under python2.5, the fake filename used here must match
             # the module name used in __name__ below.
+            # The dont_inherit flag prevents template.py's future imports
+            # from being applied to the generated code.
             self.compiled = compile(
                 escape.to_unicode(self.code),
                 "%s.generated.py" % self.name.replace('.', '_'),
-                "exec")
+                "exec", dont_inherit=True)
         except Exception:
             formatted_code = _format_code(self.code).rstrip()
-            logging.error("%s code:\n%s", self.name, formatted_code)
+            app_log.error("%s code:\n%s", self.name, formatted_code)
             raise
 
     def generate(self, **kwargs):
@@ -243,7 +253,7 @@ class Template(object):
             "linkify": escape.linkify,
             "datetime": datetime,
             "_utf8": escape.utf8,  # for internal use
-            "_string_types": (unicode, bytes_type),
+            "_string_types": (unicode_type, bytes_type),
             # __name__ and __loader__ allow the traceback mechanism to find
             # the generated source code.
             "__name__": self.name.replace('.', '_'),
@@ -251,21 +261,16 @@ class Template(object):
         }
         namespace.update(self.namespace)
         namespace.update(kwargs)
-        exec self.compiled in namespace
+        exec_in(self.compiled, namespace)
         execute = namespace["_execute"]
         # Clear the traceback module's cache of source data now that
         # we've generated a new template (mainly for this module's
         # unittests, where different tests reuse the same name).
         linecache.clearcache()
-        try:
-            return execute()
-        except Exception:
-            formatted_code = _format_code(self.code).rstrip()
-            logging.error("%s code:\n%s", self.name, formatted_code)
-            raise
+        return execute()
 
     def _generate_python(self, loader, compress_whitespace):
-        buffer = cStringIO.StringIO()
+        buffer = StringIO()
         try:
             # named_blocks maps from names to _NamedBlock objects
             named_blocks = {}
@@ -294,14 +299,14 @@ class Template(object):
 
 
 class BaseLoader(object):
-    """Base class for template loaders."""
+    """Base class for template loaders.
+
+    You must use a template loader to use template constructs like
+    ``{% extends %}`` and ``{% include %}``. The loader caches all
+    templates after they are loaded the first time.
+    """
     def __init__(self, autoescape=_DEFAULT_AUTOESCAPE, namespace=None):
-        """Creates a template loader.
-
-        root_directory may be the empty string if this loader does not
-        use the filesystem.
-
-        autoescape must be either None or a string naming a function
+        """``autoescape`` must be either None or a string naming a function
         in the template namespace, such as "xhtml_escape".
         """
         self.autoescape = autoescape
@@ -337,10 +342,6 @@ class BaseLoader(object):
 
 class Loader(BaseLoader):
     """A template loader that loads from a single root directory.
-
-    You must use a template loader to use template constructs like
-    {% extends %} and {% include %}. Loader caches all templates after
-    they are loaded the first time.
     """
     def __init__(self, root_directory, **kwargs):
         super(Loader, self).__init__(**kwargs)
@@ -348,8 +349,8 @@ class Loader(BaseLoader):
 
     def resolve_path(self, name, parent_path=None):
         if parent_path and not parent_path.startswith("<") and \
-           not parent_path.startswith("/") and \
-           not name.startswith("/"):
+            not parent_path.startswith("/") and \
+                not name.startswith("/"):
             current_path = os.path.join(self.root, parent_path)
             file_dir = os.path.dirname(os.path.abspath(current_path))
             relative_path = os.path.abspath(os.path.join(file_dir, name))
@@ -373,8 +374,8 @@ class DictLoader(BaseLoader):
 
     def resolve_path(self, name, parent_path=None):
         if parent_path and not parent_path.startswith("<") and \
-           not parent_path.startswith("/") and \
-           not name.startswith("/"):
+            not parent_path.startswith("/") and \
+                not name.startswith("/"):
             file_dir = posixpath.dirname(parent_path)
             name = posixpath.normpath(posixpath.join(file_dir, name))
         return name
@@ -484,7 +485,7 @@ class _ApplyBlock(_Node):
             writer.write_line("_append = _buffer.append", self.line)
             self.body.generate(writer)
             writer.write_line("return _utf8('').join(_buffer)", self.line)
-        writer.write_line("_append(%s(%s()))" % (
+        writer.write_line("_append(_utf8(%s(%s())))" % (
             self.method, method_name), self.line)
 
 
@@ -622,7 +623,7 @@ class _CodeWriter(object):
             ancestors = ["%s:%d" % (tmpl.name, lineno)
                          for (tmpl, lineno) in self.include_stack]
             line_comment += ' (via %s)' % ', '.join(reversed(ancestors))
-        print >> self.file, "    " * indent + line + line_comment
+        print("    " * indent + line + line_comment, file=self.file)
 
 
 class _TemplateReader(object):
@@ -710,7 +711,7 @@ def _parse(reader, template, in_block=None, in_loop=None):
             # innermost ones.  This is useful when generating languages
             # like latex where curlies are also meaningful
             if (curly + 2 < reader.remaining() and
-                reader[curly + 1] == '{' and reader[curly + 2] == '{'):
+                    reader[curly + 1] == '{' and reader[curly + 2] == '{'):
                 curly += 1
                 continue
             break
@@ -777,7 +778,7 @@ def _parse(reader, template, in_block=None, in_loop=None):
         if allowed_parents is not None:
             if not in_block:
                 raise ParseError("%s outside %s block" %
-                            (operator, allowed_parents))
+                                (operator, allowed_parents))
             if in_block not in allowed_parents:
                 raise ParseError("%s block cannot be attached to %s block" % (operator, in_block))
             body.chunks.append(_IntermediateControlBlock(contents, line))
