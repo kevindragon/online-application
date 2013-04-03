@@ -3,8 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>无标题文档</title>
-<link href="static/css/global.css" rel="stylesheet" type="text/css">
-<link href="../static/css/global.css" rel="stylesheet" type="text/css">
+<link href="/static/css/global.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -18,11 +17,11 @@
   <div class="navbar-inner navbar-full-width">
     <div class="container navbar-container">
       <ul class="nav">
-        <li{% if 1==nav %} class="active"{% end %}><a href="/">硕士研究生报名</a></li>
+        <li class="active"><a href="/">硕士研究生报名</a></li>
         <li class="divider-vertical"></li>
-        <li{% if 2==nav %} class="active"{% end %}><a href="/doctorapply">博士研究生报名</a></li>
+        <li><a href="/doctorapply">博士研究生报名</a></li>
         <li class="divider-vertical"></li>
-        <li{% if 3==nav %} class="active"{% end %}><a href="/infoquery">查询我的申请信息</a></li>
+        <li><a href="/infoquery">查询我的申请信息</a></li>
       </ul>
     </div>
   </div>
@@ -32,7 +31,6 @@
   <div class="row">
     <div class="span8 well well-white" style="_margin-left:0px;">
       <form action="/postinfo" class="form-horizontal" method="post" enctype="multipart/form-data" id="apply">
-        {% raw xsrf_form_html() %}
         <fieldset>
           <legend>硕士研究生报名表填写</legend>
         </fieldset>
@@ -49,12 +47,10 @@
             <label class="control-label" for="gender">性别</label>
             <div class="controls">
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="男" />
-                男
+                <input type="radio" name="gender" id="gender" value="男" />男
               </label>
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="男" />
-                女
+                <input type="radio" name="gender" id="gender" value="男" />女
               </label>
             </div>
           </div>
@@ -128,22 +124,21 @@
 <script type="text/javascript" src="/static/js/swfupload.js"></script>
 <script>
 var swfu;
-var isIE = false;
-
 window.onload = function() {
 	var settings = {
 		flash_url : "/static/flash/swfupload.swf",
 		upload_url: "/uploadimage",
 		file_size_limit : "5 MB",
-		post_params: {"_xsrf": $.cookie("_xsrf")},
+        file_types : "*.gif;*.jpg;*.png",
+        file_queue_limit : 1,
 
 		// Button Settings
 		//button_image_url : "XPButtonUploadText_61x22.png",
 		button_placeholder_id : "avatar",
-		button_width: 61,
+		button_width: 60,
 		button_height: 22,
 		button_text : "<span class='upload-text'>选择照片</span>",
-		button_text_style : ".upload-text{font-weight:bold;font-size:14px;}",
+		button_text_style : ".upload-text{font-weight:bold;font-size:14px;}", 
 
 		file_dialog_complete_handler : fileDialogComplete,
 		upload_success_handler : uploadSuccess

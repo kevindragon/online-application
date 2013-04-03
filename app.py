@@ -6,8 +6,38 @@ import os
 import sys
 import sqlite3
 import tornado.web
+from bottle import route, get, post, template, static_file, request
 import settings
 
+
+@route("/upload/<filename:path>")
+@route("/static/<filename:path>")
+def static_files(filename):
+    return static_file(filename, root='static/')
+
+@route("/static/flash/<filename:path>")
+def static_flash_file(filename):
+    return static_file(filename, root="static/flash", 
+                       mimetype="application/x-shockwave-flash")
+
+@get("/")
+def index():
+    return template(settings.app_tpl_path+"index.htm", nav=1)
+
+'''
+@route("/uploadimage")
+def upload_image():
+    '' '
+    avatar_file = "%s/%s" % (settings.upload_tmp_path,  
+                             request.files["avatar"][0]["filename"])
+    if request.files["avatar"][0]["filename"]:
+        if not os.path.exists(settings.upload_tmp_path):
+            os.mkdir(settings.upload_tmp_path)
+        open(avatar_file, "w").write(request.files["avatar"][0]["body"])
+    '' '
+    print request
+    return "haha"
+'''
 
 class Home(tornado.web.RequestHandler):
     def get(self):
