@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<link href="static/css/global.css" rel="stylesheet" type="text/css">
+<link href="../static/css/global.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div class="top-banner">
+  <div class="logo">
+    <img src="/static/images/logo.jpg" height="105">
+  </div>
+</div>
+
+<div class="navbar">
+  <div class="navbar-inner navbar-full-width">
+    <div class="container navbar-container">
+      <ul class="nav">
+        <li{% if 1==nav %} class="active"{% end %}><a href="/">硕士研究生报名</a></li>
+        <li class="divider-vertical"></li>
+        <li{% if 2==nav %} class="active"{% end %}><a href="/doctorapply">博士研究生报名</a></li>
+        <li class="divider-vertical"></li>
+        <li{% if 3==nav %} class="active"{% end %}><a href="/infoquery">查询我的申请信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white" style="_margin-left:0px;">
+      <form action="/postinfo" class="form-horizontal" method="post" enctype="multipart/form-data" id="apply">
+        {% raw xsrf_form_html() %}
+        <fieldset>
+          <legend>硕士研究生报名表填写</legend>
+        </fieldset>
+        <div class="form-fields">
+          <!-- 姓名 -->
+          <div class="control-group cg-name">
+            <label class="control-label" for="name">姓名</label>
+            <div class="controls">
+              <input type="text" name="name" id="name" placeholder="姓名" />
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div class="control-group cg-gender">
+            <label class="control-label" for="gender">性别</label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" />
+                男
+              </label>
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" />
+                女
+              </label>
+            </div>
+          </div>
+          <!-- 身份证 -->
+          <div class="control-group cg-id_number">
+            <label class="control-label" for="id_number">身份证</label>
+            <div class="controls">
+              <input type="text" name="id_number" id="id_number" placeholder="身份证" />
+            </div>
+          </div>
+          <!-- 毕业院校 -->
+          <div class="control-group cg-university">
+            <label class="control-label" for="university">毕业院校</label>
+            <div class="controls">
+              <input type="text" name="university" id="university" placeholder="毕业院校" />
+            </div>
+          </div>
+          <!-- 专业 -->
+          <div class="control-group cg-major">
+            <label class="control-label" for="major">专业</label>
+            <div class="controls">
+              <input type="text" name="major" id="major" placeholder="专业" />
+            </div>
+          </div>
+          <!-- 电子邮件 -->
+          <div class="control-group cg-email">
+            <label class="control-label" for="email">电子邮件</label>
+            <div class="controls">
+              <input type="text" name="email" id="email" placeholder="电子邮件" />
+            </div>
+          </div>
+          <!-- 联系方式 -->
+          <div class="control-group cg-phone">
+            <label class="control-label" for="phone">联系电话</label>
+            <div class="controls">
+              <input type="text" name="phone" id="phone" placeholder="联系电话" />
+            </div>
+          </div>
+          <!-- 照片 -->
+          <div class="avatar">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div>
+                <span class="btn btn-file cg-avatar">
+                  <input type="button" name="avatar" id="avatar" value="" />
+                </span>
+              </div>
+              <div class="fileupload-new thumbnail">
+                <img src="/static/images/blank_avatar.jpg" width="90" />
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-large btn-primary">提交报名信息</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="span3 well well-white">
+      <p>硕士研究生在线报名说明:</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/js/swfupload.js"></script>
+<script>
+var swfu;
+var isIE = false;
+
+window.onload = function() {
+	var settings = {
+		flash_url : "/static/flash/swfupload.swf",
+		upload_url: "/uploadimage",
+		file_size_limit : "5 MB",
+		post_params: {"_xsrf": $.cookie("_xsrf")},
+
+		// Button Settings
+		//button_image_url : "XPButtonUploadText_61x22.png",
+		button_placeholder_id : "avatar",
+		button_width: 61,
+		button_height: 22,
+		button_text : "<span class='upload-text'>选择照片</span>",
+		button_text_style : ".upload-text{font-weight:bold;font-size:14px;}",
+
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_success_handler : uploadSuccess
+	};
+	swfu = new SWFUpload(settings);
+};
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+	this.startUpload();
+}
+function uploadSuccess(file, serverData) {
+	try {
+		alert(file.name);
+	} catch (ex) {}
+}
+</script>
+
+</body>
+</html>

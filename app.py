@@ -11,7 +11,7 @@ import settings
 
 class Home(tornado.web.RequestHandler):
     def get(self):
-        self.render(settings.app_tpl_path+"home.htm", nav=1)
+        self.render(settings.app_tpl_path+"index.htm", nav=1)
 
 
 class PostInfo(tornado.web.RequestHandler):
@@ -115,3 +115,21 @@ class DoctorApply(tornado.web.RequestHandler):
 
         data = dict(zip(name_str+["avatar"], info))
         self.render(settings.app_tpl_path+"applyinfo.htm", data=data, nav=2)
+
+
+class UploadImage(tornado.web.RequestHandler):
+    def post(self):
+        '''
+        avatar_file = "%s/%s" % (settings.upload_tmp_path,  
+                                 self.request.files["avatar"][0]["filename"])
+        info.append(avatar_file)
+        if self.request.files["avatar"][0]["filename"]:
+            if not os.path.exists(avatar_path):
+                os.mkdir(avatar_path)
+            open(avatar_file, "w").write(self.request.files["avatar"][0]["body"])
+        '''
+        print self.request
+        self.write("post")
+
+    def get(self):
+        self.write('get')
