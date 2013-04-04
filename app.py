@@ -4,6 +4,8 @@
 
 import os
 import sys
+import hashlib
+import time
 import sqlite3
 import tornado.web
 from bottle import route, get, post, template, static_file, request
@@ -11,6 +13,9 @@ import settings
 
 
 @route("/upload/<filename:path>")
+def static_upload_files(filename):
+    return static_file(filename, root='upload/')
+
 @route("/static/<filename:path>")
 def static_files(filename):
     return static_file(filename, root='static/')
@@ -24,20 +29,44 @@ def static_flash_file(filename):
 def index():
     return template(settings.app_tpl_path+"index.htm", nav=1)
 
-'''
-@route("/uploadimage")
+@post("/uploadimage")
 def upload_image():
-    '' '
-    avatar_file = "%s/%s" % (settings.upload_tmp_path,  
-                             request.files["avatar"][0]["filename"])
-    if request.files["avatar"][0]["filename"]:
-        if not os.path.exists(settings.upload_tmp_path):
-            os.mkdir(settings.upload_tmp_path)
-        open(avatar_file, "w").write(request.files["avatar"][0]["body"])
-    '' '
-    print request
-    return "haha"
-'''
+    filename = ""
+    filedata = request.files.get("Filedata")
+    if filedata.file:
+        filename = ("%s%s%s" % 
+                    (settings.upload_tmp_path, 
+                     hashlib.md5(str(time.time())).hexdigest(),
+                     filedata.filename))
+        open(filename, "wb").write(filedata.file.read())
+    return "/%s" % filename
+
+@get("/preapply")
+def preapply():
+    return template(settings.app_tpl_path+"preapply.htm")
+
+@post("/master")
+def post_master_form():
+    '''硕士研究生表单提交处理'''
+    name_str = ["name", "gender", "id_number", "university",
+                "major", "email", "phone", "upload_path"]
+    info = [request.forms.get(x) for x in name_str]
+    
+    connect = sqlite3.connect(settings.db_path)
+    cursor = connect.cursor()
+    sql = ("INSERT INTO master_info (id, name, gender, id_number, "
+           "university, major, email, phone, avatar) VALUES ("
+           "NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
+    try:
+        cursor.execute(sql, info)
+        connect.commit()
+    except Exception, e:
+        print "unique"
+    connect.close()
+    
+    data = dict(zip(name_str+["avatar"], info))
+    return template(settings.app_tpl_path+"applyinfo.htm", data=data, nav=1)
+
 
 class Home(tornado.web.RequestHandler):
     def get(self):
@@ -146,20 +175,3 @@ class DoctorApply(tornado.web.RequestHandler):
         data = dict(zip(name_str+["avatar"], info))
         self.render(settings.app_tpl_path+"applyinfo.htm", data=data, nav=2)
 
-
-class UploadImage(tornado.web.RequestHandler):
-    def post(self):
-        '''
-        avatar_file = "%s/%s" % (settings.upload_tmp_path,  
-                                 self.request.files["avatar"][0]["filename"])
-        info.append(avatar_file)
-        if self.request.files["avatar"][0]["filename"]:
-            if not os.path.exists(avatar_path):
-                os.mkdir(avatar_path)
-            open(avatar_file, "w").write(self.request.files["avatar"][0]["body"])
-        '''
-        print self.request
-        self.write("post")
-
-    def get(self):
-        self.write('get')

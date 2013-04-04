@@ -29,7 +29,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="span8 well well-white" style="_margin-left:0px;">
+    <div class="span8 well well-white" style="margin-left:0px;">
       <form action="/postinfo" class="form-horizontal" method="post" enctype="multipart/form-data" id="apply">
         <fieldset>
           <legend>硕士研究生报名表填写</legend>
@@ -98,7 +98,8 @@
                 </span>
               </div>
               <div class="fileupload-new thumbnail">
-                <img src="/static/images/blank_avatar.jpg" width="90" />
+                <img src="/static/images/blank_avatar.jpg" width="90" id="avatar_thumb" />
+                <input type="hidden" name="upload_path" value="" />
               </div>
             </div>
           </div>
@@ -150,7 +151,8 @@ function fileDialogComplete(numFilesSelected, numFilesQueued) {
 }
 function uploadSuccess(file, serverData) {
 	try {
-		alert(file.name);
+		$('#avatar_thumb').prop("src", serverData);
+		$('input[name=upload_path]').val(serverData);
 	} catch (ex) {}
 }
 </script>
