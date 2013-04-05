@@ -1,9 +1,5 @@
-body {margin:0px;padding:0px;}
-fieldset {
-	padding: 0;
-	margin: 0;
-	border: 0;
-}
+body {margin:0px;padding:0px;font-size:14px;}
+fieldset {padding: 0; margin: 0; border: 0;}
 legend {
 	display: block;
 	width: 100%;
@@ -40,22 +36,11 @@ legend {
 .span7 {width:540px;float:left;margin-left:20px;}
 .span8 {width:620px;float:left;margin-left:20px;}
 
-.top-buffer {
-    margin-top:20px;
-}
-.top-banner {
-    background:url(/static/images/top_bg.jpg) center top repeat-x;
-    height:109px;
-}
-.top-banner .logo {
-    width:1000px;
-    margin:0px auto;
-}
+.top-buffer {margin-top:20px;}
+.top-banner {background:url(/static/images/top_bg.jpg) center top repeat-x; height:109px;}
+.top-banner .logo {width:1000px; margin:0px auto;}
 
-.navbar {
-	margin-bottom: 20px;
-	overflow: visible;
-}
+.navbar {margin-bottom: 20px; overflow: visible;}
 .navbar .navbar-inner {
 	min-height: 40px;
 	padding-right: 20px;
@@ -127,14 +112,16 @@ label {display: block;margin-bottom: 5px;}
 .form-horizontal .controls {margin-left: 140px;}
 .radio.inline, .checkbox.inline {display: inline-block;padding-top: 5px;margin-bottom: 0;vertical-align: middle;}
 
-.form-fields {
-     position:relative;
-}
-.form-fields .avatar {
-     position:absolute;
-     right:0px;
-     top:5px;
-     width:100px;
+.master-apply-form {display:none}
+.form-fields {position:relative;}
+.form-fields .avatar {position:absolute; right:0px; top:5px; width:100px;}
+
+.protocol .protocol-content {
+    border:1px solid #ddd;
+    padding:5px;
+    height:500px;
+    width:100%;
+    overflow-y:scroll;
 }
 
 .applysuccess {

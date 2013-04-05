@@ -1,0 +1,211 @@
+%def bodyblock():
+
+%include template/header.htm
+<link rel="stylesheet" href="/static/jquery-ui-1.10.2.custom/css/cupertino/jquery-ui-1.10.2.custom.min.css" type="text/css" media="screen" />
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white" style="margin-left:0px;">
+      <form action="/postinfo" class="form-horizontal master-apply-form" method="post" enctype="multipart/form-data" id="apply">
+        <fieldset>
+          <legend>硕士研究生报名表填写</legend>
+        </fieldset>
+        <div class="form-fields">
+          <!-- 姓名 -->
+          <div class="control-group cg-name">
+            <label class="control-label" for="name">姓名 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="name" id="name" placeholder="姓名" />
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div class="control-group cg-gender">
+            <label class="control-label">性别 <font color="red">*</font></label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" />男
+              </label>&nbsp;&nbsp;
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="女" />女
+              </label>
+            </div>
+          </div>
+          <!-- 籍贯 -->
+          <div class="control-group cg-hometown">
+            <label class="control-label" for="hometown">籍贯 <font color="red">*</font></label>
+            <div class="controls" id="city">
+              <select class="prov" name="prov"></select>
+              <select class="city" name="city"></select>
+            </div>
+          </div>
+          <!-- 出生年月 -->
+          <div class="control-group cg-birthday">
+            <label class="control-label" for="birthday">出生年月 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="birthday" id="birthday" placeholder="出生年月" />
+            </div>
+          </div>
+          <!-- 政治面貌 -->
+          <div class="control-group cg-political-status">
+            <label class="control-label" for="political-status">政治面貌 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="political-status" id="political-status" placeholder="政治面貌" />
+            </div>
+          </div>
+          <!-- 毕业时间 -->
+          <div class="control-group cg-graduate-date">
+            <label class="control-label" for="graduate-date">毕业时间 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="graduate-date" id="graduate-date" placeholder="毕业时间" />
+            </div>
+          </div>
+          <!-- 毕业院校 -->
+          <div class="control-group cg-university">
+            <label class="control-label" for="university">毕业院校 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="university" id="university" placeholder="毕业院校" />
+            </div>
+          </div>
+          <!-- 所学专业 -->
+          <div class="control-group cg-major">
+            <label class="control-label" for="major">所学专业 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="major" id="major" placeholder="所学专业" />
+            </div>
+          </div>
+          <!-- 身份证 -->
+          <div class="control-group cg-id_number">
+            <label class="control-label" for="id_number">身份证 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="id_number" id="id_number" placeholder="身份证" />
+            </div>
+          </div>
+          <!-- 特长 -->
+          <div class="control-group cg-special-skill">
+            <label class="control-label" for="special-skill">特长</label>
+            <div class="controls">
+              <textarea name="special-skill" id="special-skill" placeholder="特长" cols="45" rows="3" ></textarea>
+            </div>
+          </div>
+          <!-- 电子邮件 -->
+          <div class="control-group cg-email">
+            <label class="control-label" for="email">电子邮件</label>
+            <div class="controls">
+              <input type="text" name="email" id="email" placeholder="电子邮件" />
+            </div>
+          </div>
+          <!-- 联系方式 -->
+          <div class="control-group cg-phone">
+            <label class="control-label" for="phone">联系电话</label>
+            <div class="controls">
+              <input type="text" name="phone" id="phone" placeholder="联系电话" />
+            </div>
+          </div>
+          <!-- 照片 -->
+          <div class="avatar">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div>
+                <span class="btn btn-file cg-avatar">
+                  <input type="button" name="avatar" id="avatar" value="" />
+                </span>
+              </div>
+              <div class="fileupload-new thumbnail">
+                <img src="/static/images/blank_avatar.jpg" width="90" id="avatar_thumb" />
+                <input type="hidden" name="upload_path" value="" />
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-large btn-primary">提交报名信息</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div id="protocol" class="protocol">
+        <p class="protocol-content">
+          协议
+        </p>
+        <p>
+          <label for="agree">
+            <input type="checkbox" name="agree" id="agree" value="1" />我同意以上协议
+          </label>
+        </p>
+        <p>
+          <input type="button" name="agree-btn" id="agree-btn" value="我同意" />
+          <input type="button" name="cancel-btn" id="cancel-btn" value="取消" />
+        </p>
+      </div>
+    </div>
+    <div class="span3 well well-white">
+      <p>硕士研究生在线报名说明:</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer"></div>
+
+<script type="text/javascript" src="/static/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.cityselect.js"></script>
+<script type="text/javascript" src="/static/js/swfupload.js"></script>
+<script>
+var swfu;
+$(function() {
+	var settings = {
+		flash_url : "/static/flash/swfupload.swf",
+		upload_url: "/uploadimage",
+		file_size_limit : "5 MB",
+        file_types : "*.gif;*.jpg;*.png",
+        file_queue_limit : 1,
+
+		//button_image_url : "XPButtonUploadText_61x22.png",
+		button_placeholder_id : "avatar",
+		button_width: 60,
+		button_height: 22,
+		button_text : "<span class='upload-text'>选择照片</span>",
+		button_text_style : ".upload-text{font-weight:bold;font-size:14px;}", 
+
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_success_handler : uploadSuccess
+	};
+	swfu = new SWFUpload(settings);
+
+    $("#agree-btn").click(function(){
+        if ($('#agree').prop("checked")) {
+            $("#protocol").hide();
+            $("form.master-apply-form").show();
+        } else {
+            alert('请先同意以上协议，同意请勾选"我同意以上协议"');
+        }
+    });
+
+    $("#protocol").hide();
+    $("form.master-apply-form").show();
+
+    var date = new Date();
+    $("#birthday").datepicker({
+        dateFormat:"yy-mm-dd", 
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+    $("#graduate-date").datepicker({
+        dateFormat:"yy-mm-dd",
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+
+    $("#city").citySelect({  
+        url:"/static/js/city.min.js",
+        prov:"--",
+        city:"--",
+        nodata:"none"
+    }); 
+});
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+	this.startUpload();
+}
+function uploadSuccess(file, serverData) {
+	try {
+		$('#avatar_thumb').prop("src", serverData);
+		$('input[name=upload_path]').val(serverData);
+	} catch (ex) {}
+}
+</script>
+%end
+
+%rebase template/layout.htm bodyblock=bodyblock

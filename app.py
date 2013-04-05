@@ -20,14 +20,9 @@ def static_upload_files(filename):
 def static_files(filename):
     return static_file(filename, root='static/')
 
-@route("/static/flash/<filename:path>")
-def static_flash_file(filename):
-    return static_file(filename, root="static/flash", 
-                       mimetype="application/x-shockwave-flash")
-
 @get("/")
 def index():
-    return template(settings.app_tpl_path+"index.htm", nav=1)
+    return template(settings.app_tpl_path+"masterapply.htm", nav=1)
 
 @post("/uploadimage")
 def upload_image():
@@ -41,17 +36,16 @@ def upload_image():
         open(filename, "wb").write(filedata.file.read())
     return "/%s" % filename
 
-@get("/preapply")
-def preapply():
-    return template(settings.app_tpl_path+"preapply.htm")
-
-@post("/master")
+@post("/postinfo")
 def post_master_form():
     '''硕士研究生表单提交处理'''
     name_str = ["name", "gender", "id_number", "university",
-                "major", "email", "phone", "upload_path"]
+                "major", "email", "phone", "upload_path", 
+                ""]
+    return name_str
+    '''
     info = [request.forms.get(x) for x in name_str]
-    
+
     connect = sqlite3.connect(settings.db_path)
     cursor = connect.cursor()
     sql = ("INSERT INTO master_info (id, name, gender, id_number, "
@@ -63,9 +57,11 @@ def post_master_form():
     except Exception, e:
         print "unique"
     connect.close()
-    
+
     data = dict(zip(name_str+["avatar"], info))
     return template(settings.app_tpl_path+"applyinfo.htm", data=data, nav=1)
+    '''
+    
 
 
 class Home(tornado.web.RequestHandler):

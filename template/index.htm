@@ -1,31 +1,6 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>无标题文档</title>
-<link href="/static/css/global.css" rel="stylesheet" type="text/css">
-</head>
+%def bodyblock():
 
-<body>
-<div class="top-banner">
-  <div class="logo">
-    <img src="/static/images/logo.jpg" height="105">
-  </div>
-</div>
-
-<div class="navbar">
-  <div class="navbar-inner navbar-full-width">
-    <div class="container navbar-container">
-      <ul class="nav">
-        <li class="active"><a href="/">硕士研究生报名</a></li>
-        <li class="divider-vertical"></li>
-        <li><a href="/doctorapply">博士研究生报名</a></li>
-        <li class="divider-vertical"></li>
-        <li><a href="/infoquery">查询我的申请信息</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
+%include template/header.htm
 
 <div class="container">
   <div class="row">
@@ -156,6 +131,6 @@ function uploadSuccess(file, serverData) {
 	} catch (ex) {}
 }
 </script>
+%end
 
-</body>
-</html>
+%rebase template/layout.htm bodyblock=bodyblock
