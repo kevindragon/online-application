@@ -1,59 +1,303 @@
-{% extends "layout.htm" %}
+%def bodyblock():
 
-{% block stylesheet %}
-<link rel="stylesheet" href="/static/bootstrap/bootstrap-fileupload.min.css" type="text/css" />
-{% end %}
-
-{% block body %}
-{% include "header.htm" %}
+%include template/header.htm nav=nav
+<link rel="stylesheet" href="/static/jquery-ui-1.10.2.custom/css/cupertino/jquery-ui-1.10.2.custom.min.css" type="text/css" media="screen" />
 <div class="container">
   <div class="row">
-    <div class="span8 well well-white ">
-      <h4>您的申请信息：</h4>
-      <div class="applysuccess">
-        {% if data %}
-        <div class="row-fluid top-buffer">
-          <div class="span3 text-right">姓名</div>
-          <div class="span8 offset1">{{data["name"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">性别</div>
-          <div class="span8 offset1">{{data["gender"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">身份证</div>
-          <div class="span8 offset1">{{data["id_number"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">毕业院校</div>
-          <div class="span8 offset1">{{data["university"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">专业</div>
-          <div class="span8 offset1">{{data["major"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">电子邮件</div>
-          <div class="span8 offset1">{{data["email"]}}</div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 text-right">联系电话</div>
-          <div class="span8 offset1">{{data["phone"]}}</div>
-        </div>
-        <!-- 照片 -->
-        <div class="avatar">
-          <div class="fileupload fileupload-new" data-provides="fileupload">
-            <div class="fileupload-new thumbnail">
-              <img src="/{{data["avatar"]}}" width="90" />
+    <div class="span8 well well-white" style="margin-left:0px;">
+      <form action="/postinfo" class="form-horizontal master-apply-form" method="post" enctype="multipart/form-data" id="apply">
+        <input type="hidden" name="edit" value="1" />
+        <input type="hidden" name="lastrowid" value="{{lastrowid}}" />
+        <fieldset>
+          %if defined("query"):
+          <legend>您所查询的信息如下</legend>
+          %else:
+          <legend>硕士研究生报名表填写</legend>
+          %end
+        </fieldset>
+        <div class="form-fields">
+          <!-- 姓名 -->
+          <div class="control-group cg-name">
+            <label class="control-label" for="name">姓名 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="name" id="name" placeholder="姓名" value="{{name}}" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写姓名</span>
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div class="control-group cg-gender">
+            <label class="control-label">性别 <font color="red">*</font></label>
+            <div class="controls">
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="男" {{gender_mc}} />男
+              </label>&nbsp;&nbsp;
+              <label class="radio inline">
+                <input type="radio" name="gender" id="gender" value="女" {{gender_wc}} />女
+              </label>
+            </div>
+            <div class="controls">
+              <span class="help-inline">请选择性别</span>
+            </div>
+          </div>
+          <!-- 籍贯 -->
+          <div class="control-group cg-hometown">
+            <label class="control-label" for="hometown">籍贯 <font color="red">*</font></label>
+            <div class="controls" id="city">
+              <select class="prov" name="prov"></select>
+              <select class="city" name="city"></select>
+            </div>
+            <div class="controls">
+              <span class="help-inline">请选择籍贯</span>
+            </div>
+          </div>
+          <!-- 出生年月 -->
+          <div class="control-group cg-birthday">
+            <label class="control-label" for="birthday">出生年月 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="birthday" value="{{birthday}}" id="birthday" placeholder="出生年月" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请选出生年月</span>
+            </div>
+          </div>
+          <!-- 政治面貌 -->
+          <div class="control-group cg-political_status">
+            <label class="control-label" for="political_status">政治面貌 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="political_status" value="{{political_status}}" id="political_status" placeholder="政治面貌" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写政治面貌</span>
+            </div>
+          </div>
+          <!-- 毕业时间 -->
+          <div class="control-group cg-graduate_date">
+            <label class="control-label" for="graduate_date">毕业时间 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="graduate_date" value="{{graduate_date}}" id="graduate_date" placeholder="毕业时间" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请选择毕业时间</span>
+            </div>
+          </div>
+          <!-- 毕业院校 -->
+          <div class="control-group cg-university">
+            <label class="control-label" for="university">毕业院校 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="university" value="{{university}}" id="university" placeholder="毕业院校" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写毕业院校</span>
+            </div>
+          </div>
+          <!-- 所学专业 -->
+          <div class="control-group cg-major">
+            <label class="control-label" for="major">所学专业 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="major" value="{{major}}" id="major" placeholder="所学专业" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写所学专业</span>
+            </div>
+          </div>
+          <!-- 身份证 -->
+          <div class="control-group cg-id_number">
+            <label class="control-label" for="id_number">身份证 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="id_number" value="{{id_number}}" id="id_number" placeholder="身份证" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写身份证信息</span>
+            </div>
+          </div>
+          <!-- 特长 -->
+          <div class="control-group cg-special_skill">
+            <label class="control-label" for="special_skill">特长</label>
+            <div class="controls">
+              <textarea name="special_skill" id="special_skill" placeholder="特长" cols="45" rows="3" >{{special_skill}}</textarea>
+            </div>
+          </div>
+          <!-- 电子邮件 -->
+          <div class="control-group cg-email">
+            <label class="control-label" for="email">电子邮件 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="email" value="{{email}}" id="email" placeholder="电子邮件" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写电子邮件，方便我们联系您</span>
+            </div>
+          </div>
+          <!-- 联系方式 -->
+          <div class="control-group cg-phone">
+            <label class="control-label" for="phone">联系电话 <font color="red">*</font></label>
+            <div class="controls">
+              <input type="text" name="phone" value="{{phone}}" id="phone" placeholder="联系电话" />
+            </div>
+            <div class="controls">
+              <span class="help-inline">请填写联系电话，方便我物联系您</span>
+            </div>
+          </div>
+          <!-- 照片 -->
+          <div class="avatar cg-avatar">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="avatar-btn">
+                <span class="btn btn-file cg-avatar">
+                  <input type="button" name="avatar" id="avatar" value="" />
+                </span>
+              </div>
+              <div class="fileupload-new thumbnail">
+                <img src="{{avatar}}" width="140" id="avatar_thumb" />
+                <input type="hidden" name="avatar" value="{{avatar}}" />
+              </div>
+            </div>
+            <div>
+              <span class="help-inline">请选择您的照片</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-large btn-primary">提交修改信息</button>
             </div>
           </div>
         </div>
-        <div class="row-fluid top-buffer">
-          <div class="span2 offset4">
-            <input type="button" name="" value="打印" class="btn btn-large btn-primary" />
+      </form>
+      <div class="form-horizontal" id="info-show">
+        <fieldset>
+          %if defined("query"):
+          <legend>您所查询的信息如下</legend>
+          %else:
+          <legend>硕士研究生报名表填写</legend>
+          %end
+        </fieldset>
+        <div class="form-fields">
+          <!-- 姓名 -->
+          <div class="control-group cg-name">
+            <label class="control-label" for="name">姓名:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{name}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div class="control-group cg-gender">
+            <label class="control-label">性别:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{gender}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 籍贯 -->
+          <div class="control-group cg-hometown">
+            <label class="control-label" for="hometown">籍贯:</label>
+            <div class="controls" id="city">
+              <div class="text">
+	            <span>{{prov}} </span>
+	            <span>{{city}} </span>
+	          </div>
+            </div>
+          </div>
+          <!-- 出生年月 -->
+          <div class="control-group cg-birthday">
+            <label class="control-label" for="birthday">出生年月:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{birthday}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 政治面貌 -->
+          <div class="control-group cg-political_status">
+            <label class="control-label" for="political_status">政治面貌:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{political_status}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 毕业时间 -->
+          <div class="control-group cg-graduate_date">
+            <label class="control-label" for="graduate_date">毕业时间:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{graduate_date}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 毕业院校 -->
+          <div class="control-group cg-university">
+            <label class="control-label" for="university">毕业院校:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{university}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 所学专业 -->
+          <div class="control-group cg-major">
+            <label class="control-label" for="major">所学专业:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{major}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 身份证 -->
+          <div class="control-group cg-id_number">
+            <label class="control-label" for="id_number">身份证:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{id_number}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 特长 -->
+          <div class="control-group cg-special_skill">
+            <label class="control-label" for="special_skill">特长:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{special_skill}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 电子邮件 -->
+          <div class="control-group cg-email">
+            <label class="control-label" for="email">电子邮件:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{email}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 联系方式 -->
+          <div class="control-group cg-phone">
+            <label class="control-label" for="phone">联系电话:</label>
+            <div class="controls">
+              <div class="text">
+                <span>{{phone}} </span>
+              </div>
+            </div>
+          </div>
+          <!-- 照片 -->
+          <div class="avatar cg-avatar">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="fileupload-new thumbnail">
+                <img src="{{avatar}}" width="140" id="avatar_thumb" />
+              </div>
+            </div>
+            <div>
+              <span class="help-inline">请选择您的照片</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button class="btn btn-large btn-primary" id="back-to-amend">返回修改</button>
+            </div>
           </div>
         </div>
-        {% end %}
       </div>
     </div>
     <div class="span3 well well-white">
@@ -61,4 +305,137 @@
     </div>
   </div>
 </div>
-{% end %}
+
+<div class="footer"></div>
+
+<script type="text/javascript" src="/static/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.cityselect.js"></script>
+<script type="text/javascript" src="/static/js/swfupload.js"></script>
+<script>
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+    this.startUpload();
+}
+function uploadSuccess(file, serverData) {
+    try {
+        $('#avatar_thumb').prop("src", serverData);
+        $('input[name=avatar]').val(serverData);
+        $('.cg-avatar .help-inline').hide();
+    } catch (ex) {}
+}
+var swfu;
+$(function() {
+    var settings = {
+        flash_url : "/static/flash/swfupload.swf",
+        upload_url: "/uploadimage",
+        file_size_limit : "5 MB",
+        file_types : "*.gif;*.jpg;*.png",
+        file_queue_limit : 1,
+
+        //button_image_url : "XPButtonUploadText_61x22.png",
+        button_placeholder_id : "avatar",
+        button_width: 90,
+        button_height: 22,
+        button_text : "<span class='upload-text'>选择照片 *</span>",
+        button_text_style : ".upload-text{font-weight:bold;font-size:14px;}", 
+
+        file_dialog_complete_handler : fileDialogComplete,
+        upload_success_handler : uploadSuccess
+    };
+    swfu = new SWFUpload(settings);
+
+    $("#back-to-amend").click(function(){
+        $("#info-show").hide();
+        $("form.master-apply-form").show();
+    });
+
+    var date = new Date();
+    $("#birthday").datepicker({
+        dateFormat:"yy-mm-dd", 
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+    $("#graduate_date").datepicker({
+        dateFormat:"yy-mm-dd",
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+
+    $("#city").citySelect({  
+        url:"/static/js/city.min.js",
+        prov:"{{prov}}",
+        city:"{{city}}",
+        nodata:"none"
+    });
+    
+    // 表单验证
+    $("form#apply input[type=text]").keydown(function(){
+        var ename = $(this).prop("name");
+        $("div.cg-"+ename+" .controls .help-inline").hide();
+    });
+    /* 验证输入框是否为空 */
+    function validateInputEmpty(selector) {
+        var e = $("input#"+selector);
+        var ename = e.prop("name");
+        if (!$.trim(e.val())) {
+            $("div.cg-"+ename+" .help-inline").show();
+            $("input#"+e.prop("name")).focus();
+            return false;
+        }
+        return true;
+    }
+    // 选择性别后，把提示隐藏
+    $("input#gender").click(function(){
+        $("div.cg-gender .help-inline").hide();
+    });
+    // 选择籍贯后，把提示隐藏
+    $("select.prov").change(function(){
+        $('.cg-hometown .help-inline').hide();
+    });
+    // 选择日期后隐藏提示
+    $("#birthday, #graduate_date").change(function(){
+        var ename = $(this).prop("name");
+        $("div.cg-"+ename+" .help-inline").hide();
+    });
+    $("form#apply").submit(function(){
+        var elementsValidateEmpty = [
+            "birthday", "political_status", "graduate_date", "university", "major", 
+            "id_number", "email", "phone"];
+        if (!validateInputEmpty("name")) {
+            return false;
+        }
+        // 验证性别是否选择
+        if (!$("input#gender:checked").val()) {
+            $("div.cg-gender .help-inline").show();
+            return false;
+        }
+        // 验证籍贯
+        if ('--'==$('select.prov').val()) {
+            $('div.cg-hometown .help-inline').show();
+            return false;
+        }
+        for (var e in elementsValidateEmpty) {
+            if (!validateInputEmpty(elementsValidateEmpty[e])) {
+                return false;
+            }
+        }
+        // 验证身份证是否正确
+        var idNumber = $("input#id_number").val();
+        if (!/\d{17}[X\d]/.test(idNumber)) {
+            $("div.cg-id_number .help-inline").show();
+            return false;
+        }
+        // 验证电子邮件格式
+        var email = $("input[name=email]").val();
+        if (!/[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/.test(email)) {
+            $("input[name=email]").focus();
+            alert("请填写正确的电子邮件地址。邮件地址只能包含字母，数字，下划线。");
+            return false;
+        }
+        // 验证照片
+        if (""==$("input[name=avatar]").val()) {
+            alert("请选择您的照片");
+            $(".cg-avatar .help-inline").show();
+            return false;
+        }
+    });
+});
+</script>
+%end
+
+%rebase template/layout.htm bodyblock=bodyblock

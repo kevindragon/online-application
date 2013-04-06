@@ -108,13 +108,16 @@ label, select, button, input[type="button"], input[type="reset"], input[type="su
 label, input, button, select, textarea {font-size: 14px;font-weight: normal;line-height: 20px;}
 label {display: block;margin-bottom: 5px;}
 .form-horizontal .control-label {float: left;width: 120px;padding-top: 5px;text-align: right;}
-.form-horizontal .control-group {margin-bottom: 20px;}
+.form-horizontal .control-group {margin-bottom: 20px;clear:both;}
 .form-horizontal .controls {margin-left: 140px;}
+.form-horizontal .controls .text {padding-top:8px;}
 .radio.inline, .checkbox.inline {display: inline-block;padding-top: 5px;margin-bottom: 0;vertical-align: middle;}
 
 .master-apply-form {display:none}
 .form-fields {position:relative;}
-.form-fields .avatar {position:absolute; right:0px; top:5px; width:100px;}
+.form-fields .help-inline {color:red;display:none;}
+.form-fields .avatar {position:absolute; right:0px; top:5px; width:150px;}
+.form-fields .avatar-btn {margin-left:10px;}
 
 .protocol .protocol-content {
     border:1px solid #ddd;

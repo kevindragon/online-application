@@ -1,0 +1,17 @@
+%def bodyblock():
+
+%include template/header.htm nav=nav
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white" style="margin-left:0px;">
+      <div>对不起，没有找到您的申请信息</div>
+    </div>
+    <div class="span3 well well-white">
+      <p>在线报名说明:</p>
+    </div>
+  </div>
+</div>
+
+%end
+
+%rebase template/layout.htm bodyblock=bodyblock

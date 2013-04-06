@@ -1,16 +1,11 @@
-{% extends "layout.htm" %}
+%def bodyblock():
 
-{% block stylesheet %}
-<link rel="stylesheet" href="/static/bootstrap/bootstrap-fileupload.min.css" type="text/css" />
-{% end %}
-
-{% block body %}
-{% include "header.htm" %}
+%include template/header.htm nav=nav
 <div class="container">
   <div class="row">
-    <div class="span8 well well-white">
-      <form action="/infoquery" class="form-horizontal" method="post" enctype="multipart/form-data" id="apply">
-        {% raw xsrf_form_html() %}
+    <div class="span8 well well-white" style="margin-left:0px;">
+      <form action="/infoquery" class="form-horizontal" method="post" id="apply">
+        <input type="hidden" name="query" value="1" />
         <fieldset>
           <legend>查看我申请的信息</legend>
         </fieldset>
@@ -21,6 +16,9 @@
             <div class="controls">
               <input type="text" name="name" id="name" placeholder="姓名">
             </div>
+            <div class="controls">
+              <span class="help-inline">请填写姓名</span>
+            </div>
           </div>
           <!-- 身份证 -->
           <div class="control-group cg-id_number">
@@ -28,17 +26,8 @@
             <div class="controls">
               <input type="text" name="id_number" id="id_number" placeholder="身份证">
             </div>
-          </div>
-          <!-- 申请的项目 -->
-          <div class="control-group cg-job">
-            <label class="control-label" for="job">申请职位</label>
             <div class="controls">
-              <label class="radio inline">
-                <input type="radio" name="job" id="job" value="1" />硕士研究生
-              </label>
-              <label class="radio inline">
-                <input type="radio" name="job" id="job" value="2" />博士研究生
-              </label>
+              <span class="help-inline">身份证不能为空</span>
             </div>
           </div>
           <div class="control-group">
@@ -54,9 +43,7 @@
     </div>
   </div>
 </div>
-{% end %}
 
-{% block jsblock %}
 <script src="/static/bootstrap/bootstrap-fileupload.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -66,20 +53,23 @@ $("form#apply input[type=text]").keydown(function(){
     if (e.hasClass("error")) {
         e.removeClass("error");
     }
+});    
+// 表单验证
+$("form#apply input[type=text]").keydown(function(){
+    var ename = $(this).prop("name");
+    $("div.cg-"+ename+" .controls .help-inline").hide();
 });
 /* 验证输入框是否为空 */
 function validateInputEmpty(selector) {
     var e = $("input#"+selector);
+    var ename = e.prop("name");
     if (!$.trim(e.val())) {
-        $("div.cg-"+e.prop("name")).addClass("error");
+        $("div.cg-"+ename+" .help-inline").show();
         $("input#"+e.prop("name")).focus();
         return false;
     }
     return true;
 }
-$("input#job").click(function(){
-    $("div.cg-job").removeClass("error");
-});
 $("form#apply").submit(function(){
     var elementsValidateEmpty = ["name", "id_number"];
     for (var e in elementsValidateEmpty) {
@@ -93,12 +83,9 @@ $("form#apply").submit(function(){
         $("div.cg-id_number").addClass("error");
         return false;
     }
-    // 验证性别是否选择
-    if (!$("input#job:checked").val()) {
-        $("div.cg-job").addClass("error");
-        return false;
-    }
 });
 });
 </script>
-{% end %}
+%end
+
+%rebase template/layout.htm bodyblock=bodyblock

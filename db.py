@@ -7,8 +7,6 @@ import sqlite3
 
 def _get_db(cursor=True):
     """获取操作数据库的句柄"""
-    if dbname is None:
-        return None
     if not os.path.exists(settings.db_path):
         return None
     conn = sqlite3.connect(settings.db_path)
