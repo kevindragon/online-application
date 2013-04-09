@@ -25,10 +25,10 @@
             <label class="control-label">性别 <font color="red">*</font></label>
             <div class="controls">
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="男" />男
+                <input type="radio" name="gender" class="gender" value="男" />男
               </label>&nbsp;&nbsp;
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="女" />女
+                <input type="radio" name="gender" class="gender" value="女" />女
               </label>
             </div>
             <div class="controls">
@@ -235,10 +235,14 @@ $(function() {
     var date = new Date();
     $("#birthday").datepicker({
         dateFormat:"yy-mm-dd", 
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(), 
+        changeMonth: true,
+        changeYear: true });
     $("#graduate_date").datepicker({
         dateFormat:"yy-mm-dd",
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
+        changeMonth: true,
+        changeYear: true});
 
     $("#city").citySelect({  
         url:"/static/js/city.min.js",
@@ -264,7 +268,7 @@ $(function() {
         return true;
     }
     // 选择性别后，把提示隐藏
-    $("input#gender").click(function(){
+    $("input.gender").click(function(){
         $("div.cg-gender .help-inline").hide();
     });
     // 选择籍贯后，把提示隐藏
@@ -284,7 +288,7 @@ $(function() {
             return false;
         }
         // 验证性别是否选择
-        if (!$("input#gender:checked").val()) {
+        if (!$("input.gender:checked").val()) {
             $("div.cg-gender .help-inline").show();
             return false;
         }
@@ -300,8 +304,9 @@ $(function() {
         }
         // 验证身份证是否正确
         var idNumber = $("input#id_number").val();
-        if (!/\d{17}[X\d]/.test(idNumber)) {
+        if (!/^\d{17}[xX\d]$/.test(idNumber) && !/^\d{14}[xX\d]$/.test(idNumber)) {
             $("div.cg-id_number .help-inline").show();
+            $("#id_number").focus();
             return false;
         }
         // 验证电子邮件格式

@@ -31,10 +31,10 @@
             <label class="control-label">性别 <font color="red">*</font></label>
             <div class="controls">
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="男" {{gender_mc}} />男
+                <input type="radio" name="gender" class="gender" value="男" {{gender_mc}} />男
               </label>&nbsp;&nbsp;
               <label class="radio inline">
-                <input type="radio" name="gender" id="gender" value="女" {{gender_wc}} />女
+                <input type="radio" name="gender" class="gender" value="女" {{gender_wc}} />女
               </label>
             </div>
             <div class="controls">
@@ -158,7 +158,8 @@
           </div>
           <div class="control-group">
             <div class="controls">
-              <button type="submit" class="btn btn-large btn-primary">提交修改信息</button>
+              <input type="submit" class="btn btn-large btn-primary" value="提交修改信息" />
+              <input type="button" id="cancel-btn" class="btn btn-large btn-primary" value="取消修改" />
             </div>
           </div>
         </div>
@@ -294,7 +295,7 @@
           </div>
           <div class="control-group">
             <div class="controls">
-              <button class="btn btn-large btn-primary" id="back-to-amend">返回修改</button>
+              <button class="btn btn-large btn-primary" id="back-to-amend">修改</button>
             </div>
           </div>
         </div>
@@ -343,18 +344,28 @@ $(function() {
     };
     swfu = new SWFUpload(settings);
 
+    // 查看完信息后，直接修改
     $("#back-to-amend").click(function(){
         $("#info-show").hide();
         $("form.master-apply-form").show();
+    });
+    // 取消修改
+    $("#cancel-btn").click(function(){
+        $("#info-show").show();
+        $("form.master-apply-form").hide();
     });
 
     var date = new Date();
     $("#birthday").datepicker({
         dateFormat:"yy-mm-dd", 
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
+        changeMonth: true,
+        changeYear: true});
     $("#graduate_date").datepicker({
         dateFormat:"yy-mm-dd",
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDay()});
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
+        changeMonth: true,
+        changeYear: true});
 
     $("#city").citySelect({  
         url:"/static/js/city.min.js",
@@ -380,7 +391,7 @@ $(function() {
         return true;
     }
     // 选择性别后，把提示隐藏
-    $("input#gender").click(function(){
+    $("input.gender").click(function(){
         $("div.cg-gender .help-inline").hide();
     });
     // 选择籍贯后，把提示隐藏
@@ -400,7 +411,7 @@ $(function() {
             return false;
         }
         // 验证性别是否选择
-        if (!$("input#gender:checked").val()) {
+        if (!$("input.gender:checked").val()) {
             $("div.cg-gender .help-inline").show();
             return false;
         }
@@ -416,8 +427,9 @@ $(function() {
         }
         // 验证身份证是否正确
         var idNumber = $("input#id_number").val();
-        if (!/\d{17}[X\d]/.test(idNumber)) {
+        if (!/^\d{17}[xX\d]$/.test(idNumber) && !/^\d{14}[xX\d]$/.test(idNumber)) {
             $("div.cg-id_number .help-inline").show();
+            $("#id_number").focus();
             return false;
         }
         // 验证电子邮件格式
