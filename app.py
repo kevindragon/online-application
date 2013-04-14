@@ -27,11 +27,13 @@ def index():
 def upload_image():
     filename = ""
     filedata = request.files.get("Filedata")
+    prefix, suffix = os.path.splitext(filedata.filename)
     if filedata.file:
-        filename = ("%s%s%s" % 
-                    (settings.upload_tmp_path, 
-                     hashlib.md5(str(time.time())).hexdigest(),
-                     filedata.filename))
+        filename = (
+            "%s%s%s" % 
+            (settings.upload_tmp_path, 
+             hashlib.md5(str(time.time())).hexdigest(),
+             "%s%s" % (hashlib.md5(prefix+str(time.time())).hexdigest(), suffix)))
         open(filename, "wb").write(filedata.file.read())
     return "/%s" % filename
 

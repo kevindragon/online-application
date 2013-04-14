@@ -79,8 +79,9 @@ $("form#apply").submit(function(){
     }
     // 验证身份证是否正确
     var idNumber = $("input#id_number").val();
-    if (!/\d{17}[X\d]/.test(idNumber)) {
-        $("div.cg-id_number").addClass("error");
+    if (!/\d{17}[X\d]/.test(idNumber) && !/^\d{14}[xX\d]$/.test(idNumber)) {
+        $("div.cg-id_number .help-inline").show();
+        $("#id_number").focus();
         return false;
     }
 });
