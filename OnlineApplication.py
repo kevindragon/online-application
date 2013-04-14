@@ -17,4 +17,5 @@ import settings
 
 if __name__ == "__main__":
     import app
+    import admin
     run(host='0.0.0.0', port=8888, debug=True, reloader=True)
