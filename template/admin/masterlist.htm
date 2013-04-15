@@ -1,0 +1,18 @@
+%def bodyblock():
+<div class="content-container">
+  <table width="900" cellspacing="" cellpadding="" border="1">
+    <tr>
+      <th>姓名</th>
+      <th>身份证</th>
+    </tr>
+    %for row in rows:
+    <tr>
+      <td>{{row[1]}}</td>
+      <td>{{row[3]}}</td>
+    </tr>
+    %end
+  </table>
+</div>
+%end
+
+%rebase template/admin/layout.htm bodyblock=bodyblock

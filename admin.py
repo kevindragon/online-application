@@ -10,6 +10,7 @@ import sqlite3
 import settings
 from bottle import route, get, post, template, request, response, redirect
 
+user = {}
 
 def check_login(fun):
     def inner(*args, **argkw):
@@ -27,16 +28,19 @@ def check_login(fun):
         cursor.execute(sql, (sessionId, ))
         rows = cursor.fetchone()
         connect.close()
-        print rows
         if not rows:
             redirect("/admin/login")
+        if not user.has_key("session_id"):
+            user["session_id"] = rows[0]
+            user["username"] = rows[1]
+            user["update_time"] = rows[2]
         return fun(*args, **argkw)
     return inner
 
 @route("/admin")
 @check_login
 def admin():
-    return template(settings.admin_tpl_path+"admin.htm")
+    return template(settings.admin_tpl_path+"admin.htm", user=user)
 
 @get("/admin/login")
 def login_form():
@@ -61,6 +65,56 @@ def login():
             connect.commit()
             connect.close()
             redirect("/admin")
+    redirect("/admin/login")
+
+@get("/admin/passwd")
+@check_login
+def change_passwd_form():
+    return template(settings.admin_tpl_path+"change_passwd.htm")
+
+@post("/admin/passwd")
+@check_login
+def change_passwd():
+    old_passwd = request.forms.get("old_password").strip()
+    old_passwd_hash = hashlib.md5(old_passwd).hexdigest()
+    new_passwd = request.forms.get("password").strip()
+    confirm_passwd = request.forms.get("confirm_password").strip()
+    if new_passwd!=confirm_passwd:
+        return template(settings.admin_tpl_path+"change_passwd.htm", 
+                        message="两次输入的新密码不同。")
+    connect = sqlite3.connect(settings.db_path)
+    cursor = connect.cursor()
+    sql = ("SELECT COUNT(*) FROM admin WHERE username=? AND password=?")
+    cursor.execute(sql, (user["username"], old_passwd_hash))
+    rows = cursor.fetchone()
+    if not rows[0]:
+        return template(settings.admin_tpl_path+"change_passwd.htm", 
+                        message="旧密码不正确。")
+    sql = ("UPDATE admin SET password=? WHERE username=?")
+    password = hashlib.md5(new_passwd).hexdigest()
+    cursor.execute(sql, (password, user["username"]))
+    connect.commit()
+    connect.close()
+    redirect("/admin")
+
+@get("/admin/masterlist")
+@check_login
+def masterlist():
+    connect = sqlite3.connect(settings.db_path)
+    cursor = connect.cursor()
+    page = 0
+    sql = ("SELECT * FROM master_info LIMIT 0, 30;")
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    return template(settings.admin_tpl_path+"masterlist.htm",
+                    rows=rows)
+
+
+@get("/admin/logout")
+def logout():
+    connect = sqlite3.connect(settings.db_path)
+    cursor = connect.cursor()
+    sql = ("DELETE FROM ")
     redirect("/admin/login")
 
 
