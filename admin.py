@@ -107,14 +107,16 @@ def masterlist():
     cursor.execute(sql)
     rows = cursor.fetchall()
     return template(settings.admin_tpl_path+"masterlist.htm",
-                    rows=rows)
-
+                    rows=rows, settings=settings, time=time)
 
 @get("/admin/logout")
 def logout():
     connect = sqlite3.connect(settings.db_path)
     cursor = connect.cursor()
-    sql = ("DELETE FROM ")
+    sql = ("DELETE FROM admin_session WHERE username=? and session_id=?")
+    cursor.execute(sql, (user['username'], request.get_cookie("session_id")))
+    connect.commit()
+    connect.close()
     redirect("/admin/login")
 
 

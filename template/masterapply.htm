@@ -9,12 +9,19 @@
         <fieldset>
           <legend>硕士研究生报名表填写</legend>
         </fieldset>
+        <div class="message control-group">
+          <div class="control-group cg-old_password">
+            <div class="controls">
+              {{get("message", "")}}
+            </div>
+          </div>
+        </div>
         <div class="form-fields">
           <!-- 姓名 -->
           <div class="control-group cg-name">
             <label class="control-label" for="name">姓名 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="name" id="name" placeholder="姓名" />
+              <input type="text" name="name" id="name" placeholder="姓名" value="{{get('name', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请填写姓名</span>
@@ -25,10 +32,10 @@
             <label class="control-label">性别 <font color="red">*</font></label>
             <div class="controls">
               <label class="radio inline">
-                <input type="radio" name="gender" class="gender" value="男" />男
+                <input type="radio" name="gender" class="gender" value="男" {{get('gender_mc', '')}} />男
               </label>&nbsp;&nbsp;
               <label class="radio inline">
-                <input type="radio" name="gender" class="gender" value="女" />女
+                <input type="radio" name="gender" class="gender" value="女" {{get('gender_wc', '')}} />女
               </label>
             </div>
             <div class="controls">
@@ -50,7 +57,7 @@
           <div class="control-group cg-birthday">
             <label class="control-label" for="birthday">出生年月 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="birthday" id="birthday" placeholder="出生年月" />
+              <input type="text" name="birthday" id="birthday" placeholder="出生年月" value="{{get('birthday', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请选出生年月</span>
@@ -60,7 +67,7 @@
           <div class="control-group cg-political_status">
             <label class="control-label" for="political_status">政治面貌 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="political_status" id="political_status" placeholder="政治面貌" />
+              <input type="text" name="political_status" id="political_status" placeholder="政治面貌" value="{{get('political_status', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请填写政治面貌</span>
@@ -70,7 +77,7 @@
           <div class="control-group cg-graduate_date">
             <label class="control-label" for="graduate_date">毕业时间 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="graduate_date" id="graduate_date" placeholder="毕业时间" />
+              <input type="text" name="graduate_date" id="graduate_date" placeholder="毕业时间" value="{{get('graduate_date', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请选择毕业时间</span>
@@ -80,7 +87,7 @@
           <div class="control-group cg-university">
             <label class="control-label" for="university">毕业院校 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="university" id="university" placeholder="毕业院校" />
+              <input type="text" name="university" id="university" placeholder="毕业院校" value="{{get('university', '')}}" />
               <span>请根据毕业证书填写毕业院校名称</span>
             </div>
             <div class="controls">
@@ -91,7 +98,7 @@
           <div class="control-group cg-major">
             <label class="control-label" for="major">所学专业 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="major" id="major" placeholder="所学专业" />
+              <input type="text" name="major" id="major" placeholder="所学专业" value="{{get('major', '')}}" />
               <span>请根据毕业证书填写专业名称</span>
             </div>
             <div class="controls">
@@ -100,9 +107,10 @@
           </div>
           <!-- 身份证 -->
           <div class="control-group cg-id_number">
-            <label class="control-label" for="id_number">身份证 <font color="red">*</font></label>
+            <label class="control-label" for="id_number">身份证号 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="id_number" id="id_number" placeholder="身份证" />
+              <input type="text" name="id_number" id="id_number" placeholder="身份证号" value="{{get('id_number', '')}}" />
+              <span>填写后不能修改，请仔细核对</span>
             </div>
             <div class="controls">
               <span class="help-inline">请填写身份证信息</span>
@@ -112,14 +120,14 @@
           <div class="control-group cg-special_skill">
             <label class="control-label" for="special_skill">特长</label>
             <div class="controls">
-              <textarea name="special_skill" id="special_skill" placeholder="特长" cols="45" rows="3" ></textarea>
+              <textarea name="special_skill" id="special_skill" placeholder="特长" cols="45" rows="3" >{{get('special_skill', '')}}</textarea>
             </div>
           </div>
           <!-- 电子邮件 -->
           <div class="control-group cg-email">
             <label class="control-label" for="email">电子邮件 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="email" id="email" placeholder="电子邮件" />
+              <input type="text" name="email" id="email" placeholder="电子邮件" value="{{get('email', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请填写电子邮件，方便我们联系您</span>
@@ -129,7 +137,7 @@
           <div class="control-group cg-phone">
             <label class="control-label" for="phone">联系电话 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="phone" id="phone" placeholder="联系电话" />
+              <input type="text" name="phone" id="phone" placeholder="联系电话" value="{{get('phone', '')}}" />
             </div>
             <div class="controls">
               <span class="help-inline">请填写联系电话，方便我物联系您</span>
@@ -144,8 +152,8 @@
                 </span>
               </div>
               <div class="fileupload-new thumbnail">
-                <img src="/static/images/blank_avatar.jpg" width="140" id="avatar_thumb" />
-                <input type="hidden" name="avatar" value="" />
+                <img src="{{get('avatar', '/static/images/blank_avatar.jpg')}}" width="140" id="avatar_thumb" />
+                <input type="hidden" name="avatar" value="{{get('avatar', '')}}" />
               </div>
             </div>
             <div>
@@ -159,18 +167,6 @@
           </div>
         </div>
       </form>
-      <div id="protocol" class="protocol">
-        <p class="protocol-content">协议</p>
-        <p>
-          <label for="agree">
-            <input type="checkbox" name="agree" id="agree" value="1" />我同意以上协议
-          </label>
-        </p>
-        <p>
-          <input type="button" name="agree-btn" id="agree-btn" value="我同意" disabled="disabled" />
-          <input type="button" name="cancel-btn" id="cancel-btn" value="取消" />
-        </p>
-      </div>
     </div>
     <div class="span3 well well-white">
       <p>硕士研究生在线报名说明:</p>
@@ -220,25 +216,6 @@ $(function() {
 	};
 	swfu = new SWFUpload(settings);
 
-	$("#agree").click(function(){
-		if ($(this).prop("checked")) {
-			$("#agree-btn").removeAttr("disabled");
-		} else {
-			$("#agree-btn").attr("disabled", "disabled");
-		}
-	});
-    $("#agree-btn").click(function(){
-        if ($('#agree').prop("checked")) {
-            $("#protocol").hide();
-            $("form.master-apply-form").show();
-        } else {
-            alert('请先同意以上协议，同意请勾选"我同意以上协议"');
-        }
-    });
-
-    //$("#protocol").hide();
-    //$("form.master-apply-form").show();
-
     var date = new Date();
     $("#birthday").datepicker({
         dateFormat:"yy-mm-dd", 
@@ -257,8 +234,8 @@ $(function() {
 
     $("#city").citySelect({  
         url:"/static/js/city.min.js",
-        prov:"--",
-        city:"--",
+        prov:"{{get('prov', '--')}}",
+        city:"{{get('city', '--')}}",
         nodata:"none"
     });
     

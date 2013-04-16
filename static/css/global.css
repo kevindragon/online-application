@@ -113,7 +113,6 @@ label {display: block;margin-bottom: 5px;}
 .form-horizontal .controls .text {padding-top:8px;}
 .radio.inline, .checkbox.inline {display: inline-block;padding-top: 5px;margin-bottom: 0;vertical-align: middle;}
 
-.master-apply-form {display:none}
 .form-fields {position:relative;}
 .form-fields .help-inline {color:red;display:none;}
 .form-fields .avatar {position:absolute; right:0px; top:5px; width:150px;}
@@ -126,6 +125,8 @@ label {display: block;margin-bottom: 5px;}
     width:100%;
     overflow-y:scroll;
 }
+
+.message {font-weight:bold; color:red;}
 
 .applysuccess {
      position:relative;

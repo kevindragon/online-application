@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
     <div class="span8 well well-white" style="margin-left:0px;">
-      <form action="/postinfo" class="form-horizontal master-apply-form" method="post" enctype="multipart/form-data" id="apply">
+      <form action="/postinfo" class="form-horizontal master-apply-form" method="post" enctype="multipart/form-data" id="apply" style="display:none;">
         <input type="hidden" name="edit" value="1" />
         <input type="hidden" name="lastrowid" value="{{lastrowid}}" />
         <fieldset>
@@ -104,9 +104,11 @@
           </div>
           <!-- 身份证 -->
           <div class="control-group cg-id_number">
-            <label class="control-label" for="id_number">身份证 <font color="red">*</font></label>
+            <label class="control-label" for="id_number">身份证号 <font color="red">*</font></label>
             <div class="controls">
-              <input type="text" name="id_number" value="{{id_number}}" id="id_number" placeholder="身份证" />
+              <input type="text" name="id_number_virtual" value="{{id_number}}" id="id_number_virtual" placeholder="身份证号" disabled="disabled" />
+              <input type="hidden" name="id_number" value="{{id_number}}" id="id_number" placeholder="身份证号" />
+              <span>身份证号不能修改</span>
             </div>
             <div class="controls">
               <span class="help-inline">请填写身份证信息</span>

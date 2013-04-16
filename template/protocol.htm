@@ -1,0 +1,48 @@
+%def bodyblock():
+
+%include template/header.htm nav=nav
+<link rel="stylesheet" href="/static/jquery-ui-1.10.2.custom/css/cupertino/jquery-ui-1.10.2.custom.min.css" type="text/css" media="screen" />
+<div class="container">
+  <div class="row">
+    <div class="span8 well well-white" style="margin-left:0px;">
+      <div id="protocol" class="protocol">
+        <p class="protocol-content">协议</p>
+        <p>
+          <label for="agree">
+            <input type="checkbox" name="agree" id="agree" value="1" />我同意以上协议
+          </label>
+        </p>
+        <p>
+          <input type="button" name="agree-btn" id="agree-btn" value="我同意" disabled="disabled" />
+          <input type="button" name="cancel-btn" id="cancel-btn" value="取消" />
+        </p>
+      </div>
+    </div>
+    <div class="span3 well well-white">
+      <p>硕士研究生在线报名说明:</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer"></div>
+<script type="text/javascript">
+$(function(){
+    $("#agree").click(function(){
+		if ($(this).prop("checked")) {
+			$("#agree-btn").removeAttr("disabled");
+		} else {
+			$("#agree-btn").attr("disabled", "disabled");
+		}
+	});
+    $("#agree-btn").click(function(){
+        if ($('#agree').prop("checked")) {
+            window.location.href = "/masterapply"
+        } else {
+            alert('请先同意以上协议，同意请勾选"我同意以上协议"');
+        }
+    });
+});
+</script>
+%end
+
+%rebase template/layout.htm bodyblock=bodyblock

@@ -101,7 +101,7 @@ li {line-height: 20px;}
     background-color: #111;
 }
 
-.content-container {margin-top:50px;}
+.content-container {margin:20px;margin-top:60px;}
 .well {
 	min-height: 20px;
 	padding: 19px;
@@ -132,6 +132,8 @@ label {display: block;margin-bottom: 5px;}
 .message {font-weight:bold; color:red;}
 
 .content-container table {border-collapse:collapse;border-color:#cccccc;}
+.content-container table tr th {padding:3px;}
+.content-container table tr td {padding:3px;}
 
 /* The white background content wrapper */
 .login-form-content {

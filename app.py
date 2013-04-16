@@ -19,7 +19,7 @@ def static_upload_files(filename):
 def static_files(filename):
     return static_file(filename, root='static/')
 
-@get("/")
+@get("/masterapply")
 def index():
     return template(settings.app_tpl_path+"masterapply.htm", nav=1)
 
@@ -36,6 +36,11 @@ def upload_image():
              "%s%s" % (hashlib.md5(prefix+str(time.time())).hexdigest(), suffix)))
         open(filename, "wb").write(filedata.file.read())
     return "/%s" % filename
+
+@get("/")
+@get("/protocol")
+def protocol():
+    return template(settings.app_tpl_path+"protocol.htm", nav=1)
 
 @post("/postinfo")
 def post_master_form():
@@ -79,23 +84,30 @@ def post_master_form():
                "NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         params = post_data
     
+    tpl = settings.app_tpl_path+"applyinfo.htm"
     try:
         cursor.execute(sql, params)
         connect.commit()
         if not edit:
             pd_dict.update(lastrowid=cursor.lastrowid)
     except Exception:
-        sql = "select id from master_info where id_number=? and name=?"
-        cursor.execute(sql, (pd_dict["id_number"], pd_dict["name"]))
+        sql = "select id, name from master_info where id_number=?"
+        cursor.execute(sql, (pd_dict["id_number"], ))
         row = cursor.fetchall()
         if len(row):
             pd_dict.update(lastrowid=row[0][0])
+            message = "此身份证号码已经申请过，请核对您的身份证号码"
+            tpl = settings.app_tpl_path+"masterapply.htm"
+            if pd_dict["name"]==row[0][1]:
+                message = ""
+                tpl = settings.app_tpl_path+"applyinfo.htm"
+            pd_dict.update(message=message)
     connect.close()
     
     pd_dict.update(avatar=("/%s" % dst_file))
     pd_dict.update(gender_mc="checked='true'" if "男"==pd_dict["gender"] else "")
     pd_dict.update(gender_wc="checked='true'" if "女"==pd_dict["gender"] else "")
-    return template(settings.app_tpl_path+"applyinfo.htm", nav=1, **pd_dict)
+    return template(tpl, nav=1, **pd_dict)
 
 @get("/infoquery")
 def infoquery():
@@ -132,3 +144,6 @@ def doquery():
 
     return template(tpl, nav=1, **info_dict)
 
+@post("/verifyidnumber")
+def verify_id_number():
+    pass
