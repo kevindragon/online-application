@@ -1,9 +1,10 @@
 *.pyc
 *~
-#*#
 *.bak
 .project
 .pydevproject
 .settings
 upload/tmp
 upload/*
+\#*
+*.swp

@@ -52,6 +52,32 @@
               <span class="help-inline">请选择籍贯</span>
             </div>
           </div>
+          <!-- 政治面貌 -->
+          <div class="control-group cg-political_status">
+            <label class="control-label" for="political_status">政治面貌 <font color="red">*</font></label>
+            <div class="controls">
+              <select name="political_status" id="political_status">
+                <option value=""> -- </option>
+                <option value="中共党员">中共党员</option>
+                <option value="中共预备党员">中共预备党员</option>
+                <option value="共青团员">共青团员</option>
+                <option value="民革党员">民革党员</option>
+                <option value="民盟盟员">民盟盟员</option>
+                <option value="民建会员">民建会员</option>
+                <option value="民进会员">民进会员</option>
+                <option value="农工党党员">农工党党员</option>
+                <option value="致公党党员">致公党党员</option>
+                <option value="九三学社社员">九三学社社员</option>
+                <option value="台盟盟员">台盟盟员</option>
+                <option value="无党派人士">无党派人士</option>
+                <option value="群众（现称普通公民）">群众（现称普通公民）</option>
+                <option value="港澳同胞">港澳同胞</option>
+              </select>
+            </div>
+            <div class="controls">
+              <span class="help-inline">请选择政治面貌</span>
+            </div>
+          </div>
           <!-- 出生年月 -->
           <div class="control-group cg-birthday">
             <label class="control-label" for="birthday">出生年月 <font color="red">*</font></label>
@@ -60,16 +86,6 @@
             </div>
             <div class="controls">
               <span class="help-inline">请选出生年月</span>
-            </div>
-          </div>
-          <!-- 政治面貌 -->
-          <div class="control-group cg-political_status">
-            <label class="control-label" for="political_status">政治面貌 <font color="red">*</font></label>
-            <div class="controls">
-              <input type="text" name="political_status" value="{{political_status}}" id="political_status" placeholder="政治面貌" />
-            </div>
-            <div class="controls">
-              <span class="help-inline">请填写政治面貌</span>
             </div>
           </div>
           <!-- 毕业时间 -->
@@ -376,6 +392,10 @@ $(function() {
         nodata:"none"
     });
     
+    %if get('political_status', ''):
+    $("#political_status").val("{{get('political_status', '')}}");
+    %end
+
     // 表单验证
     $("form#apply input[type=text]").keydown(function(){
         var ename = $(this).prop("name");
@@ -407,7 +427,7 @@ $(function() {
     });
     $("form#apply").submit(function(){
         var elementsValidateEmpty = [
-            "birthday", "political_status", "graduate_date", "university", "major", 
+            "political_status", "birthday", "graduate_date", "university", "major", 
             "id_number", "email", "phone"];
         if (!validateInputEmpty("name")) {
             return false;

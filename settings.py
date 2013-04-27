@@ -14,4 +14,5 @@ app_tpl_path = "template/"
 upload_path = "upload/"
 upload_tmp_path = "upload/tmp/"
 
-verify_text = ('未审核', '已通过审核', '审核未通过')
+verify_text = {'0': '未审核', '1': '已通过审核', '2': '审核未通过', 
+               0: '未审核', 1: '已通过审核', 2: '审核未通过'}

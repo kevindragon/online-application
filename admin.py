@@ -106,8 +106,39 @@ def masterlist():
     sql = ("SELECT * FROM master_info LIMIT 0, 30;")
     cursor.execute(sql)
     rows = cursor.fetchall()
+    print rows
     return template(settings.admin_tpl_path+"masterlist.htm",
                     rows=rows, settings=settings, time=time)
+
+@get("/admin/check/<mid:int>")
+@check_login
+def admin_check(mid=None):
+    info = []
+    if mid > 0:
+        connect = sqlite3.connect(settings.db_path)
+        cursor = connect.cursor()
+        sql = ("SELECT * FROM master_info WHERE id=?")
+        cursor.execute(sql, (mid, ))
+        data = cursor.fetchall()
+        if data:
+            info = list(data[0])
+        connect.close()
+    return template(settings.admin_tpl_path+"verify_info.htm", info=info)
+
+@post("/admin/check")
+@check_login
+def verify_info():
+    data_id = int(request.forms.get("id"))
+    vstatus = int(request.forms.get("passed"))
+    if data_id and vstatus in (0, 1):
+        connect = sqlite3.connect(settings.db_path)
+        cursor = connect.cursor()
+        sql = "UPDATE master_info SET verify_status=? WHERE id=?"
+        res = cursor.execute(sql, (vstatus, data_id))
+        a = connect.commit()
+        print res, a
+        connect.close()
+
 
 @get("/admin/logout")
 def logout():
