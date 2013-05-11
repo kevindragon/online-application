@@ -1,16 +1,25 @@
+{% extends 'layout.html' %}
+
 {% load staticfiles %}
 
-<link rel="stylesheet" href="{% static 'jquery-ui/css/cupertino/jquery-ui-1.10.2.custom.min.css' %}" type="text/css" media="screen" />
+{% block content %}
 
+{% block css_block %}
+<link rel="stylesheet" href="{% static 'jquery-ui/css/cupertino/jquery-ui-1.10.2.custom.min.css' %}" type="text/css" media="screen" />
+{% endblock %}
+
+{% block js_block %}
 <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.cityselect.js' %}"></script>
 <script type="text/javascript" src="{% static 'jquery-ui/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/swfupload.js' %}"></script>
+{% endblock %}
 
 <!-- {{ peopleForm.errors }} -->
-<form action="/apply/" method="post">
+<form action="/{% if 'edit' == operate %}update{% else %}apply{% endif %}/" method="post">
 {% csrf_token %}
 {{ peopleForm.non_field_errors }}
+
 <p><label>岗位：</label><span>{{ peopleForm.job }}</span>
 {{ peopleForm.job.errors }}</p>
 <p><label>姓名：</label><span>{{ peopleForm.name }}</span>
@@ -21,9 +30,11 @@
 {{ peopleForm.nation.errors }}</p>
 <p><label>出生年月：</label><span>{{ peopleForm.birthday }}</span>
 {{ peopleForm.birthday.errors }}</p>
+
 <p><label>身份证号：</label>
 <span>{{ peopleForm.id_number }}</span>
 {{ peopleForm.id_number.errors }}</p>
+
 <p><label>政治面貌：</label><span>{{ peopleForm.political_status }}</span>
 {{ peopleForm.political_status.errors }}</p>
 <p><label>婚姻状况：</label><span>{{ peopleForm.marital_status }}</span>
@@ -53,11 +64,14 @@
 {{ peopleForm.foreign_language_level.errors }}</p>
 <p><label>参加工作时间：</label><span>{{ peopleForm.start_work_date }}</span>
 {{ peopleForm.start_work_date.errors }}</p>
+
+{% if 'edit' != operate %}
 <p><label>查询密码：</label>
 <span>{{ peopleForm.query_password }}</span>
 {{ peopleForm.query_password.errors }}</p>
 <p><label>确认查询密码：</label><span>{{ peopleForm.query_password2 }}</span>
 {{ peopleForm.query_password2.errors }}</p>
+{% endif %}
 
 <p><label>取得资格——专业技术资格：</label><span>{{ peopleForm.technical_qualification }}</span>
 {{ peopleForm.technical_qualification.errors }}</p>
@@ -113,6 +127,9 @@
 {{ peopleForm.avator.errors }}</p>
 <!-- {{ peopleForm.as_p }} -->
 <input type="submit" value="提交" name="submit" />
+{% if 'edit' == operate %}
+<a href="/myinfo">返回</a>
+{% endif %}
 </form>
 
 <script type="text/javascript">
@@ -155,3 +172,5 @@ $(function(){
         defaultDate: 0});
 });
 </script>
+
+{% endblock %}

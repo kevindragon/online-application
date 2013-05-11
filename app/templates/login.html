@@ -1,6 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
 <form action="/login/" method="post">
 {% csrf_token %}
 <p><label>身份证号：</label>{{ loginForm.id_number }}</p>
 <p><label>密码：</label>{{ loginForm.password }}</p>
 <input type="submit" name="submit" value="Login" />
 </form>
+
+{% endblock %}

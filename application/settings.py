@@ -160,3 +160,10 @@ LOGGING = {
         },
     }
 }
+
+ADMIN_EMAIL = 'rsch_imut_admin@126.com'
+
+EMAIL_HOST = 'smtp.126.com'
+EMAIL_HOST_USER = 'rsch_imut_admin@126.com'
+EMAIL_HOST_PASSWORD = 'qwe123'
+

@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<form action="/findpwd" method="post">
+  {% csrf_token %}
+  <p>
+    <label>身份证号：</label>
+    <span>{{ form.id_number }}</span>
+    {{ form.id_number.errors }}
+  </p>
+  <p>
+    <label>电子邮箱：</label>
+    <span>{{ form.email }}</span>
+    {{ form.email.errors }}
+  </p>
+  <p>
+    <input type="submit" name="submit" value="找回密码" />
+  </p>
+</form>
+
+{% endblock %}

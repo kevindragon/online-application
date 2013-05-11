@@ -1,3 +1,7 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
 <p><label>审核进度：</label><span>{{ people.audit_step }}</span></p>
 <p><label>岗位：</label><span>{{ people.job }}</span></p>
 <p><label>姓名：</label><span>{{ people.name }}</span></p>
@@ -58,8 +62,14 @@
 
 <p><label>照片：</label><span>{{ people.avator }}</span>
 
-<form action="/apply/" method="get">
-<input type="hidden" name="id" value="{{ people.id }}" />
-<input type="hidden" name="operate" value="amend" />
-<input type="submit" name="submit" value="Amend" />
-</form>
+<p>
+  <form action="/edit/" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="people_id" value="{{ people.id }}" />
+    <input type="hidden" name="id_number" value="{{ people.id_number }}" />
+    <input type="submit" name="submit" value="修改" />
+  </form>
+  <a href="/">返回</a>
+</p>
+
+{% endblock %}

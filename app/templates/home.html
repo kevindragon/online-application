@@ -1,25 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>内蒙古工业大学网上报名系统</title>
-</head>
-<body>
-<p>
-{% if request.session.profile %}
-<span>{{ request.session.profile.name }}</span> 
-<span>您好！</span>
-<a href="/logout/">退出</a>
-<a href="/myinfo/">查看报名信息</a> 
-{% else %}
-<a href="/login/">登录</a>
-{% endif %}
-</p>
-<a href="/apply/">申请</a>
-<br>
+{% extends 'layout.html' %}
+
+{% block content %}
+
 {% for people in peoples %}
 {{ people.name }} {{ people.birthday }} {{ people.id_number }} {{ people.query_password }}<br>
 {% endfor %}
-<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
-</body>
-</html>
+
+{% endblock %}

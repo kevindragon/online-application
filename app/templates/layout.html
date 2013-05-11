@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}内蒙古工业大学网上报名系统{% endblock %}</title>
+{% block css_block %}{% endblock %}
+</head>
+<body>
+<p>
+{% if request.session.profile %}
+<span>{{ request.session.profile.name }}</span> 
+<span>您好！</span>
+<a href="/myinfo/">查看报名信息</a> 
+<a href="/changepwd">修改密码</a>
+<a href="/logout/">退出</a>
+{% else %}
+<a href="/login/">登录</a>
+{% endif %}
+<a href="/findpwd">找回密码</a>
+</p>
+
+<p>
+  <a href="/job/">查看岗位</a>
+</p>
+{% block content %}{% endblock %}
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+{% block js_block %}{% endblock %}
+</body>
+</html>

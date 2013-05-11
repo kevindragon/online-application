@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<form action="/changepwd" method="post">
+  {% csrf_token %}
+  <p>
+    <label>原始密码：</label>
+    <span>{{ form.old_password }}</span>
+    {{ form.old_password.errors }}
+  </p>
+  <p>
+    <label>新密码：</label>
+    <span>{{ form.new_password }}</span>
+    {{ form.new_password.errors }}
+  </p>
+  <p>
+    <label>确认新密码：</label>
+    <span>{{ form.confirm_password }}</span>
+    {{ form.confirm_password.errors }}
+  </p>
+  <p>
+    <input type="submit" name="submit" value="确认" />
+  </p>
+</form>
+
+{% endblock %}

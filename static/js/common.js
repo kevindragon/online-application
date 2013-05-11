@@ -1,5 +1,0 @@
-
-$(function(){
-  $('.hover-dropdown').dropdownHover();
-})
-

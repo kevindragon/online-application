@@ -15,10 +15,14 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^$', 'app.views.home'),
-    url(r'^job/', 'app.views.jobs'),
+    url(r'^job', 'app.views.jobs'),
     url(r'^apply/(?P<job_id>\d+)?', 'app.views.applyjob'), 
-    url(r'^myinfo/', 'app.views.myinfo'), 
-    url(r'^login/', 'app.views.login'), 
-    url(r'^logout/', 'app.views.logout'), 
+    url(r'^edit', 'app.views.edit'), 
+    url(r'^update/', 'app.views.update'),
+    url(r'^myinfo', 'app.views.myinfo'), 
+    url(r'^login', 'app.views.login'), 
+    url(r'^logout', 'app.views.logout'), 
+    url(r'^findpwd', 'app.views.findpwd'), 
+    url(r'^changepwd', 'app.views.changepwd'), 
     url(r'^admin/', include(admin.site.urls)),
 ) + staticfiles_urlpatterns()
