@@ -2,11 +2,14 @@
 
 {% block content %}
 
+<p>岗位, 招聘要求, 招聘人数, 学历要求</p>
 {% for job in jobs %}
+<p>
 {{job.title}}, {{job.major}}, {{job.count}}, {{job.degree_limit}}, 
 {% if job.degree_des %}
 岗位详细要求:{{job.degree_des}}
 {% endif %}<a href="/apply/{{job.id}}">立即申请</a><br>
+</p>
 {% endfor %}
 
 {% endblock %}

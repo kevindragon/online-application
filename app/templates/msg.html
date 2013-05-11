@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<p>{{ message }}</p>
+<p>{% autoescape off %}{{ message }}{% endautoescape %}</p>
 <p>
   <a href="/">返回首页</a>
 </p>

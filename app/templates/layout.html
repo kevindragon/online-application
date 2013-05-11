@@ -7,6 +7,8 @@
 </head>
 <body>
 <p>
+<a href="/">首页</a>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 {% if request.session.profile %}
 <span>{{ request.session.profile.name }}</span> 
 <span>您好！</span>
@@ -19,9 +21,6 @@
 <a href="/findpwd">找回密码</a>
 </p>
 
-<p>
-  <a href="/job/">查看岗位</a>
-</p>
 {% block content %}{% endblock %}
 <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 {% block js_block %}{% endblock %}

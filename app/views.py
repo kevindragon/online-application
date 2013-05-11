@@ -30,13 +30,11 @@ def applyjob(request, job_id):
     if request.method == 'POST':
         peopleForm = PeopleForm(request.POST)
         if peopleForm.is_valid():
-            print "People Form is valided"
             data = peopleForm.cleaned_data
             data['query_password'] = hashlib.md5(data['query_password']).hexdigest()
             del data['query_password2']
             People(**data).save()
-        else:
-            print "People Form is invalided"
+            return render_to_response("msg.html", {'message': u'信息提交成功'})
     else:
         peopleForm = PeopleForm(initial={'job': job_id})
     return render_to_response("apply.html", locals())
@@ -69,7 +67,8 @@ def update(request):
             people.save()
             # 更新session
             request.session['profile'] = people
-            return redirect('/myinfo')
+            message = u'信息修改成功。<a href="/myinfo">查看</a>'
+            return render_to_response("msg.html", locals())
         return render_to_response("apply.html", locals())
     else:
         return redirect('/')
@@ -121,7 +120,7 @@ def findpwd(request):
                     message = u'您的密码已经发送到您的邮箱，请登录您的邮箱查看'
                 else:
                     message = u'邮件发送失败，请联系内蒙古工业大学人事处00000-0000000'
-                return render_to_response("msg.html", {'message': message})
+                return render_to_response("msg.html", locals())
     else:
         form = FindpwdForm()
     return render_to_response("findpwd.html", locals())
@@ -139,7 +138,8 @@ def changepwd(request):
                 query_password = hashlib.md5(form.cleaned_data['new_password']).hexdigest()
                 people[0].query_password = query_password
                 people[0].save()
-                return render_to_response("msg.html", {'message': u'密码修改成功'})
+                message = u'密码修改成功'
+                return render_to_response("msg.html", locals())
             else:
                 form.errors['old_password'] = form.error_class([u'原始密码不匹配'])
     else:

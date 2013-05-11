@@ -3,6 +3,7 @@
 from django import forms
 from app.models import People
 from django.core.exceptions import ValidationError
+from app.functions import id_number_validator
 
 class PeopleNoPasswordForm(forms.ModelForm):
     gender = forms.ChoiceField(widget=forms.RadioSelect, 
@@ -12,7 +13,7 @@ class PeopleNoPasswordForm(forms.ModelForm):
     hometown_city = forms.CharField(widget=forms.Select)
     residence_prov = forms.CharField(widget=forms.Select)
     residence_city = forms.CharField(widget=forms.Select)
-    avator = forms.CharField(widget=forms.HiddenInput)
+    avator = forms.CharField() #widget=forms.HiddenInput
     # 修改自己信息的时候不需要验证密码
     query_password = forms.CharField(required=False)
 
@@ -85,13 +86,13 @@ class PeopleForm(PeopleNoPasswordForm):
 
 
 class LoginForm(forms.Form):
-    id_number = forms.CharField()
+    id_number = forms.CharField(validators=[id_number_validator])
     password = forms.CharField(widget=forms.PasswordInput)
-
+    
 
 class FindpwdForm(forms.Form):
-    id_number = forms.CharField()
-    email = forms.EmailField()
+    id_number = forms.CharField(validators=[id_number_validator])
+    email = forms.EmailField(error_messages={'invalid': '邮件格式不正确'})
 
 
 class ChangepwdForm(forms.Form):

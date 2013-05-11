@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import re
 import hashlib
 import datetime
 from django.db import models
-from django.core.exceptions import ValidationError
+from app.functions import id_number_validator
+
+year_choices = [(y, y) for y in range(1903, datetime.datetime.now().year+1)]
+month_choices = [(m, m) for m in range(1, 13)]
 
 class PasswordField(models.CharField):
     def get_prep_value(self, value):
@@ -22,13 +24,6 @@ class Job(models.Model):
     def __unicode__(self):
         return self.title
 
-
-def id_number_validator(value):
-    '''验证身份证是否合法'''
-    p1 = re.compile(u'^\d{14}[xX\d]$')
-    p2 = re.compile(u'^\d{17}[xX\d]$')
-    if not p1.match(str(value)) and not p2.match(str(value)):
-        raise ValidationError(u'请填写正确的身份证号码')
 
 class People(models.Model):
     gender_choices = ((u'男',)*2, (u'女',)*2)
@@ -73,7 +68,8 @@ class People(models.Model):
     phone = models.CharField(max_length=20)
     other_contact = models.CharField(max_length=30, blank=True)
     foreign_language_level = models.CharField(max_length=50)
-    start_work_date = models.DateField(verbose_name=u'参加工作时间')
+    start_work_year = models.IntegerField(choices=year_choices)
+    start_work_month = models.IntegerField(choices=month_choices)
     query_password = models.CharField(max_length=32)
     # 专业技术资格
     technical_qualification = models.CharField(max_length=200, blank=True)
@@ -82,8 +78,6 @@ class People(models.Model):
     # 其他资格
     other_qualification = models.CharField(max_length=200, blank=True)
     
-    year_choices = [(y, y) for y in range(1903, datetime.datetime.now().year+1)]
-    month_choices = [(m, m) for m in range(1, 13)]
     # 第一学历 - 起始时间
     first_edu_start_year = models.IntegerField(choices=year_choices)
     first_edu_start_month = models.IntegerField(choices=month_choices)
@@ -119,11 +113,11 @@ class People(models.Model):
     high_edu_major = models.CharField(max_length=200)
     
     # 其他学习经历 - 起始时间
-    other_edu_start_year = models.IntegerField(blank=True, choices=year_choices)
-    other_edu_start_month = models.IntegerField(blank=True, choices=month_choices)
+    other_edu_start_year = models.IntegerField(blank=True, null=True, choices=year_choices)
+    other_edu_start_month = models.IntegerField(blank=True, null=True, choices=month_choices)
     # 其他学习经历 - 结束时间
-    other_edu_edu_year = models.IntegerField(blank=True, choices=year_choices)
-    other_edu_edu_month = models.IntegerField(blank=True, choices=month_choices)
+    other_edu_edu_year = models.IntegerField(blank=True, null=True, choices=year_choices)
+    other_edu_edu_month = models.IntegerField(blank=True, null=True, choices=month_choices)
     # 其他学习经历 - 学习单位
     other_edu_unit = models.CharField(max_length=100, blank=True)
     # 其他学习经历 - 所学专业
@@ -145,7 +139,7 @@ class People(models.Model):
     # 个人特长及奖惩情况
     special_skill = models.TextField(blank=True)
     # 照片路径
-    avator = models.FilePathField()
+    avator = models.CharField(max_length=255)
     # 审核进度
     audit_step = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     

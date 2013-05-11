@@ -37,22 +37,40 @@
 <p><label>取得资格——执业资格：</label><span>{{ people.operation_qualification }}</span></p>
 <p><label>取得资格——其他：</label><span>{{ people.other_qualification }}</span></p>
 
-<p><label>第一学历——起始时间：</label><span>{{ people.first_edu_start_year }} {{ people.first_edu_start_month }}</span></p>
-<p><label>第一学历——结束时间：</label><span>{{ people.first_edu_end_year }}{{ people.first_edu_end_month }}</span></p>
+<p><label>第一学历——起始时间：</label><span>{{ people.first_edu_start_year }} - {{ people.first_edu_start_month }}</span></p>
+<p><label>第一学历——结束时间：</label><span>{{ people.first_edu_end_year }} - {{ people.first_edu_end_month }}</span></p>
 <p><label>第一学历——学位：</label><span>{{ people.first_edu_degree }}</span></p>
 <p><label>第一学历——学历：</label><span>{{ people.first_edu_bkgrd }}</span></p>
 <p><label>第一学历——毕业院校：</label><span>{{ people.first_edu_university }}</span></p>
 <p><label>第一学历——所学专业：</label><span>{{ people.first_edu_major }}</span></p>
 
-<p><label>最高学历——起始时间：</label><span>{{ people.high_edu_start_year }}{{ people.high_edu_start_month }}</span></p>
-<p><label>最高学历——结束时间：</label><span>{{ people.high_edu_edu_year }}{{ people.high_edu_edu_month }}</span></p>
+<p>
+  <label>最高学历——起始时间：</label>
+  {% if people.high_edu_start_year %}
+  <span>{{ people.high_edu_start_year }} - {{ people.high_edu_start_month }}</span>
+  {% endif %}
+</p>
+<p>
+  <label>最高学历——结束时间：</label>
+  <span>{{ people.high_edu_edu_year }} - {{ people.high_edu_edu_month }}</span>
+</p>
 <p><label>最高学历——学位：</label><span>{{ people.high_edu_degree }}</span></p>
 <p><label>最高学历——学历：</label><span>{{ people.high_edu_bkgrd }}</span></p>
 <p><label>最高学历——毕业院校：</label><span>{{ people.high_edu_university }}</span></p>
 <p><label>最高学历——所学专业：</label><span>{{ people.high_edu_major }}</span></p>
 
-<p><label>其他学习经历——起始时间：</label><span>{{ people.other_edu_start_year }}{{ people.other_edu_start_month }}</span></p>
-<p><label>其他学习经历——结束时间：</label><span>{{ people.other_edu_edu_year }}{{ people.other_edu_edu_month }}</span></p>
+<p>
+  <label>其他学习经历——起始时间：</label>
+  {% if people.other_edu_start_year %}
+  <span>{{ people.other_edu_start_year }} - {{ people.other_edu_start_month }}</span>
+  {% endif %}
+</p>
+<p>
+  <label>其他学习经历——结束时间：</label>
+  {% if people.other_edu_edu_year %}
+  <span>{{ people.other_edu_edu_year }} - {{ people.other_edu_edu_month }}</span>
+  {% endif %}
+</p>
 <p><label>其他学习经历——学习单位：</label><span>{{ people.other_edu_unit }}</span></p>
 <p><label>其他学习经历——所学专业：</label><span>{{ people.other_edu_major }}</span></p>
 <p><label>其他学习经历——学历：</label><span>{{ people.other_edu_bkgrd }}</span></p>

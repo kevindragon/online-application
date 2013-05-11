@@ -62,8 +62,13 @@
 <p><label>其他联系方式：</label><span>{{ peopleForm.other_contact }}</span></p>
 <p><label>外语及水平：</label><span>{{ peopleForm.foreign_language_level }}</span>
 {{ peopleForm.foreign_language_level.errors }}</p>
-<p><label>参加工作时间：</label><span>{{ peopleForm.start_work_date }}</span>
-{{ peopleForm.start_work_date.errors }}</p>
+<p><label>参加工作时间：</label><span>{{ peopleForm.start_work_year }}{{ peopleForm.start_work_month }}</span>
+{% if peopleForm.start_work_year.errors %}
+{{ peopleForm.start_work_year.errors }}
+{% else %}
+{{ peopleForm.start_work_month.errors }}
+{% endif %}
+</p>
 
 {% if 'edit' != operate %}
 <p><label>查询密码：</label>
@@ -81,7 +86,12 @@
 {{ peopleForm.other_qualification.errors }}</p>
 
 <p><label>第一学历——起始时间：</label><span>{{ peopleForm.first_edu_start_year }} {{ peopleForm.first_edu_start_month }}</span>
-{{ peopleForm.first_edu_start_year.errors }}</p>
+{% if peopleForm.first_edu_start_year.errors %}
+{{ peopleForm.first_edu_start_year.errors }}
+{% else %}
+{{ peopleForm.first_edu_start_month.errors }}
+{% endif %}
+</p>
 <p><label>第一学历——结束时间：</label><span>{{ peopleForm.first_edu_end_year }}{{ peopleForm.first_edu_end_month }}</span>
 {{ peopleForm.first_edu_end_year.errors }}</p>
 <p><label>第一学历——学位：</label><span>{{ peopleForm.first_edu_degree }}</span>
@@ -94,7 +104,12 @@
 {{ peopleForm.first_edu_major.errors }}</p>
 
 <p><label>最高学历——起始时间：</label><span>{{ peopleForm.high_edu_start_year }}{{ peopleForm.high_edu_start_month }}</span>
-{{ peopleForm.high_edu_start_year.errors }}</p>
+{% if peopleForm.high_edu_start_year.errors %}
+{{ peopleForm.high_edu_start_year.errors }}
+{% else %}
+{{ peopleForm.high_edu_start_month.errors }}
+{% endif %}
+</p>
 <p><label>最高学历——结束时间：</label><span>{{ peopleForm.high_edu_edu_year }}{{ peopleForm.high_edu_edu_month }}</span>
 {{ peopleForm.high_edu_edu_year.errors }}</p>
 <p><label>最高学历——学位：</label><span>{{ peopleForm.high_edu_degree }}</span>
@@ -125,7 +140,7 @@
 
 <p><label>照片：</label><span>{{ peopleForm.avator }}</span>
 {{ peopleForm.avator.errors }}</p>
-<!-- {{ peopleForm.as_p }} -->
+
 <input type="submit" value="提交" name="submit" />
 {% if 'edit' == operate %}
 <a href="/myinfo">返回</a>
