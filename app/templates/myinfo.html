@@ -1,0 +1,65 @@
+<p><label>审核进度：</label><span>{{ people.audit_step }}</span></p>
+<p><label>岗位：</label><span>{{ people.job }}</span></p>
+<p><label>姓名：</label><span>{{ people.name }}</span></p>
+<p><label>性别：</label><span>{{ people.gender }}</span></p>
+<p><label>民族：</label><span>{{ people.nation }}</span></p>
+<p><label>出生年月：</label><span>{{ people.birthday }}</span></p>
+<p><label>身份证号：</label><span>{{ people.id_number }}</span></p>
+<p><label>政治面貌：</label><span>{{ people.political_status }}</span></p>
+<p><label>婚姻状况：</label><span>{{ people.marital_status }}</span></p>
+<p>
+  <label>籍贯：</label>
+  <span id="hometown">
+    <span>{{ people.hometown_prov }}</span>
+    <span>{{ people.hometown_city }}</span>
+  </span>
+</p>
+<p>
+  <label>户口所在地：</label>
+  <span id="residence">
+    <span>{{ people.residence_prov }}</span>
+    <span>{{ people.residence_city }}</span>
+  </span>
+</p>
+<p><label>电子邮件：</label><span>{{ people.email }}</span></p>
+<p><label>手机：</label><span>{{ people.phone }}</span></p>
+<p><label>其他联系方式：</label><span>{{ people.other_contact }}</span></p>
+<p><label>外语及水平：</label><span>{{ people.foreign_language_level }}</span></p>
+<p><label>参加工作时间：</label><span>{{ people.start_work_date }}</span></p>
+<p><label>查询密码：</label><span>{{ people.query_password }}</span></p>
+<p><label>确认查询密码：</label><span>{{ people.query_password2 }}</span></p>
+
+<p><label>取得资格——专业技术资格：</label><span>{{ people.technical_qualification }}</span></p>
+<p><label>取得资格——执业资格：</label><span>{{ people.operation_qualification }}</span></p>
+<p><label>取得资格——其他：</label><span>{{ people.other_qualification }}</span></p>
+
+<p><label>第一学历——起始时间：</label><span>{{ people.first_edu_start_year }} {{ people.first_edu_start_month }}</span></p>
+<p><label>第一学历——结束时间：</label><span>{{ people.first_edu_end_year }}{{ people.first_edu_end_month }}</span></p>
+<p><label>第一学历——学位：</label><span>{{ people.first_edu_degree }}</span></p>
+<p><label>第一学历——学历：</label><span>{{ people.first_edu_bkgrd }}</span></p>
+<p><label>第一学历——毕业院校：</label><span>{{ people.first_edu_university }}</span></p>
+<p><label>第一学历——所学专业：</label><span>{{ people.first_edu_major }}</span></p>
+
+<p><label>最高学历——起始时间：</label><span>{{ people.high_edu_start_year }}{{ people.high_edu_start_month }}</span></p>
+<p><label>最高学历——结束时间：</label><span>{{ people.high_edu_edu_year }}{{ people.high_edu_edu_month }}</span></p>
+<p><label>最高学历——学位：</label><span>{{ people.high_edu_degree }}</span></p>
+<p><label>最高学历——学历：</label><span>{{ people.high_edu_bkgrd }}</span></p>
+<p><label>最高学历——毕业院校：</label><span>{{ people.high_edu_university }}</span></p>
+<p><label>最高学历——所学专业：</label><span>{{ people.high_edu_major }}</span></p>
+
+<p><label>其他学习经历——起始时间：</label><span>{{ people.other_edu_start_year }}{{ people.other_edu_start_month }}</span></p>
+<p><label>其他学习经历——结束时间：</label><span>{{ people.other_edu_edu_year }}{{ people.other_edu_edu_month }}</span></p>
+<p><label>其他学习经历——学习单位：</label><span>{{ people.other_edu_unit }}</span></p>
+<p><label>其他学习经历——所学专业：</label><span>{{ people.other_edu_major }}</span></p>
+<p><label>其他学习经历——学历：</label><span>{{ people.other_edu_bkgrd }}</span></p>
+<p><label>其他学习经历——学位：</label><span>{{ people.other_edu_degree }}</span></p>
+<p><label>其他学习经历——学习形式：</label><span>{{ people.other_edu_type }}</span></p>
+<p><label>个人特长及奖惩情况：</label><span>{{ people.special_skill }}</span></p>
+
+<p><label>照片：</label><span>{{ people.avator }}</span>
+
+<form action="/apply/" method="get">
+<input type="hidden" name="id" value="{{ people.id }}" />
+<input type="hidden" name="operate" value="amend" />
+<input type="submit" name="submit" value="Amend" />
+</form>
