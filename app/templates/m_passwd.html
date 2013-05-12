@@ -1,0 +1,67 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+<div class="content-container">
+  <div class="well">
+    <form method="post" action="/management/passwd/" class="form-horizontal" id="passwd_form">
+      {% csrf_token %}
+      <fieldset>
+        <legend>修改密码</legend>
+      </fieldset>
+      <div class="message control-group">
+        <div class="control-group cg-old_password">
+          <div class="controls">
+          </div>
+        </div>
+      </div>
+      <!-- 旧密码 -->
+      <div class="control-group cg-old_password">
+        <label class="control-label" for="old_password">旧密码 <font color="red">*</font></label>
+        <div class="controls">
+          {{ form.old_passwd }}
+        </div>
+        <div class="controls">
+          {{ form.old_passwd.errors }}
+        </div>
+      </div>
+      <!-- 新密码 -->
+      <div class="control-group cg-password">
+        <label class="control-label" for="password">新密码 <font color="red">*</font></label>
+        <div class="controls">
+          {{ form.new_passwd }}
+        </div>
+        <div class="controls">
+          {{ form.new_passwd.errors }}
+        </div>
+      </div>
+      <!-- 确认密码 -->
+      <div class="control-group cg-confirm_password">
+        <label class="control-label" for="confirm_password">确认新密码 <font color="red">*</font></label>
+        <div class="controls">
+          {{ form.confirm_passwd }}
+        </div>
+        <div class="controls">
+          {{ form.confirm_passwd.errors }}
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input type="submit" name="submit" value="修改密码" />
+          <input type="button" name="cancel" value="取消" />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+$(function(){
+    $("input[name=cancel]").click(function(){
+        window.location.href = "/admin"
+    });
+});
+</script>
+{% endblock %}
+

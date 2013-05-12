@@ -13,7 +13,6 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
     url(r'^$', 'app.views.home'),
     url(r'^protocol/(?P<type_id>\d)', 'app.views.protocol'), 
     url(r'^job', 'app.views.jobs'),
@@ -26,6 +25,17 @@ urlpatterns = patterns('',
     url(r'^login', 'app.views.login'), 
     url(r'^logout', 'app.views.logout'), 
     url(r'^findpwd', 'app.views.findpwd'), 
-    url(r'^changepwd', 'app.views.changepwd'), 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^changepwd', 'app.views.changepwd'),
+    
+    url(r'^management/$', 'app.views.m_admin'), 
+    url(r'^management/login', 'app.views.m_login'), 
+    url(r'^management/logout/', 'app.views.m_logout'),
+    url(r'^management/firstaudit/', 'app.views.m_firstaudit'), 
+    url(r'^management/passwd/', 'app.views.m_change_passwd'), 
+    url(r'^management/job/$', 'app.views.m_job'), 
+    url(r'^management/job/add/', 'app.views.m_job_add'), 
+    url(r'^management/job/(?P<job_id>\d+)/del/', 'app.views.m_job_del'), 
+    url(r'^management/job/(?P<job_id>\d+)/edit/', 'app.views.m_job_edit'),  
+    
+    url(r'^admin/', include(admin.site.urls)), 
 ) + staticfiles_urlpatterns()

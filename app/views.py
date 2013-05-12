@@ -5,9 +5,12 @@ from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib import auth
+from django.http import HttpResponse
 from app.models import People, Job
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm 
-from app.forms import ChangepwdForm
+from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
 
 def auth_check(func):
     def wrapper(*args, **kwargs):
@@ -161,4 +164,101 @@ def changepwd(request):
 
 def protocol(request, type_id):
     return render_to_response("protocol.html", locals())
+
+
+# ---------- admin views ----------
+
+def m_auth_check(func):
+    def wrapper(*args, **kwargs):
+        request = args[0]
+        if not request.user.is_authenticated():
+            return redirect('/management/login/')
+        return func(*args, **kwargs)
+    return wrapper
+
+@m_auth_check
+def m_firstaudit(request):
+    peoples = People.objects.filter(audit_step__lt=1)
+    return render_to_response("m_firstaudit.html", locals())
+
+@m_auth_check
+def m_admin(request):
+    return render_to_response("m_admin.html", locals())
+
+@m_auth_check
+def m_job(request):
+    locals().update(csrf(request))
+    jobs = Job.objects.all()
+    if request.session.has_key('message'):
+        message = request.session['message']
+        del request.session['message']
+    return render_to_response("m_job_list.html", locals())
+
+@m_auth_check
+def m_job_add(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            if request.POST.get('edit') == '1':
+                job = Job.objects.get(pk=int(request.POST.get('job_id')))
+                for k, v in form.cleaned_data.items():
+                    setattr(job, k, v)
+                job.save()
+                request.session['message'] = u'岗位信息修改成功'
+            else:
+                form.save()
+                request.session['message'] = u'岗位信息添加成功'
+            return redirect("/management/job/")
+    else:
+        form = JobForm()
+    return render_to_response("m_job_add.html", locals())
+
+@m_auth_check
+def m_job_del(request, job_id):
+    job = Job.objects.get(pk=job_id)
+    job.delete()
+    request.session['message'] = u'%s - %s删除成功' % (job.major, job.job_type)
+    return redirect("/management/job/")
+
+@m_auth_check
+def m_job_edit(request, job_id):
+    locals().update(csrf(request))
+    job = Job.objects.get(pk=job_id)
+    form = JobForm(instance=job)
+    edit = True
+    return render_to_response("m_job_add.html", locals())
+
+def m_change_passwd(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        form = AdminChangePasswd(request.POST)
+        if form.is_valid() and request.user.check_password(request.POST.get('old_passwd')):
+            request.user.set_password(request.POST.get('new_passwd'))
+            request.user.save()
+            message = u'密码修改成功'
+            return render_to_response("m_msg.html", locals())
+    else:
+        form = AdminChangePasswd()
+    return render_to_response("m_passwd.html", locals())
+
+def m_login(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        form = AdminLoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(username=request.POST.get('username'), 
+                                password=request.POST.get('password'))
+            if user and user.is_active:
+                auth.login(request, user)
+                return redirect("/management/")
+    else:
+        form = AdminLoginForm()
+    return render_to_response("m_login.html", locals())
+
+def m_logout(request):
+    auth.logout(request)
+    return redirect("/management/login/")
+
+
 

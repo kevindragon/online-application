@@ -7,19 +7,20 @@
   <body>
     <div class="container">
       <div class="login-form-content">
-        <form action="/admin/login" class="form-horizontal" method="post">
+        <form action="/management/login" class="form-horizontal" method="post">
+          {% csrf_token %}
           <fieldset>
             <legend>管理员登录</legend>
             <div class="control-group">
               <label class="control-label" for="username">用户名</label>
               <div class="controls">
-                <input type="text" name="username" id="username" placeholder="用户名" style="width:140px;" />
+                {{ form.username }}{{ form.username.errors }}
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="password">密码</label>
               <div class="controls">
-                <input type="password" name="password" id="password" placeholder="密码" style="width:140px;" />
+                {{ form.password }}{{ form.password.errors }}
               </div>
             </div>
             <div class="control-group">
@@ -31,7 +32,5 @@
         </form>
       </div>
     </div>
-    <script src="/static/js/jquery-1.9.1.min.js"></script>
-    <script src="/static/js/common.js"></script>
   </body>
 </html>

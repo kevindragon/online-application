@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from app.models import People
+from app.models import People, Job
 from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
 
@@ -108,4 +108,31 @@ class ChangepwdForm(forms.Form):
             self._errors['confirm_password'] = self.error_class([errmsg])
             raise ValidationError(errmsg)
         return pwd2
+
+
+class AdminLoginForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(min_length=6, widget=forms.PasswordInput)
+
+
+class AdminChangePasswd(forms.Form):
+    old_passwd = forms.CharField(min_length=6, widget=forms.PasswordInput)
+    new_passwd = forms.CharField(min_length=6, widget=forms.PasswordInput)
+    confirm_passwd = forms.CharField(min_length=6, widget=forms.PasswordInput)
+    
+    def clean_confirm_passwd(self):
+        pwd1 = self.cleaned_data.get('new_passwd')
+        pwd2 = self.cleaned_data.get('confirm_passwd')
+        if pwd1 and pwd2 and pwd1 != pwd2:
+            errmsg = u'两次输入的密码不一致'
+            self._errors['confirm_passwd'] = self.error_class([errmsg])
+            raise ValidationError(errmsg)
+        return pwd2
+
+
+class JobForm(forms.ModelForm):
+    
+    class Meta:
+        model = Job
+
 

@@ -15,14 +15,16 @@ class PasswordField(models.CharField):
 
 class Job(models.Model):
     u'''招聘岗位'''
-    title = models.CharField(max_length=200)
+    job_type = models.CharField(
+        max_length=20, choices=((u'教师', )*2, (u'教辅', )*2, (u'管理人员', )*2))
+    department = models.CharField(max_length=100)
     major = models.CharField(max_length=200)
     count = models.IntegerField(default=0)
     degree_limit = models.CharField(max_length=255)
     degree_des = models.TextField()
 
     def __unicode__(self):
-        return self.title
+        return '%s - %s' % (self.major, self.job_type)
 
 
 class People(models.Model):
