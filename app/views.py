@@ -76,8 +76,17 @@ def update(request):
 @auth_check
 def myinfo(request):
     locals().update(csrf(request))
-    people = request.session['profile']
+    people = People.objects.get(pk=request.session['profile'].id)
     return render_to_response("myinfo.html", locals())
+
+@auth_check
+def progress(request):
+    people = People.objects.get(pk=request.session['profile'].id)
+    return render_to_response("progress.html", locals())
+
+@auth_check
+def printinfo(request, ptype):
+    return render_to_response("audit_table.html", locals())
 
 def login(request):
     locals().update(csrf(request))

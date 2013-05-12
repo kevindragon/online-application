@@ -81,12 +81,14 @@
 <p><label>照片：</label><span>{{ people.avator }}</span>
 
 <p>
+  {% if not people.audit_step %}
   <form action="/edit/" method="post">
     {% csrf_token %}
     <input type="hidden" name="people_id" value="{{ people.id }}" />
     <input type="hidden" name="id_number" value="{{ people.id_number }}" />
     <input type="submit" name="submit" value="修改" />
   </form>
+  {% endif %}
   <a href="/">返回</a>
 </p>
 
