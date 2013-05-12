@@ -86,7 +86,11 @@ def progress(request):
 
 @auth_check
 def printinfo(request, ptype):
-    return render_to_response("audit_table.html", locals())
+    people = People.objects.get(pk=request.session['profile'].id)
+    if ptype == 'audit':
+        return render_to_response("audit_table.html", locals())
+    else:
+        return render_to_response("ticket_table.html", locals())
 
 def login(request):
     locals().update(csrf(request))
@@ -155,4 +159,6 @@ def changepwd(request):
         form = ChangepwdForm()
     return render_to_response("changepwd.html", locals()) 
 
+def protocol(request, type_id):
+    return render_to_response("protocol.html", locals())
 

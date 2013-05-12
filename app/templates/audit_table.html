@@ -11,26 +11,28 @@ table {border-collapse:collapse;}
 <table width="898" height="146" border="1">
   <tr>
     <td width="40" height="36" align="center">姓名</td>
-    <td width="141">&nbsp;</td>
+    <td width="141">{{ people.name }}</td>
     <td width="44" align="center">性别</td>
-    <td width="83">&nbsp;</td>
+    <td width="83">{{ people.gender }}</td>
     <td width="36" align="center">民族</td>
-    <td width="81">&nbsp;</td>
+    <td width="81">{{ people.nation }}</td>
     <td width="67" align="center">出生日期</td>
-    <td width="228">&nbsp;</td>
-    <td width="120" rowspan="3">&nbsp;</td>
+    <td width="228">{{ people.birthday|date:"Y/m/d" }}</td>
+    <td width="120" rowspan="3">
+        <img width="120px" src="{{ people.avator }}" />
+    </td>
   </tr>
   <tr>
     <td height="58" align="center">报考序号</td>
     <td colspan="4">&nbsp;</td>
     <td align="center">身份证号</td>
-    <td colspan="2">&nbsp;</td>
+    <td colspan="2">{{ people.id_number }}</td>
   </tr>
   <tr>
     <td height="42" align="center">报考岗位</td>
-    <td colspan="4">&nbsp;</td>
+    <td colspan="4">{{ people.job.title }}</td>
     <td align="center">手机号码</td>
-    <td colspan="2">&nbsp;</td>
+    <td colspan="2">{{ people.phone }}</td>
   </tr>
 </table>
 <table width="898" height="231" border="1">
@@ -38,35 +40,35 @@ table {border-collapse:collapse;}
     <td height="38" colspan="9" align="center">第一学历相关信息</td>
   </tr>
   <tr>
-    <td width="77" height="33">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 历</td>
-    <td width="263">&nbsp;</td>
-    <td width="57">学&nbsp;&nbsp;&nbsp;&nbsp; 位</td>
-    <td width="204">&nbsp;</td>
+    <td width="77" height="33">学&nbsp;&nbsp;历</td>
+    <td width="263">{{ people.first_edu_bkgrd }}</td>
+    <td width="57">学&nbsp;&nbsp;位</td>
+    <td width="204">{{ people.first_edu_degree }}</td>
     <td width="69">毕业院校</td>
-    <td width="188">&nbsp;</td>
+    <td width="188">{{ people.first_edu_university }}</td>
   </tr>
   <tr>
     <td height="41">所学专业</td>
-    <td colspan="3">&nbsp;</td>
+    <td colspan="3">{{ people.first_edu_major }}</td>
     <td>毕业时间</td>
-    <td>&nbsp;</td>
+    <td>{{ people.first_edu_end_year }}-{{ people.first_edu_end_month }}</td>
   </tr>
   <tr>
     <td height="32" colspan="6" align="center">最高学历相关信息</td>
   </tr>
   <tr>
-    <td height="38">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 历</td>
-    <td>&nbsp;</td>
-    <td>学&nbsp;&nbsp;&nbsp;&nbsp; 位</td>
-    <td>&nbsp;</td>
+    <td height="38">学&nbsp;&nbsp;历</td>
+    <td>{{ people.high_edu_bkgrd }}</td>
+    <td>学&nbsp;&nbsp; 位</td>
+    <td>{{ people.high_edu_degree }}</td>
     <td>毕业院校</td>
-    <td>&nbsp;</td>
+    <td>{{ people.high_edu_university }}</td>
   </tr>
   <tr>
     <td height="33">所学专业</td>
-    <td colspan="3">&nbsp;</td>
+    <td colspan="3">{{ people.high_edu_major }}</td>
     <td>毕业时间</td>
-    <td>&nbsp;</td>
+    <td>{{ people.high_edu_edu_year }}-{{ people.high_edu_edu_month }}</td>
   </tr>
 </table>
 <table width="898" border="1">
@@ -117,6 +119,7 @@ table {border-collapse:collapse;}
 </div>
 <p id="print-wrapper">
   <button id="print-btn" style="font-size:16px;width:80px;height:40px;">打印</button>
+  <button id="print-back" style="font-size:16px;width:80px;height:40px;">返回</button>
 </p>
 <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 <script>
@@ -124,6 +127,9 @@ $(function(){
 	$('#print-btn').click(function(){
 		$('#print-wrapper').hide();
 		window.print();
+	});
+	$('#print-back').click(function(){
+		history.go(-1);
 	});
 })
 </script>

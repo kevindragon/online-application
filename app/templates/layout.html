@@ -10,8 +10,7 @@
 <a href="/">首页</a>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 {% if request.session.profile %}
-<span>{{ request.session.profile.name }}</span> 
-<span>您好！</span>
+<span>{{ request.session.profile.name }}</span>,<span>您好！</span>
 <a href="/myinfo/">查看报名信息</a>
 <a href="/progress">查看审核进度</a>
 <a href="/changepwd">修改密码</a>

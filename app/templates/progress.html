@@ -24,14 +24,15 @@
   <span>复审通过</span>
   <div>您的信息已经复审通过，现在您可以打印您的报考信息</div>
   {% elif people.audit_step == 7 %}
-  <span>初审未通过</span>
+  <span>未通过初审</span>
   <div>照片不符合要求，请更换您的照片</div>
   {% elif people.audit_step == 8 %}
-  <span>复审未通过</span>
+  <span>未通过复审</span>
   <div>什么什么不符合要求</div>
   {% endif %}
 </p>
 
+{% if people.audit_step == 2 %}
 <p>
   <span style="padding:10px;background-color:blue;">
     <a href="/print/audit" style="color:white;font-weight:bold;text-decoration:none;">打印资格审查表</a>
@@ -41,5 +42,6 @@
     <a href="/print/ticket" style="color:white;font-weight:bold;text-decoration:none;">打印准考证</a>
   </span>
 </p>
+{% endif %}
 
 {% endblock %}

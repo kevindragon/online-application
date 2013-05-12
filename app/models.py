@@ -141,5 +141,8 @@ class People(models.Model):
     # 照片路径
     avator = models.CharField(max_length=255)
     # 审核进度
-    audit_step = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
-    
+    audit_step = models.PositiveSmallIntegerField(
+        default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+
+    def __unicode__(self):
+        return self.name
