@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from app.models import People, Job
+from app.models import People, Job, PeopleExtra
 from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
 
@@ -131,8 +131,29 @@ class AdminChangePasswd(forms.Form):
 
 
 class JobForm(forms.ModelForm):
-    
     class Meta:
         model = Job
 
+
+class AuditForm(forms.ModelForm):
+    def __init__(self, people, *args, **kwargs):
+        super(AuditForm, self).__init__(*args, **kwargs)
+        status_choices = ((u' -- ', u' -- '),)
+        if people:
+            if not people.audit_step or people.audit_step == 0:
+                status_choices = ((u' -- ', u' -- '), (1, u'通过'), (7, u'不通过'))
+            elif people.audit_step == 2:
+                status_choices = ((u' -- ', u' -- '), (2, u'通过'), (8, u'不通过'))
+        self.fields['audit_step'] = forms.ChoiceField(widget=forms.Select, choices=status_choices)
+
+    def clean(self):
+        d = self.cleaned_data
+        if int(d['audit_step']) in (7, 8) and not d['reason'].strip():
+            errmsg = u'请填写不通过的理由'
+            self._errors['reason'] = self.error_class([errmsg])
+            raise ValidationError(errmsg)
+        return d
+
+    class Meta:
+        model = PeopleExtra
 

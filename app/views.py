@@ -8,15 +8,17 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import HttpResponse
-from app.models import People, Job
+from app.models import People, Job, PeopleExtra
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm 
 from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
+from app.forms import AuditForm
 
 def auth_check(func):
     def wrapper(*args, **kwargs):
         request = args[0]
         if not request.session.has_key('profile'):
             return redirect('/login')
+        request.session.set_expiry(3600)
         return func(*args, **kwargs)
     return wrapper
 
@@ -34,6 +36,7 @@ def applyjob(request, job_id):
         peopleForm = PeopleForm(request.POST)
         if peopleForm.is_valid():
             data = peopleForm.cleaned_data
+            data['audit_step'] = 0
             data['query_password'] = hashlib.md5(data['query_password']).hexdigest()
             del data['query_password2']
             People(**data).save()
@@ -62,6 +65,7 @@ def update(request):
         if (request.POST.get('id_number') == request.session['profile'].id_number and 
             peopleForm.is_valid()):
             data = peopleForm.cleaned_data
+            data['audit_step'] = 0
             # 把不需要更新的字段去掉
             del data['id_number'], data['query_password']
             people = People.objects.get(pk=request.session['profile'].id)
@@ -106,13 +110,15 @@ def login(request):
             )
             if people:
                 request.session['profile'] = people[0]
+                request.session.set_expiry(3600)
                 return redirect('/')
     else:
         loginForm = LoginForm()
     return render_to_response('login.html', locals())
 
 def logout(request):
-    del request.session['profile']
+    if request.session.has_key('profile'):
+        del request.session['profile']
     return redirect('/')
 
 def findpwd(request):
@@ -177,9 +183,44 @@ def m_auth_check(func):
     return wrapper
 
 @m_auth_check
-def m_firstaudit(request):
+def elementary(request):
+    locals().update(csrf(request))
     peoples = People.objects.filter(audit_step__lt=1)
-    return render_to_response("m_firstaudit.html", locals())
+    if request.session.has_key('message'):
+        message = request.session['message']
+        del request.session['message']
+    return render_to_response("m_elementary.html", locals())
+
+@m_auth_check
+def m_people_del(request):
+    if request.method == 'POST' and request.POST.get('operate') == 'del':
+        people_ids = request.POST.getlist('people_id')
+        peoples = People.objects.filter(pk__in=people_ids)
+        peoples.delete()
+        request.session['message'] = u'删除成功'
+        return redirect('/management/elementary/')
+
+@m_auth_check
+def m_audit(request, people_id=0):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        people = People.objects.get(pk=request.POST.get('people'))
+        form = AuditForm(people, request.POST)
+        if form.is_valid():
+            form.save()
+            people.audit_step = form.cleaned_data['audit_step']
+            people.save()
+            request.session['message'] = u'%s的审核状态保存成功' % (people.name, )
+            return redirect('/management/elementary/')
+    else:
+        people = People.objects.get(pk=people_id)
+        job = Job.objects.get(pk=people.job.id)
+        failed_audit = ('7', '8')
+        if people.audit_step >= 0:
+            audit_step = (people.audit_step, 7, 8)
+            people_extra = PeopleExtra.objects.filter(people=people, audit_step__in=audit_step)
+        form = AuditForm(people, initial={'people': people})
+    return render_to_response("m_audit.html", locals())
 
 @m_auth_check
 def m_admin(request):
@@ -187,6 +228,7 @@ def m_admin(request):
 
 @m_auth_check
 def m_job(request):
+    '''岗位列表'''
     locals().update(csrf(request))
     jobs = Job.objects.all()
     if request.session.has_key('message'):

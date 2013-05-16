@@ -131,7 +131,7 @@ label {display: block;margin-bottom: 5px;}
 
 .message {font-weight:bold; color:red;}
 
-.content-container table {border-collapse:collapse;border-color:#cccccc;}
+.content-container table {border-collapse:collapse;border:1px solid #cccccc;}
 .content-container table tr th {padding:3px;}
 .content-container table tr td {padding:3px;}
 

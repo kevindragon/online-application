@@ -62,8 +62,10 @@ class People(models.Model):
                                         verbose_name=u'政治面貌')
     marital_status = models.CharField(max_length=10, choices=marital_status_choices, 
                                       verbose_name=u'婚姻状况')
+    # 籍贯
     hometown_prov = models.CharField(max_length=50)
     hometown_city = models.CharField(max_length=100)
+    # 户口
     residence_prov = models.CharField(max_length=50)
     residence_city = models.CharField(max_length=50)
     email = models.EmailField()
@@ -138,6 +140,12 @@ class People(models.Model):
         max_length=100, blank=True, 
         choices=((u'全日制教育',)*2, (u'在职教育',)*2, 
                  (u'博士后',)*2, (u'其他',)*2))
+    # 是否蒙汉兼通
+    is_han_mongolia_both = models.CharField(
+        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
+    # 是否服务基层项目人员
+    is_basic_attendant =  models.CharField(
+        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
     # 个人特长及奖惩情况
     special_skill = models.TextField(blank=True)
     # 照片路径
@@ -148,3 +156,12 @@ class People(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class PeopleExtra(models.Model):
+    people = models.ForeignKey(People)
+    audit_step = models.PositiveSmallIntegerField(
+        default=0, blank=True, null=True,  
+        help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+    reason = models.TextField(blank=True)
+

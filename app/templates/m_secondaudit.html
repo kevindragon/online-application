@@ -1,0 +1,15 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+{% for people in peoples %}
+<p>
+  <span>{{ people.name }}</span>
+  <span>{{ people.gender }}</span>
+  <span>{{ people.first_edu_degree }}</span>
+  <a href="/management/audit/{{ people.id }}">审核</a>
+{% endfor %}
+</div>
+
+{% endblock %}

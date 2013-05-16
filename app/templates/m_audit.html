@@ -1,0 +1,225 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+<h3>{{ people.name }}的初审信息</h3>
+<p>
+<table width="900" border="1">
+  <tr>
+    <td width="11%">姓名</td>
+    <td width="18%">{{ people.name }}</td>
+    <td width="13%">性别</td>
+    <td width="18%">{{ people.gender }}</td>
+    <td width="9%">民族</td>
+    <td width="15%">{{ people.nation }}</td>
+    <td width="16%" rowspan="5">照片</td>
+  </tr>
+  <tr>
+    <td>出生年月</td>
+    <td>{{ people.birthday|date:"Y-m-d" }}</td>
+    <td>籍贯</td>
+    <td>{{ people.hometown_prov }} {{ people.hometown_city }}</td>
+    <td>政治面貌</td>
+    <td>{{ people.political_status }}</td>
+  </tr>
+  <tr>
+    <td>报考岗位</td>
+    <td colspan="5">{{ people.job.major }} - {{ people.job.job_type }}</td>
+  </tr>
+  <tr>
+    <td>第一学历</td>
+    <td>{{ people.first_edu_bkgrd }}</td>
+    <td>所需第一学历</td>
+    <td>{{ job.degree_limit }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">第一学历毕业院校及所学专业</td>
+    <td colspan="3">{{ people.first_edu_university }} - {{ people.first_edu_major }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>最高学历</td>
+    <td>{{ people.high_edu_bkgrd }}</td>
+    <td>所需最高学历</td>
+    <td>{{ job.degree_limit }}?</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>最高学位</td>
+    <td>{{ people.high_edu_degree }}</td>
+    <td>所需最高学位</td>
+    <td>{{ job.degree_limit }}?</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">最高学历起始时间</td>
+    <td>
+      <span>{{ people.high_edu_start_year }}/{{ people.high_edu_start_month }}</span>
+      <span> - </span>
+      <span>{{ people.high_edu_edu_year }}/{{ people.high_edu_edu_month }}</span>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">最高学历毕业院校及所学专业</td>
+    <td colspan="3">{{ people.high_edu_university }} - {{ people.high_edu_major }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>是否蒙汉兼通</td>
+    <td>{{ people.is_han_mongolia_both }}</td>
+    <td colspan="2">是否服务基层项目人员</td>
+    <td>{{ people.is_basic_attendant }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>身份证号</td>
+    <td>{{ people.id_number }}</td>
+    <td>婚姻状况</td>
+    <td>{{ people.marital_status }}</td>
+    <td>户口所在地</td>
+    <td>{{ people.residence_prov }} {{ people.residence_city }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>外语水平</td>
+    <td>{{ people.foreign_language_level }}</td>
+    <td>参加工作时间</td>
+    <td>{{ people.start_work_year }}-{{ people.start_work_month }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">第一学历起始时间</td>
+    <td colspan="5">
+      <span>{{ people.first_edu_start_year }}/{{ people.first_edu_start_month }}</span>
+      <span> - </span>
+      <span>{{ people.first_edu_end_year }}/{{ people.first_edu_end_month }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>其他学习经历 - 起始时间</td>
+    <td>
+      {% if people.other_edu_start_year %}{
+      <span>{ people.other_edu_start_year }}/{{ people.other_edu_start_mont }}</span>
+      <span> - </span>
+      <span>{{ people.other_edu_edu_year }}/{{ people.other_edu_edu_mont }}</span>
+      {% endif %}
+    </td>
+    <td>其他学习经历 - 学位</td>
+    <td>{{ people.other_edu_degree }}</td>
+    <td>其他学习经历 - 学历</td>
+    <td>{{ people.other_edu_bkgrd }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>其他学习经历 - 学习单位</td>
+    <td>{{ people.other_edu_unit }}</td>
+    <td>其他学习经历 - 所学专业</td>
+    <td>{{ people.other_edu_major }}</td>
+    <td>其他学习经历 - 学习形式</td>
+    <td>{{ people.other_edu_type }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>专业技术资格</td>
+    <td>{{ people.technical_qualification }}</td>
+    <td>执业资格</td>
+    <td>{{ people.operation_qualification }}</td>
+    <td>其他资格</td>
+    <td>{{ people.other_qualification }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>电子邮件</td>
+    <td>{{ people.email }}</td>
+    <td>手机</td>
+    <td>{{ people.phone }}</td>
+    <td>其他联系方式</td>
+    <td>{{ people.other_contact }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>个人特长</td>
+    <td>{{ people.special_skill }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</p>
+{% if not people_extra %}
+<form action="/management/audit/" method="post" onsubmit="return audit_check(this);">
+  {% csrf_token %}
+  <input type="hidden" name="people" value="{{ people.id }}" />
+  <p>
+    <div>
+      <span>是否通过：</span>
+      <span>{{ form.audit_step }}</span>{{ form.audit_step.errors }}
+    </div>
+  </p>
+  <div id="reason" style="display:none;">
+    <span>理由：</span>
+    <span>{{ form.reason }}</span>{{ form.reason.errors }}
+  </div>
+  <p>
+    <input type="submit" name="submit" value="提交" />
+  </p>
+</form>
+{% else %}
+<p>已经审核过此信息</p>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% if not people_extra %}
+{% block js_block %}
+<script>
+function audit_check(form) {
+    var e = $('#id_audit_step');
+    var e2 = $('#id_reason');
+    if (-1 != $.inArray(parseInt(e.val()), [7, 8]) && !$.trim(e2.val())) {
+        alert('请填写不通过的理由');
+        //return false;
+    }
+}
+$(function(){
+	if (-1 != $.inArray(parseInt($('#id_audit_step').val()), [7, 8])) {
+        $('#reason').show();
+	}
+    $('#id_audit_step').change(function(){
+        if (-1 == $.inArray(parseInt($(this).val()), [7, 8])) {
+            $('#reason').hide();
+        } else {
+            $('#reason').show();
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endif %}
