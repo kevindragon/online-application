@@ -2,12 +2,21 @@
 
 {% block content %}
 
-<p>
-  <a href="/protocol/1">硕士网上报名入口</a>
-</p>
-<p>
-  <a href="/protocol/2">博士网上报名入口</a>
-</p>
+<div>
+  <div class="left-flow">{% include 'left-flow.html' with workflow_step=1 %}</div>
+  <div class="right-content right-line import-tips">
+    <h3 class="std-color">[重要提示]</h3>
+    <div class="notice-content">
+      有什么重要提示啊
+    </div>
+    <div class="btn-group-center">
+      <a href="/protocol/1" class="master-enter btn red-btn">硕士报名入口</a>
+      <a href="/protocol/2" class="doctor-enter btn">博士报名入口</a>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<div class="std-blank-60"></div>
 
 <!-- 
 {% for people in peoples %}

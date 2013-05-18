@@ -3,25 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <title>{% block title %}内蒙古工业大学网上报名系统{% endblock %}</title>
+<link rel="stylesheet" href="/static/css/style.css" type="text/css" />
 {% block css_block %}{% endblock %}
 </head>
 <body>
-<p>
-<a href="/">首页</a>
-<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-{% if request.session.profile %}
-<span>{{ request.session.profile.name }}</span>,<span>您好！</span>
-<a href="/myinfo/">查看报名信息</a>
-<a href="/progress">查看审核进度</a>
-<a href="/changepwd">修改密码</a>
-<a href="/logout/">退出</a>
-{% else %}
-<a href="/login/">登录</a>
-{% endif %}
-<a href="/findpwd">找回密码</a>
-</p>
 
+<div class="container">
+  <div class="logo-line">
+    <div class="logo"></div>
+    <div class="logo-text std-color">在线报名系统</div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="menu-bar std-bg-color white-color">
+    <div class="back-to-home">
+      <a href="/">返回首页</a>
+    </div>
+    <ul class="right-menu">
+      {% if request.session.profile %}
+      <span>{{ request.session.profile.name }}</span>,<span>您好！</span>
+      <li><a href="/myinfo/">查看报名信息</a></li>
+      <li><a href="/progress/">查看审核进度</a></li>
+      <li><a href="/changepwd/">修改密码</a></li>
+      <li><a href="/logout/">退出</a></li>
+      {% else %}
+      <li><a href="/login/">登录</a></li>
+      <li><a href="/findpwd/">找回密码</a></li>
+      {% endif %}
+      <li><a href="/">帮助</a></li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+  <div class="std-blank-40"></div>
+  
 {% block content %}{% endblock %}
+
+  <div class="std-blank-20"></div>
+  <div class="footer std-bg-color white-color">
+    <div class="copyright">Copyright&copy;2010-{% now "Y" %} www.imut.edu.cn All Rights Reserved</div>
+    <div class="other-info">
+      <div class="contact">咨询电话：0471-1111111 联系地址：内蒙古自治区呼和浩特市新城区爱民街49号</div>
+      <div class="icp">蒙ICP备05000412 网络中心 未经授权不得转载</div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+</div>
+
 <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 {% block js_block %}{% endblock %}
 </body>
