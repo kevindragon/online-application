@@ -6,14 +6,17 @@ from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
 
 class PeopleNoPasswordForm(forms.ModelForm):
+    '''
     gender = forms.ChoiceField(widget=forms.RadioSelect, 
                                choices=People.gender_choices, 
-                               label=u'性别 *')
+                               label=u'性别 *')'''
+    email = forms.EmailField(error_messages={'invalid': '邮件格式不正确'})
     hometown_prov = forms.CharField(widget=forms.Select)
     hometown_city = forms.CharField(widget=forms.Select)
     residence_prov = forms.CharField(widget=forms.Select)
     residence_city = forms.CharField(widget=forms.Select)
-    avator = forms.CharField() #widget=forms.HiddenInput
+    avatar = forms.CharField(widget=forms.HiddenInput, 
+                             error_messages={'required': '请上传照片'})
     # 修改自己信息的时候不需要验证密码
     query_password = forms.CharField(required=False)
 

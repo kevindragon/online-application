@@ -1,22 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
-<form action="/findpwd" method="post">
-  {% csrf_token %}
-  <p>
-    <label>身份证号：</label>
-    <span>{{ form.id_number }}</span>
-    {{ form.id_number.errors }}
-  </p>
-  <p>
-    <label>电子邮箱：</label>
-    <span>{{ form.email }}</span>
-    {{ form.email.errors }}
-  </p>
-  <p>
-    <input type="submit" name="submit" value="找回密码" />
-  </p>
-</form>
-
+<h1 class="text-center">找回密码</h1>
+<div class="std-blank-10"></div>
+<div class="account-form">
+  <form action="/findpwd/" method="post">
+    {{ form.non_field_errors }}
+    {% csrf_token %}
+    <div class="control-group">
+      <label>身份证号：</label>
+      <span>{{ form.id_number }}</span>
+      {{ form.id_number.errors }}
+    </div>
+    <div class="control-group">
+      <label>电子邮箱：</label>
+      <span>{{ form.email }}</span>
+      {{ form.email.errors }}
+    </div>
+    <div class="btn-group-center">
+      <input type="submit" name="submit" value="找回密码" class="btn" />
+      <input type="button" value="取消" class="btn gray-btn" style="margin-left:40px;" onclick="location.href='/'" />
+    </div>
+  </form>
+</div>
+<div class="std-blank-60"></div>
 {% endblock %}

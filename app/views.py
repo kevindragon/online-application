@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, string, random
+import hashlib, string, random, os, shutil, time
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
@@ -39,6 +39,20 @@ def applyjob(request, job_id):
             data['audit_step'] = 0
             data['query_password'] = hashlib.md5(data['query_password']).hexdigest()
             del data['query_password2']
+            
+            # 复制图片到相应目录
+            avatar_path = "/".join(('static/upload/', peopleForm.cleaned_data["id_number"]))
+            if not os.path.exists(avatar_path):
+                os.mkdir(avatar_path)
+            src_file = peopleForm.cleaned_data["avatar"][1:]
+            dst_file = "/".join((avatar_path, os.path.basename(peopleForm.cleaned_data["avatar"])))
+            if src_file!=dst_file:
+                try:
+                    shutil.move(src_file, dst_file)
+                    peopleForm.cleaned_data["avatar"] = '/%s' % (dst_file, )
+                except Exception:
+                    pass
+            
             People(**data).save()
             return render_to_response("msg.html", {'message': u'信息提交成功'})
     else:
@@ -54,7 +68,7 @@ def edit(request):
         locals().update(csrf(request), operate='edit')
         return render_to_response("apply.html", locals())
     else:
-        return redirect('/myinfo')
+        return redirect('/myinfo/')
     locals().update(csrf(request))
 
 @auth_check
@@ -131,7 +145,8 @@ def findpwd(request):
             if people:
                 pwd = ''.join(random.choice(string.letters + string.digits) for x in range(12))
                 pwdhash = hashlib.md5(pwd).hexdigest()
-                subject = u'找回%s在内蒙古工业大学申请的%s的查询密码' % (people[0].name, people[0].job.title)
+                subject = (u'找回%s在内蒙古工业大学申请的 %s(%s) 的查询密码' % 
+                           (people[0].name, people[0].job.major, people[0].job.job_type))
                 msg = ((u"亲爱的%s\n\n您的查询密码已经被系统重置，请使用下面的密码登录\n\n"
                         u"%s\n\nhttp://localhost:8000/login") % 
                        (people[0].name, pwd))
@@ -143,6 +158,8 @@ def findpwd(request):
                 else:
                     message = u'邮件发送失败，请联系内蒙古工业大学人事处00000-0000000'
                 return render_to_response("msg.html", locals())
+            else:
+                form.errors['__all__'] = form.error_class([u'未能匹配身份证号与电子邮箱'])
     else:
         form = FindpwdForm()
     return render_to_response("findpwd.html", locals())
@@ -171,6 +188,22 @@ def changepwd(request):
 def protocol(request, type_id):
     return render_to_response("protocol.html", locals())
 
+def uploadimage(request):
+    filename = request.FILES['avatar'].name
+    filedata = request.FILES['avatar']
+    prefix, suffix = os.path.splitext(filename)
+    if filedata.file:
+        filename = (
+            "static/upload/tmp/%s%s" % 
+            (hashlib.md5(str(time.time())).hexdigest(),
+             "%s%s" % (hashlib.md5(str(time.time())).hexdigest(), suffix)))
+        open(filename, "wb").write(filedata.read())
+    for root, dirs, files in os.walk("static/upload/tmp/"):
+        for filespath in files:
+            tmpfilename = "%s/%s" % (root, filespath)
+            if time.time() - os.stat(tmpfilename).st_mtime > 86400:
+                os.unlink(tmpfilename)
+    return HttpResponse("/%s" % filename)
 
 # ---------- admin views ----------
 

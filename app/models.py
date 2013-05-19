@@ -5,7 +5,7 @@ import datetime
 from django.db import models
 from app.functions import id_number_validator
 
-year_choices = [(y, y) for y in range(1903, datetime.datetime.now().year+1)]
+year_choices = [(y, y) for y in range(datetime.datetime.now().year, 1903, -1) ]
 month_choices = [(m, m) for m in range(1, 13)]
 
 class PasswordField(models.CharField):
@@ -116,6 +116,22 @@ class People(models.Model):
     # 最高学历 - 所学专业
     high_edu_major = models.CharField(max_length=200)
     
+    # 计算机等级
+    compute_level = models.CharField(max_length=200)
+    # 是否蒙汉兼通
+    is_han_mongolia_both = models.CharField(
+        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
+    # 是否服务基层项目人员
+    is_basic_attendant =  models.CharField(
+        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
+    # 个人特长及奖惩情况
+    special_skill = models.TextField(blank=True)
+    # 照片路径
+    avatar = models.CharField(max_length=255)
+    # 审核进度
+    audit_step = models.PositiveSmallIntegerField(
+        default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+    
     # 其他学习经历 - 起始时间
     other_edu_start_year = models.IntegerField(blank=True, null=True, choices=year_choices)
     other_edu_start_month = models.IntegerField(blank=True, null=True, choices=month_choices)
@@ -140,19 +156,34 @@ class People(models.Model):
         max_length=100, blank=True, 
         choices=((u'全日制教育',)*2, (u'在职教育',)*2, 
                  (u'博士后',)*2, (u'其他',)*2))
-    # 是否蒙汉兼通
-    is_han_mongolia_both = models.CharField(
-        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
-    # 是否服务基层项目人员
-    is_basic_attendant =  models.CharField(
-        max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
-    # 个人特长及奖惩情况
-    special_skill = models.TextField(blank=True)
-    # 照片路径
-    avator = models.CharField(max_length=255)
-    # 审核进度
-    audit_step = models.PositiveSmallIntegerField(
-        default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+
+    # 其他学习经历 - 起始时间
+    other_edu_start_year_2 = models.IntegerField(blank=True, null=True, choices=year_choices)
+    other_edu_start_month_2 = models.IntegerField(blank=True, null=True, choices=month_choices)
+    # 其他学习经历 - 结束时间
+    other_edu_edu_year_2 = models.IntegerField(blank=True, null=True, choices=year_choices)
+    other_edu_edu_month_2 = models.IntegerField(blank=True, null=True, choices=month_choices)
+    # 其他学习经历 - 学习单位
+    other_edu_unit_2 = models.CharField(max_length=100, blank=True)
+    # 其他学习经历 - 所学专业
+    other_edu_major_2 = models.CharField(max_length=100, blank=True)
+    # 其他学习经历 - 学历
+    other_edu_bkgrd_2 = models.CharField(
+        max_length=200, blank=True, 
+        choices=((u'专科',)*2, (u'本科',)*2, (u'硕士研究生',)*2, 
+                 (u'博士研究生',)*2, (u'无',)*2))
+    # 其他学习经历 - 学位
+    other_edu_degree_2 = models.CharField(
+        max_length=200, blank=True, 
+        choices=((u'学士',)*2, (u'硕士',)*2, (u'博士',)*2))
+    # 其他学习经历 - 学习形式
+    other_edu_type_2 = models.CharField(
+        max_length=100, blank=True, 
+        choices=((u'全日制教育',)*2, (u'在职教育',)*2, 
+                 (u'博士后',)*2, (u'其他',)*2))
+
+    create_at = models.DateTimeField(auto_now_add = True)
+    last_edit_at = models.DateTimeField(auto_now = True)
 
     def __unicode__(self):
         return self.name

@@ -11,14 +11,18 @@ a {text-decoration: none;}
 .white-color {color:#ffffff;}
 .std-bg-color {background-color:#03499e;}
 
+/* standard text style */
+.text-center {text-align:center;}
+
 .left-line {border-right:1px solid #03499e;}
 .right-line {border-left:1px solid #03499e;}
 
 .btn {
 	background-color:#03499e;cursor:pointer;padding:0px 20px;line-height:35px;color:#fff;
-    font-weight:bold;display: inline-block;text-align: center;vertical-align: middle;}
-.red-btn {background-color:#9b0608;}
-.gray-btn {background-color:#999;}
+    font-weight:bold;display: inline-block;text-align: center;vertical-align: middle;
+    border:1px solid #03499e;}
+.red-btn {background-color:#9b0608;border:1px solid #9b0608;}
+.gray-btn {background-color:#999;border:1px solid #999;}
 .btn-group-center {text-align:center;}
 
 /* standard blank line */
@@ -28,6 +32,7 @@ a {text-decoration: none;}
 .std-blank-60 {width:100%;height:60px;margin:0px;padding:0px;clear:both;}
 
 .container {width:1000px;margin:0px auto;}
+.block-title {font-size:14px;font-weight:bold;color: #03499e;margin-top:20px;}
 
 .logo-line {height:85px;}
 .logo {width:572px;height:69px;margin:6px;float:left;background:url(/static/images/logo.jpg) no-repeat;}
@@ -41,11 +46,11 @@ a {text-decoration: none;}
 .menu-bar ul li {margin:0px;padding:0px;float:left;margin-left:15px;}
 .menu-bar ul.right-menu {float:right;margin-right:10px;}
 
-.left-flow {width:150px;float:left;}
-.right-content {width:800px;float:right;padding-left:20px;min-height:300px;}
+.left-flow {width:130px;float:left;}
+.right-content {width:820px;float:right;padding-left:20px;min-height:300px;}
 .import-tips {height:360px;}
 .work-flow {font-weight:bold;color:#666;}
-.work-flow li {height:40px;line-height:40px;font-weight:bold;}
+.work-flow li {line-height:40px;font-weight:bold;}
 .work-flow li.active {color:#9b0608;}
 .notice-content {margin-left:40px;}
 .doctor-enter {margin-left:60px;}
@@ -63,6 +68,35 @@ table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;
 .tip-box-title {color:#9b0608;font-weight:bold;float:left;}
 .tip-box-close {float:right;cursor:pointer;}
 .tip-box-body {clear:both;}
+
+.control-group {margin-bottom: 10px;}
+.control-label {text-align:right;vertical-align: top;padding-top: 6px;}
+.help-inline {color: #595959;padding-left: 5px;display: inline-block;line-height: 20px;}
+.form-table td {vertical-align: top;}
+.form-table .errorlist {list-style:none;padding:0px;margin:2px 0px 2px 3px;color:red;}
+.form-table .errorlist li {padding:0px;}
+
+.account-form {width:500px;margin:0px auto;}
+.account-form .control-group {margin-bottom: 10px;}
+.account-form form label {float: left;width: 160px;padding-top: 5px;text-align: right;}
+.account-form form .control-group input {width:170px;}
+.account-form ul.errorlist {list-style: none;padding:0px;margin-left:160px;margin-top:5px;color:#9b0608;}
+
+#id_name {width:100px;}
+#id_birthday {width:70px;}
+#id_foreign_language_level {width:100px;}
+#id_phone {width:110px;}
+#id_other_contact {width:110px;}
+#id_first_edu_university {width:300px;}
+#id_first_edu_major {width:240px;}
+#id_high_edu_university {width:300px;}
+#id_high_edu_major {width:240px;}
+#id_other_edu_unit {width:300px;}
+#id_other_edu_major {width:100px;}
+#id_special_skill {width: 810px;height: 60px;}
+
+.another-edu {margin:5px 0px 5px 0px;;}
+.another-edu a {color:#000;}
 
 .footer {padding:10px;font-size:12px;}
 .footer .copyright {text-align:right;margin-bottom:5px;}

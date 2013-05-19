@@ -20,9 +20,10 @@
     </div>
     <ul class="right-menu">
       {% if request.session.profile %}
-      <span>{{ request.session.profile.name }}</span>,<span>您好！</span>
       <li><a href="/myinfo/">查看报名信息</a></li>
       <li><a href="/progress/">查看审核进度</a></li>
+      <li> | </li>
+      <li>{{ request.session.profile.name }}, 您好！</li>
       <li><a href="/changepwd/">修改密码</a></li>
       <li><a href="/logout/">退出</a></li>
       {% else %}
