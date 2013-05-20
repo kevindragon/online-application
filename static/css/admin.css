@@ -21,6 +21,8 @@ legend {
 	border-bottom: 1px solid #e5e5e5;
 }
 
+.errorlist {color:red;}
+
 .navbar {margin-bottom: 20px; overflow: visible;}
 .navbar-fixed-top, .navbar-fixed-bottom {position: fixed; right: 0; left: 0; z-index: 1030; margin-bottom: 0;}
 .navbar-fixed-top {top: 0;}
@@ -153,3 +155,8 @@ label {display: block;margin-bottom: 5px;}
 .people-info tr {height:40px;}
 
 .btns {margin-top:20px;padding-left:100px;}
+
+select.audit-def-choices {display:none;}
+option.audit-def {display:none;}
+
+.footer {height:20px;}

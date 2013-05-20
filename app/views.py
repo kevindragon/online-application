@@ -9,7 +9,8 @@ from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import HttpResponse
 from app.models import People, Job, PeopleExtra
-from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm 
+from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
+    PeopleSearchForm
 from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
 from app.forms import AuditForm
 
@@ -218,7 +219,25 @@ def m_auth_check(func):
 @m_auth_check
 def elementary(request):
     locals().update(csrf(request))
-    peoples = People.objects.filter(audit_step__lt=1)
+    if request.method == 'POST':
+        psForm = PeopleSearchForm(request.POST)
+        psForm.is_valid()
+        params = {'audit_step__lt': 1}
+        if psForm.cleaned_data:
+            if psForm.cleaned_data['id_number']:
+                params.update(id_number=psForm.cleaned_data['id_number'])
+            if psForm.cleaned_data['name']:
+                params.update(name=psForm.cleaned_data['name'])
+            if psForm.cleaned_data.has_key('gender'):
+                params.update(gender=psForm.cleaned_data['gender'])
+            if psForm.cleaned_data['major']:
+                params.update(job__major=psForm.cleaned_data['major'])
+            if psForm.cleaned_data['department']:
+                params.update(job__department=psForm.cleaned_data['department'])
+        peoples = People.objects.filter(**params)
+    else:
+        psForm = PeopleSearchForm()
+        peoples = People.objects.filter(audit_step__lt=1)
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
@@ -238,7 +257,7 @@ def m_audit(request, people_id=0):
     locals().update(csrf(request))
     if request.method == 'POST':
         people = People.objects.get(pk=request.POST.get('people'))
-        form = AuditForm(people, request.POST)
+        form = AuditForm(request.POST)
         if form.is_valid():
             form.save()
             people.audit_step = form.cleaned_data['audit_step']
@@ -248,12 +267,87 @@ def m_audit(request, people_id=0):
     else:
         people = People.objects.get(pk=people_id)
         job = Job.objects.get(pk=people.job.id)
-        failed_audit = ('7', '8')
-        if people.audit_step >= 0:
-            audit_step = (people.audit_step, 7, 8)
-            people_extra = PeopleExtra.objects.filter(people=people, audit_step__in=audit_step)
-        form = AuditForm(people, initial={'people': people})
+        if people.audit_step > 0:
+            people_extra = PeopleExtra.objects.filter(people=people).order_by('-pk')
+        form = AuditForm(initial={'people': people})
+    audit_status = {0: u'未审核', 1: u'通过审核', 7: u'未过审核', '7': u'未过审核', 8: u'不合格'}
     return render_to_response("m_audit.html", locals())
+
+@m_auth_check
+def m_reviewed(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        psForm = PeopleSearchForm(request.POST)
+        psForm.is_valid()
+        params = {'audit_step': 1}
+        if psForm.cleaned_data:
+            if psForm.cleaned_data['id_number']:
+                params.update(id_number=psForm.cleaned_data['id_number'])
+            if psForm.cleaned_data['name']:
+                params.update(name=psForm.cleaned_data['name'])
+            if psForm.cleaned_data.has_key('gender'):
+                params.update(gender=psForm.cleaned_data['gender'])
+            if psForm.cleaned_data['major']:
+                params.update(job__major=psForm.cleaned_data['major'])
+            if psForm.cleaned_data['department']:
+                params.update(job__department=psForm.cleaned_data['department'])
+        peoples = People.objects.filter(**params)
+    else:
+        psForm = PeopleSearchForm()
+        peoples = People.objects.filter(audit_step=1)
+    return render_to_response('m_reviewed.html', locals())
+
+@m_auth_check
+def m_notpass(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        psForm = PeopleSearchForm(request.POST)
+        psForm.is_valid()
+        params = {'audit_step': 7}
+        if psForm.cleaned_data:
+            if psForm.cleaned_data['id_number']:
+                params.update(id_number=psForm.cleaned_data['id_number'])
+            if psForm.cleaned_data['name']:
+                params.update(name=psForm.cleaned_data['name'])
+            if psForm.cleaned_data.has_key('gender'):
+                params.update(gender=psForm.cleaned_data['gender'])
+            if psForm.cleaned_data['major']:
+                params.update(job__major=psForm.cleaned_data['major'])
+            if psForm.cleaned_data['department']:
+                params.update(job__department=psForm.cleaned_data['department'])
+        peoples = People.objects.filter(**params)
+    else:
+        psForm = PeopleSearchForm()
+        peoples = People.objects.filter(audit_step=7)
+    return render_to_response('m_notpass.html', locals())
+
+@m_auth_check
+def m_unqualified(request):
+    params = {'audit_step': 8}
+    if request.method == 'POST':
+        psForm = PeopleSearchForm(request.POST)
+        psForm.is_valid()
+        if psForm.cleaned_data:
+            if psForm.cleaned_data['id_number']:
+                params.update(id_number=psForm.cleaned_data['id_number'])
+            if psForm.cleaned_data['name']:
+                params.update(name=psForm.cleaned_data['name'])
+            if psForm.cleaned_data.has_key('gender'):
+                params.update(gender=psForm.cleaned_data['gender'])
+            if psForm.cleaned_data['major']:
+                params.update(job__major=psForm.cleaned_data['major'])
+            if psForm.cleaned_data['department']:
+                params.update(job__department=psForm.cleaned_data['department'])
+        peoples = People.objects.filter(**params)
+    else:
+        psForm = PeopleSearchForm()
+        peoples = People.objects.filter(**params)
+    return render_to_response('m_unqualified.html', locals())
+
+@m_auth_check
+def m_people(request, people_id):
+    people = People.objects.get(pk=people_id)
+    return render_to_response('m_people.html', locals())
 
 @m_auth_check
 def m_admin(request):

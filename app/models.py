@@ -193,6 +193,11 @@ class PeopleExtra(models.Model):
     people = models.ForeignKey(People)
     audit_step = models.PositiveSmallIntegerField(
         default=0, blank=True, null=True,  
-        help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+        help_text=u'0:未审核 1:通过初审 7:未过初审 8:不合格')
     reason = models.TextField(blank=True)
 
+    create_at = models.DateTimeField(auto_now_add = True)
+    last_edit_at = models.DateTimeField(auto_now = True)
+
+    def __unicode__(self):
+        return self.people.name

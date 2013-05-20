@@ -414,13 +414,6 @@ $(function(){
         changeYear: true, 
         yearRange: "1800:"+date.getFullYear(), 
         defaultDate: 0});
-    $("#id_first_edu_start_date").datepicker({
-        dateFormat:"yy-mm-dd",
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
-        changeMonth: true,
-        changeYear: true, 
-        yearRange: "1800:"+date.getFullYear(), 
-        defaultDate: 0});
     // 添加另一项其他学习
     $('#add-other-edu').click(function(){
     	if ('1' == $(this).attr('s')) {

@@ -12,17 +12,25 @@
         <ul class="nav">
           <li class="active"><a href="/management/">Welcome</a></li>
           <li><a href="/management/job/">岗位管理</a></li>
-          <li><a href="/management/elementary/">硕士研究生初审</a></li>
+          <li><a href="/management/elementary/">待审核列表</a></li>
+          <li><a href="/management/reviewed/">已审核列表</a></li>
+          <li><a href="/management/notpass/">不通过列表</a></li>
+          <li><a href="/management/unqualified/">不合格列表</a></li>
           <li><a href="/management/passwd/">修改密码</a></li>
           <li><a href="/management/logout/">退出</a></li>
         </ul>
+        <ul class="nav" style="float:right;">
+          <li><a href="/admin/">超级后台</a></li>
+        </ul>
+        <div style="clear:both;"></div>
       </div>
     </div>
   </div>
 </div>
 
-{% block content %}
-{% endblock %}
+{% block content %}{% endblock %}
+
+<div class="footer"></div>
 
 <script src="/static/js/jquery-1.9.1.min.js"></script>
 {% block js_block %}
