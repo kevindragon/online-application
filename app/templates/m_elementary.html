@@ -7,11 +7,10 @@
 <p>{{ message }}</p>
 {% endif %}
 
-<h3>硕士研究生初审</h3>
+<h3>待审核列表</h3>
 
 <p>
-  <form action="/management/elementary/search/" method="post">
-    {% csrf_token %}
+  <form action="/management/plist/elementary/" method="post">
     <table>
       <tr>
         <td>搜索</td>
@@ -26,6 +25,7 @@
         <td>专业</td>
         <td>{{ psForm.major }}</td>
         <td>
+          {% csrf_token %}
           <input type="submit" name="submit" value="搜索" />
         </td>
       </tr>

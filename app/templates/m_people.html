@@ -33,7 +33,7 @@
     <td>第一学历</td>
     <td>{{ people.first_edu_bkgrd }}</td>
     <td>所需第一学历</td>
-    <td>{{ job.degree_limit }}</td>
+    <td>本科</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -46,7 +46,7 @@
     <td>最高学历</td>
     <td>{{ people.high_edu_bkgrd }}</td>
     <td>所需最高学历</td>
-    <td>{{ job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -55,7 +55,7 @@
     <td>最高学位</td>
     <td>{{ people.high_edu_degree }}</td>
     <td>所需最高学位</td>
-    <td>{{ job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -165,12 +165,7 @@
   </tr>
   <tr>
     <td>个人特长</td>
-    <td>{{ people.special_skill }}</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <td colspan="6">{{ people.special_skill }}</td>
   </tr>
 </table>
 </p>

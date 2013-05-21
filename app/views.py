@@ -13,6 +13,7 @@ from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,
     PeopleSearchForm
 from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
 from app.forms import AuditForm
+from django.core.exceptions import ObjectDoesNotExist
 
 def auth_check(func):
     def wrapper(*args, **kwargs):
@@ -217,33 +218,6 @@ def m_auth_check(func):
     return wrapper
 
 @m_auth_check
-def elementary(request):
-    locals().update(csrf(request))
-    if request.method == 'POST':
-        psForm = PeopleSearchForm(request.POST)
-        psForm.is_valid()
-        params = {'audit_step__lt': 1}
-        if psForm.cleaned_data:
-            if psForm.cleaned_data['id_number']:
-                params.update(id_number=psForm.cleaned_data['id_number'])
-            if psForm.cleaned_data['name']:
-                params.update(name=psForm.cleaned_data['name'])
-            if psForm.cleaned_data.has_key('gender'):
-                params.update(gender=psForm.cleaned_data['gender'])
-            if psForm.cleaned_data['major']:
-                params.update(job__major=psForm.cleaned_data['major'])
-            if psForm.cleaned_data['department']:
-                params.update(job__department=psForm.cleaned_data['department'])
-        peoples = People.objects.filter(**params)
-    else:
-        psForm = PeopleSearchForm()
-        peoples = People.objects.filter(audit_step__lt=1)
-    if request.session.has_key('message'):
-        message = request.session['message']
-        del request.session['message']
-    return render_to_response("m_elementary.html", locals())
-
-@m_auth_check
 def m_people_del(request):
     if request.method == 'POST' and request.POST.get('operate') == 'del':
         people_ids = request.POST.getlist('people_id')
@@ -259,90 +233,59 @@ def m_audit(request, people_id=0):
         people = People.objects.get(pk=request.POST.get('people'))
         form = AuditForm(request.POST)
         if form.is_valid():
-            form.save()
+            try:
+                people.peopleextra.audit_step = form.cleaned_data['audit_step']
+                if form.cleaned_data.has_key('reason'):
+                    people.peopleextra.reason = form.cleaned_data['reason']
+                people.peopleextra.save()
+            except ObjectDoesNotExist:
+                form.save()
             people.audit_step = form.cleaned_data['audit_step']
             people.save()
             request.session['message'] = u'%s的审核状态保存成功' % (people.name, )
-            return redirect('/management/elementary/')
+            return redirect('/management/plist/elementary/')
     else:
         people = People.objects.get(pk=people_id)
-        job = Job.objects.get(pk=people.job.id)
-        if people.audit_step > 0:
-            people_extra = PeopleExtra.objects.filter(people=people).order_by('-pk')
-        form = AuditForm(initial={'people': people})
+        form = AuditForm(initial={'audit_step': people.audit_step, 'reason': people.peopleextra.reason})
     audit_status = {0: u'未审核', 1: u'通过审核', 7: u'未过审核', '7': u'未过审核', 8: u'不合格'}
     return render_to_response("m_audit.html", locals())
 
 @m_auth_check
-def m_reviewed(request):
+def m_people_list(request, status):
     locals().update(csrf(request))
-    if request.method == 'POST':
-        psForm = PeopleSearchForm(request.POST)
-        psForm.is_valid()
-        params = {'audit_step': 1}
-        if psForm.cleaned_data:
-            if psForm.cleaned_data['id_number']:
-                params.update(id_number=psForm.cleaned_data['id_number'])
-            if psForm.cleaned_data['name']:
-                params.update(name=psForm.cleaned_data['name'])
-            if psForm.cleaned_data.has_key('gender'):
-                params.update(gender=psForm.cleaned_data['gender'])
-            if psForm.cleaned_data['major']:
-                params.update(job__major=psForm.cleaned_data['major'])
-            if psForm.cleaned_data['department']:
-                params.update(job__department=psForm.cleaned_data['department'])
-        peoples = People.objects.filter(**params)
-    else:
-        psForm = PeopleSearchForm()
-        peoples = People.objects.filter(audit_step=1)
-    return render_to_response('m_reviewed.html', locals())
-
-@m_auth_check
-def m_notpass(request):
-    locals().update(csrf(request))
-    if request.method == 'POST':
-        psForm = PeopleSearchForm(request.POST)
-        psForm.is_valid()
-        params = {'audit_step': 7}
-        if psForm.cleaned_data:
-            if psForm.cleaned_data['id_number']:
-                params.update(id_number=psForm.cleaned_data['id_number'])
-            if psForm.cleaned_data['name']:
-                params.update(name=psForm.cleaned_data['name'])
-            if psForm.cleaned_data.has_key('gender'):
-                params.update(gender=psForm.cleaned_data['gender'])
-            if psForm.cleaned_data['major']:
-                params.update(job__major=psForm.cleaned_data['major'])
-            if psForm.cleaned_data['department']:
-                params.update(job__department=psForm.cleaned_data['department'])
-        peoples = People.objects.filter(**params)
-    else:
-        psForm = PeopleSearchForm()
-        peoples = People.objects.filter(audit_step=7)
-    return render_to_response('m_notpass.html', locals())
-
-@m_auth_check
-def m_unqualified(request):
-    params = {'audit_step': 8}
+    status_dict = {
+        'elementary': {'filter': {'audit_step__lt': 1}, 'tpl': 'm_elementary.html'}, 
+        'passed': {'filter': {'audit_step': 1}, 'tpl': 'm_passed.html'}, 
+        'notpass': {'filter': {'audit_step': 7}, 'tpl': 'm_notpass.html'},
+        'unqualified': {'filter': {'audit_step': 8}, 'tpl': 'm_unqualified.html'}, 
+        'search':  {'filter': {}, 'tpl': 'm_people_list.html'}
+    }
+    if not status_dict.has_key(status):
+        return redirect("/management")
+    params = status_dict[status]['filter']
     if request.method == 'POST':
         psForm = PeopleSearchForm(request.POST)
         psForm.is_valid()
         if psForm.cleaned_data:
             if psForm.cleaned_data['id_number']:
-                params.update(id_number=psForm.cleaned_data['id_number'])
+                params.update(id_number__contains=psForm.cleaned_data['id_number'])
             if psForm.cleaned_data['name']:
-                params.update(name=psForm.cleaned_data['name'])
+                params.update(name__contains=psForm.cleaned_data['name'])
             if psForm.cleaned_data.has_key('gender'):
                 params.update(gender=psForm.cleaned_data['gender'])
             if psForm.cleaned_data['major']:
-                params.update(job__major=psForm.cleaned_data['major'])
+                params.update(job__major__contains=psForm.cleaned_data['major'])
             if psForm.cleaned_data['department']:
-                params.update(job__department=psForm.cleaned_data['department'])
-        peoples = People.objects.filter(**params)
+                params.update(job__department__contains=psForm.cleaned_data['department'])
+            peoples = People.objects.filter(**params)
     else:
         psForm = PeopleSearchForm()
-        peoples = People.objects.filter(**params)
-    return render_to_response('m_unqualified.html', locals())
+        if params:
+            peoples = People.objects.filter(**params)
+    if request.session.has_key('message'):
+        message = request.session['message']
+        del request.session['message']
+    return render_to_response(status_dict[status]['tpl'], locals())
 
 @m_auth_check
 def m_people(request, people_id):

@@ -88,7 +88,7 @@ legend {
 li {line-height: 20px;}
 .navbar .nav li {float: left;}
 .nav li a {display: block;}
-.navbar .nav li a {float: none; padding: 10px 15px 10px; color: #777; text-decoration: none; text-shadow: 0 1px 0 #fff;}
+.navbar .nav li a {float: none; padding: 10px ; color: #777; text-decoration: none; text-shadow: 0 1px 0 #fff;}
 .navbar-inverse .brand, .navbar-inverse .nav li a {color: #999; text-shadow: 0 -1px 0 rgba(0,0,0,0.25);}
 .navbar .nav .active a, .navbar .nav .active a:hover, .navbar .nav .active a:focus {
     color: #555;
@@ -159,4 +159,4 @@ label {display: block;margin-bottom: 5px;}
 select.audit-def-choices {display:none;}
 option.audit-def {display:none;}
 
-.footer {height:20px;}
+.footer {height:40px;}

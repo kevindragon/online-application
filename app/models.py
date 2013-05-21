@@ -130,7 +130,7 @@ class People(models.Model):
     avatar = models.CharField(max_length=255)
     # 审核进度
     audit_step = models.PositiveSmallIntegerField(
-        default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 2:通过复审 7:未过初审 8:未过复审')
+        default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 7:未过初审 8:不合格')
     
     # 其他学习经历 - 起始时间
     other_edu_start_year = models.IntegerField(blank=True, null=True, choices=year_choices)
@@ -190,7 +190,7 @@ class People(models.Model):
 
 
 class PeopleExtra(models.Model):
-    people = models.ForeignKey(People)
+    people = models.OneToOneField(People)
     audit_step = models.PositiveSmallIntegerField(
         default=0, blank=True, null=True,  
         help_text=u'0:未审核 1:通过初审 7:未过初审 8:不合格')

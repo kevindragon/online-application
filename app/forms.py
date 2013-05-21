@@ -139,7 +139,8 @@ class JobForm(forms.ModelForm):
 
 
 class AuditForm(forms.ModelForm):
-    audit_step = forms.ChoiceField(choices=((u'', u' -- '), (1, u'通过'), (7, u'不通过'), (8, u'不合格')))
+    audit_step = forms.ChoiceField(choices=((u'', u' -- '), (0, u'待审核'), 
+                                            (1, u'通过'), (7, u'不通过'), (8, u'不合格')))
 
     def clean(self):
         d = self.cleaned_data
@@ -147,9 +148,6 @@ class AuditForm(forms.ModelForm):
             errmsg = u'请填写不通过或者不合格的理由'
             self._errors['reason'] = self.error_class([errmsg])
             raise ValidationError(errmsg)
-        if PeopleExtra.objects.filter(people=d.get('people'), 
-                                      audit_step=d.get('audit_step')):
-            self._errors['__all__'] = self.error_class(['重复审核'])
         return d
 
     class Meta:
@@ -165,8 +163,6 @@ class PeopleSearchForm(forms.Form):
     
     def clean(self):
         d = self.cleaned_data
-        print not (d['id_number'] or d['name'] or d.has_key('gender') or
-                   d['department'] or d['major']), 'fuck'
         if not (d['id_number'] or d['name'] or d.has_key('gender') or
                 d['department'] or d['major']):
             return False

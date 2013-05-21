@@ -7,10 +7,9 @@
 <p>{{ message }}</p>
 {% endif %}
 
-<h3>已审核名单</h3>
+<h3>不合格列表</h3>
 <p>
-  <form action="/management/unqualified/" method="post">
-    {% csrf_token %}
+  <form action="/management/plist/unqualified/" method="post">
     <table>
       <tr>
         <td>搜索</td>
@@ -25,6 +24,7 @@
         <td>专业</td>
         <td>{{ psForm.major }}</td>
         <td>
+          {% csrf_token %}
           <input type="submit" name="submit" value="搜索" />
         </td>
       </tr>
@@ -32,30 +32,52 @@
   </form>
 </p>
 
-<table border="1" width="900">
-  <tr>
-    <td width="60"></td>
-    <td>应聘岗位</td>
-    <td>毕业院校</td>
-    <td>所学专业</td>
-    <td>姓名</td>
-    <td width="100"></td>
-  </tr>
-  {% for people in peoples %}
-  <tr>
-    <td>
-      <span>{{ forloop.counter }}</span>
-    </td>
-    <td>{{ people.job }}</td>
-    <td>{{ people.high_edu_university }}</td>
-    <td>{{ people.high_edu_major }}</td>
-    <td>{{ people.name }}</td>
-    <td>
-      <a href="/management/people/{{ people.id }}">查看详细信息</a>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+<form action="/management/people/del/" method="post">
+  <table border="1" width="900">
+    <tr>
+      <td width="60"><input type="checkbox" id="check-all" />全选</td>
+      <td>应聘岗位</td>
+      <td>毕业院校</td>
+      <td>所学专业</td>
+      <td>姓名</td>
+      <td width="160"></td>
+    </tr>
+    {% for people in peoples %}
+    <tr>
+      <td>
+        <input type="checkbox" name="people_id" value="{{ people.id }}" />
+        <span>{{ forloop.counter }}</span>
+      </td>
+      <td>{{ people.job }}</td>
+      <td>{{ people.high_edu_university }}</td>
+      <td>{{ people.high_edu_major }}</td>
+      <td>{{ people.name }}</td>
+      <td>
+        <a href="/management/audit/{{ people.id }}">修改审核</a>&nbsp;
+        <a href="/management/people/{{ people.id }}">查看详细信息</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p>
+    <select name="operate">
+      <option value="">----</option>
+      <option value="del">删除所选</option>
+    </select>
+    {% csrf_token %}
+    <input type="submit" name="submit" value="提交" />
+  </p>
+</form>
 </div>
 
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+$(function(){
+    $('#check-all').click(function(){
+        $('input[name=people_id]').prop('checked', $(this).prop('checked'));
+    });
+});
+</script>
 {% endblock %}

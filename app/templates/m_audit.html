@@ -33,7 +33,7 @@
     <td>第一学历</td>
     <td>{{ people.first_edu_bkgrd }}</td>
     <td>所需第一学历</td>
-    <td>{{ job.degree_limit }}</td>
+    <td>本科</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -46,7 +46,7 @@
     <td>最高学历</td>
     <td>{{ people.high_edu_bkgrd }}</td>
     <td>所需最高学历</td>
-    <td>{{ job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}?</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -55,7 +55,7 @@
     <td>最高学位</td>
     <td>{{ people.high_edu_degree }}</td>
     <td>所需最高学位</td>
-    <td>{{ job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}?</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -174,7 +174,21 @@
   </tr>
 </table>
 </p>
-{% if not people_extra %}
+
+{% if people.peopleextra.audit_step > 0 %}
+<p>审核状态：
+{% if people.peopleextra.audit_step < 1 %}
+<span>未审核</span>
+{% elif people.peopleextra.audit_step == 1 %}
+<span>已通过审核</span>
+{% elif people.peopleextra.audit_step == 7 %}
+<span>未通过审核</span>
+{% elif people.peopleextra.audit_step == 8 %}
+<span>不合格</span>
+{% endif %}
+</p>
+{% endif %}
+
 {{ form.non_field_errors }}
 <form action="/management/audit/" method="post" onsubmit="return audit_check(this);">
   {% csrf_token %}
@@ -214,12 +228,6 @@
     <input type="button" name="cancel" value="取消返回" onclick="history.go(-1);" />
   </p>
 </form>
-{% else %}
-{% for pe in people_extra %}
-{{ pe.audit_step }} {{ pe.reason }}
-{% endfor %}
-<p>已经审核过此信息</p>
-{% endif %}
 </div>
 
 {% endblock %}
@@ -235,32 +243,46 @@ function audit_check(form) {
         return false;
     }
 }
+function auditSelectChange(id) {
+    if (1 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-failed, option.audit-block').hide();
+        $('.audit-pass').show();
+    } else if (7 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-pass, option.audit-block').hide();
+        $('.audit-failed').show();
+    } else if (8 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-pass, option.audit-failed').hide();
+        $('.audit-block').show();
+    } else {
+        $('.audit-def-choices').hide();
+    }
+}
+var reason = {}
 $(function(){
 	if ($('#id_audit_step option:selected').val()) {
+		var audit_step = parseInt($('#id_audit_step').val());
         $('#reason').show();
+        auditSelectChange(audit_step);
+        if ($('textarea[name=reason]').val()) {
+        	reason[audit_step] = $('textarea[name=reason]').val();
+        }
 	}
     $('#id_audit_step').change(function(){
     	var audit_step = parseInt($(this).val());
-        if (audit_step) {
+        if (audit_step >= 0) {
             $('#reason').show();
+            if (reason[audit_step]) {
+            	$('textarea[name=reason]').val(reason[audit_step]);
+            } else {
+            	$('textarea[name=reason]').val('');
+            }
         } else {
             $('#reason').hide();
         }
-        if (1 == audit_step) {
-        	$('.audit-def-choices').show().val(0);
-        	$('option.audit-failed, option.audit-block').hide();
-        	$('.audit-pass').show();
-        } else if (7 == audit_step) {
-            $('.audit-def-choices').show().val(0);
-            $('option.audit-pass, option.audit-block').hide();
-            $('.audit-failed').show();
-        } else if (8 == audit_step) {
-            $('.audit-def-choices').show().val(0);
-            $('option.audit-pass, option.audit-failed').hide();
-            $('.audit-block').show();
-        } else {
-            $('.audit-def-choices').hide();
-        }
+        auditSelectChange(audit_step);
     });
     $('.audit-def-choices').change(function(){
     	var v = parseInt($(this).val());

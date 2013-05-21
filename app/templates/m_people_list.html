@@ -7,9 +7,9 @@
 <p>{{ message }}</p>
 {% endif %}
 
-<h3>未通过审核列表</h3>
+<h3>搜索</h3>
 <p>
-  <form action="/management/plist/notpass/" method="post">
+  <form action="/management/plist/search/" method="post">
     <table>
       <tr>
         <td>搜索</td>
@@ -32,6 +32,7 @@
   </form>
 </p>
 
+{% if peoples %}
 <table border="1" width="900">
   <tr>
     <td width="60"></td>
@@ -39,6 +40,7 @@
     <td>毕业院校</td>
     <td>所学专业</td>
     <td>姓名</td>
+    <td>状态</td>
     <td width="160"></td>
   </tr>
   {% for people in peoples %}
@@ -51,12 +53,24 @@
     <td>{{ people.high_edu_major }}</td>
     <td>{{ people.name }}</td>
     <td>
+      {% if people.audit_step < 1 %}
+      <span>未审核</span>
+      {% elif people.audit_step == 1 %}
+      <span>通过审核</span>
+      {% elif people.audit_step == 7 %}
+      <span>未通过审核</span>
+      {% elif people.audit_step == 8 %}
+      <span>不合格</span>
+      {% endif %}
+    </td>
+    <td>
       <a href="/management/audit/{{ people.id }}">修改审核</a>&nbsp;
-      <a href="/management/people/{{ people.id }}">详细信息</a>
+      <a href="/management/people/{{ people.id }}">查看详细信息</a>
     </td>
   </tr>
   {% endfor %}
 </table>
+{% endif %}
 </div>
 
 {% endblock %}
