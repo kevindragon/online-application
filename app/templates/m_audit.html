@@ -3,6 +3,11 @@
 {% block content %}
 
 <div class="content-container">
+{% if message %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endif %}
 <h3>{{ people.name }}的初审信息</h3>
 <p>
 <table width="900" border="1">
@@ -46,7 +51,7 @@
     <td>最高学历</td>
     <td>{{ people.high_edu_bkgrd }}</td>
     <td>所需最高学历</td>
-    <td>{{ people.job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -55,7 +60,7 @@
     <td>最高学位</td>
     <td>{{ people.high_edu_degree }}</td>
     <td>所需最高学位</td>
-    <td>{{ people.job.degree_limit }}?</td>
+    <td>{{ people.job.degree_limit }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -224,6 +229,7 @@
     <span>{{ form.reason }}</span>{{ form.reason.errors }}
   </div>
   <p>
+    <input type="hidden" name="last_edit_at" value="{{ people.last_edit_at|date:"U" }}" />
     <input type="submit" name="submit" value="提交" />
     <input type="button" name="cancel" value="取消返回" onclick="history.go(-1);" />
   </p>

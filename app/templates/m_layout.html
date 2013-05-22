@@ -10,14 +10,14 @@
     <div class="container">
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <li class="active"><a href="/management/">Welcome</a></li>
-          <li><a href="/management/job/">岗位管理</a></li>
-          <li><a href="/management/plist/elementary/">待审核列表</a></li>
-          <li><a href="/management/plist/passed/">已通过列表</a></li>
-          <li><a href="/management/plist/notpass/">不通过列表</a></li>
-          <li><a href="/management/plist/unqualified/">不合格列表</a></li>
-          <li><a href="/management/plist/search/">搜索</a></li>
-          <li><a href="/management/passwd/">修改密码</a></li>
+          <li{% if not menu_active %} class="active"{% endif %}><a href="/management/">Welcome</a></li>
+          <li{% if menu_active == 'job' %} class="active"{% endif %}><a href="/management/job/">岗位管理</a></li>
+          <li{% if menu_active == 'elementary' %} class="active"{% endif %}><a href="/management/plist/elementary/">待审核列表</a></li>
+          <li{% if menu_active == 'passed' %} class="active"{% endif %}><a href="/management/plist/passed/">已通过列表</a></li>
+          <li{% if menu_active == 'notpass' %} class="active"{% endif %}><a href="/management/plist/notpass/">不通过列表</a></li>
+          <li{% if menu_active == 'unqualified' %} class="active"{% endif %}><a href="/management/plist/unqualified/">不合格列表</a></li>
+          <li{% if menu_active == 'search' %} class="active"{% endif %}><a href="/management/plist/search/">搜索</a></li>
+          <li{% if menu_active == 'change_passwd' %} class="active"{% endif %}><a href="/management/passwd/">修改密码</a></li>
           <li><a href="/management/logout/">退出</a></li>
         </ul>
         <ul class="nav" style="float:right;">

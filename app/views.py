@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, string, random, os, shutil, time
+import hashlib, string, random, os, shutil, time, datetime
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
@@ -56,7 +56,7 @@ def applyjob(request, job_id):
                     pass
             
             People(**data).save()
-            return render_to_response("msg.html", {'message': u'信息提交成功'})
+            return render_to_response("msg.html", {'message': u'信息提交成功<a href="/login/">登录</a>查看已提交的信息'})
     else:
         peopleForm = PeopleForm(initial={'job': job_id})
     return render_to_response("apply.html", locals())
@@ -88,6 +88,10 @@ def update(request):
             for k, v in data.items():
                 setattr(people, k, v)
             people.save()
+            try:
+                people.peopleextra.delete()
+            except Exception:
+                pass
             # 更新session
             request.session['profile'] = people
             message = u'信息修改成功。<a href="/myinfo">查看</a>'
@@ -207,7 +211,9 @@ def uploadimage(request):
                 os.unlink(tmpfilename)
     return HttpResponse("/%s" % filename)
 
+
 # ---------- admin views ----------
+
 
 def m_auth_check(func):
     def wrapper(*args, **kwargs):
@@ -233,6 +239,11 @@ def m_audit(request, people_id=0):
         people = People.objects.get(pk=request.POST.get('people'))
         form = AuditForm(request.POST)
         if form.is_valid():
+            db_time = datetime.datetime(*people.last_edit_at.timetuple()[:6])
+            ori_time = datetime.datetime.utcfromtimestamp(float(request.POST.get('last_edit_at')))
+            if int((db_time - ori_time).total_seconds()) is not 0:
+                message = u'%s 的状态已经被其他管理员修改' % (people.name, )
+                return render_to_response("m_audit.html", locals())
             try:
                 people.peopleextra.audit_step = form.cleaned_data['audit_step']
                 if form.cleaned_data.has_key('reason'):
@@ -243,11 +254,18 @@ def m_audit(request, people_id=0):
             people.audit_step = form.cleaned_data['audit_step']
             people.save()
             request.session['message'] = u'%s的审核状态保存成功' % (people.name, )
-            return redirect('/management/plist/elementary/')
+            
+            status_dict = {0: 'elementary', 1: 'passed', 7: 'notpass', 8: 'unqualified'}
+            return redirect('/management/plist/%s/' % (status_dict[int(form.cleaned_data['audit_step'])],))
     else:
         people = People.objects.get(pk=people_id)
-        form = AuditForm(initial={'audit_step': people.audit_step, 'reason': people.peopleextra.reason})
-    audit_status = {0: u'未审核', 1: u'通过审核', 7: u'未过审核', '7': u'未过审核', 8: u'不合格'}
+        initail = {'audit_step': people.audit_step}
+        try:
+            reason = people.peopleextra.reason
+            initail.update(reason=reason)
+        except ObjectDoesNotExist:
+            pass
+        form = AuditForm(initial=initail)
     return render_to_response("m_audit.html", locals())
 
 @m_auth_check
@@ -281,10 +299,11 @@ def m_people_list(request, status):
     else:
         psForm = PeopleSearchForm()
         if params:
-            peoples = People.objects.filter(**params)
+            peoples = People.objects.filter(**params).order_by('-last_edit_at')
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
+    menu_active = status
     return render_to_response(status_dict[status]['tpl'], locals())
 
 @m_auth_check
@@ -304,6 +323,7 @@ def m_job(request):
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
+    menu_active = 'job'
     return render_to_response("m_job_list.html", locals())
 
 @m_auth_check
@@ -324,6 +344,7 @@ def m_job_add(request):
             return redirect("/management/job/")
     else:
         form = JobForm()
+    menu_active = 'job'
     return render_to_response("m_job_add.html", locals())
 
 @m_auth_check
@@ -339,6 +360,7 @@ def m_job_edit(request, job_id):
     job = Job.objects.get(pk=job_id)
     form = JobForm(instance=job)
     edit = True
+    menu_active = 'job'
     return render_to_response("m_job_add.html", locals())
 
 def m_change_passwd(request):
@@ -352,6 +374,7 @@ def m_change_passwd(request):
             return render_to_response("m_msg.html", locals())
     else:
         form = AdminChangePasswd()
+    menu_active = 'change_passwd'
     return render_to_response("m_passwd.html", locals())
 
 def m_login(request):

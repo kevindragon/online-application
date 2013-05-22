@@ -10,17 +10,17 @@
         <td>
           <table>
             <tr>
-              <td align="right" width="150">岗位</td>
+              <td align="right" width="150" class="field-name">岗位</td>
               <td>{{ people.job }}</td>
             </tr>
             <tr>
-              <td align="right">身份证号</td>
+              <td align="right" class="field-name">身份证号</td>
               <td>
                 {{ people.id_number }}
               </td>
             </tr>
             <tr>
-              <td align="right">电子邮件</td>
+              <td align="right" class="field-name">电子邮件</td>
               <td>
                 {{ people.email }}
               </td>
@@ -37,64 +37,64 @@
     <div class="block-title">[个人信息]</div>
     <table width="100%" bgcolor="#b3c8e3">
       <tr>
-        <td align="right" width="150">姓名</td>
+        <td align="right" width="150" class="field-name">姓名</td>
         <td>{{ people.name }}</td>
-        <td align="right" width="100">性别</td>
+        <td align="right" width="100" class="field-name">性别</td>
         <td>
           {{ people.gender }}
         </td>
       </tr>
       <tr>
-        <td align="right">民族</td>
+        <td align="right" class="field-name">民族</td>
         <td>{{ people.nation }}</td>
-        <td align="right">出生年月</td>
+        <td align="right" class="field-name">出生年月</td>
         <td>
           {{ people.birthday|date:"Y-m-d" }}
         </td>
       </tr>
       <tr>
-        <td align="right">户口所在地</td>
+        <td align="right" class="field-name">户口所在地</td>
         <td id="residence">
           {{ people.residence_prov }}
           {{ people.residence_city }}
         </td>
-        <td align="right">籍贯</td>
+        <td align="right" class="field-name">籍贯</td>
         <td id="hometown">
           {{ people.hometown_prov }}
           {{ people.hometown_city }}
         </td>
       </tr>
       <tr>
-        <td align="right">婚姻状况</td>
+        <td align="right" class="field-name">婚姻状况</td>
         <td>{{ people.marital_status }}</td>
-        <td align="right">外语及水平</td>
+        <td align="right" class="field-name">外语及水平</td>
         <td>{{ people.foreign_language_level }}</td>
       </tr>
       <tr>
-        <td align="right">政治面貌</td>
+        <td align="right" class="field-name">政治面貌</td>
         <td>{{ people.political_status }}</td>
-        <td align="right">参加工作时间</td>
+        <td align="right" class="field-name">参加工作时间</td>
         <td>
           {{ people.start_work_year }}年
           {{ people.start_work_month }}月
         </td>
       </tr>
       <tr>
-        <td align="right">手机</td>
+        <td align="right" class="field-name">手机</td>
         <td>{{ people.phone }}{{ people.phone.errors }}</td>
-        <td align="right">其他联系方式</td>
+        <td align="right" class="field-name">其他联系方式</td>
         <td>{{ people.other_contact }}</td>
       </tr>
       <tr>
-        <td align="right">计算机等级</td>
+        <td align="right" class="field-name">计算机等级</td>
         <td>
           {{ people.compute_level }}
         </td>
-        <td align="right">是否蒙汉兼通</td>
+        <td align="right" class="field-name">是否蒙汉兼通</td>
         <td>{{ people.is_han_mongolia_both }}</td>
       </tr>
       <tr>
-        <td align="right">是否服务基层项目人员</td>
+        <td align="right" class="field-name">是否服务基层项目人员</td>
         <td>{{ people.is_basic_attendant }}</td>
         <td></td>
         <td></td>
@@ -106,25 +106,25 @@
         <td rowspan="3" valign="top" width="80">
           <div style="margin-top:4px;width:80px;">第一学历</div>
         </td>
-        <td align="right" width="70">起始时间</td>
+        <td align="right" width="70" class="field-name">起始时间</td>
         <td width="330">
           {{ people.first_edu_start_year }}年 {{ people.first_edu_start_month }}月
         </td>
-        <td align="right" width="70">结束时间</td>
+        <td align="right" width="70" class="field-name">结束时间</td>
         <td>
           {{ people.first_edu_end_year }}年 {{ people.first_edu_end_month }}月
         </td>
       </tr>
       <tr>
-        <td align="right">获得学位</td>
+        <td align="right" class="field-name">获得学位</td>
         <td>{{ people.first_edu_degree }}</td>
-        <td align="right">获得学历</td>
+        <td align="right" class="field-name">获得学历</td>
         <td>{{ people.first_edu_bkgrd }}</td>
       </tr>
       <tr>
-        <td align="right">毕业院校</td>
+        <td align="right" class="field-name">毕业院校</td>
         <td>{{ people.first_edu_university }}</td>
-        <td align="right">所学专业</td>
+        <td align="right" class="field-name">所学专业</td>
         <td>{{ people.first_edu_major }}</td>
       </tr>
     </table>
@@ -133,27 +133,27 @@
         <td rowspan="3" valign="top" width="80">
           <div style="margin-top:4px;width:80px;">最高学历</div>
         </td>
-        <td align="right" width="70">起始时间</td>
+        <td align="right" width="70" class="field-name">起始时间</td>
         <td width="330">
           {{ people.high_edu_start_year }}年 {{ people.high_edu_start_month }}月
           
         </td>
-        <td align="right" width="70">结束时间</td>
+        <td align="right" width="70" class="field-name">结束时间</td>
         <td>
           {{ people.high_edu_edu_year }}年
           {{ people.high_edu_edu_month }}月
         </td>
       </tr>
       <tr>
-        <td align="right">获得学位</td>
+        <td align="right" class="field-name">获得学位</td>
         <td>{{ people.high_edu_degree }}</td>
-        <td align="right">获得学历</td>
+        <td align="right" class="field-name">获得学历</td>
         <td>{{ people.high_edu_bkgrd }}</td>
       </tr>
       <tr>
-        <td align="right">毕业院校</td>
+        <td align="right" class="field-name">毕业院校</td>
         <td>{{ people.high_edu_university }}</td>
-        <td align="right">所学专业</td>
+        <td align="right" class="field-name">所学专业</td>
         <td>{{ people.high_edu_major }}</td>
       </tr>
     </table>
@@ -162,13 +162,13 @@
         <td rowspan="4" valign="top" width="80">
           <div style="margin-top:4px;width:80px;">其他学习</div>
         </td>
-        <td align="right" width="70">起始时间</td>
+        <td align="right" width="70" class="field-name">起始时间</td>
         <td width="330">
           {% if people.other_edu_start_year %}
           {{ people.other_edu_start_year }}年 {{ people.other_edu_start_month }}月
           {% endif %}
         </td>
-        <td align="right" width="70">结束时间</td>
+        <td align="right" width="70" class="field-name">结束时间</td>
         <td>
           {% if people.other_edu_edu_year %}
           {{ people.other_edu_edu_year }}年 {{ people.other_edu_edu_month }}月
@@ -176,19 +176,19 @@
         </td>
       </tr>
       <tr>
-        <td align="right">获得学位</td>
+        <td align="right" class="field-name">获得学位</td>
         <td>{{ people.other_edu_degree }}</td>
-        <td align="right">获得学历</td>
+        <td align="right" class="field-name">获得学历</td>
         <td>{{ people.other_edu_bkgrd }}</td>
       </tr>
       <tr>
-        <td align="right">学习单位</td>
+        <td align="right" class="field-name">学习单位</td>
         <td>{{ people.other_edu_unit }}</td>
-        <td align="right">所学专业</td>
+        <td align="right" class="field-name">所学专业</td>
         <td>{{ people.other_edu_major }}</td>
       </tr>
       <tr>
-        <td align="right">学习形式</td>
+        <td align="right" class="field-name">学习形式</td>
         <td>{{ people.other_edu_type }}</td>
         <td></td>
         <td></td>
@@ -199,29 +199,29 @@
         <td rowspan="4" valign="top" width="80">
           <div style="margin-top:4px;width:80px;">其他学习</div>
         </td>
-        <td align="right" width="70">起始时间</td>
+        <td align="right" width="70" class="field-name">起始时间</td>
         <td width="330">
           {{ people.other_edu_start_year_2 }}年 {{ people.other_edu_start_month_2 }}月
         </td>
-        <td align="right" width="70">结束时间</td>
+        <td align="right" width="70" class="field-name">结束时间</td>
         <td>
           {{ people.other_edu_edu_year_2 }}年 {{ people.other_edu_edu_month_2 }}月
         </td>
       </tr>
       <tr>
-        <td align="right">获得学位</td>
+        <td align="right" class="field-name">获得学位</td>
         <td>{{ people.other_edu_degree_2 }}</td>
-        <td align="right">获得学历</td>
+        <td align="right" class="field-name">获得学历</td>
         <td>{{ people.other_edu_bkgrd_2 }}</td>
       </tr>
       <tr>
-        <td align="right">学习单位</td>
+        <td align="right" class="field-name">学习单位</td>
         <td>{{ people.other_edu_unit_2 }}</td>
-        <td align="right">所学专业</td>
+        <td align="right" class="field-name">所学专业</td>
         <td>{{ people.other_edu_major_2 }}</td>
       </tr>
       <tr>
-        <td align="right">学习形式</td>
+        <td align="right" class="field-name">学习形式</td>
         <td>{{ people.other_edu_type_2 }}</td>
         <td></td>
         <td></td>
@@ -229,33 +229,33 @@
     </table>
 
     <div class="block-title">[其他信息]</div>
-    <div style="margin:5px 0px;">个人特长及奖惩情况</div>
+    <div style="margin:5px 0px;" class="field-name">个人特长及奖惩情况</div>
     <div>
       {{ people.special_skill }}
     </div>
     <div class="block-title">[资格信息]</div>
     <table width="100%" bgcolor="#b3c8e3">
       <tr>
-        <td align="right" width="120">专业技术资格</td>
+        <td align="right" width="120" class="field-name">专业技术资格</td>
         <td>{{ people.technical_qualification }}</td>
       </tr>
     </table>
     <table width="100%">
       <tr>
-        <td align="right" width="120">执业资格</td>
+        <td align="right" width="120" class="field-name">执业资格</td>
         <td colspan="3">{{ people.operation_qualification }}</td>
       </tr>
     </table>
     <table width="100%" bgcolor="#b3c8e3">
       <tr>
-        <td align="right" width="120">其他资格</td>
+        <td align="right" width="120" class="field-name">其他资格</td>
         <td colspan="3">{{ people.other_qualification }}</td>
       </tr>
     </table>
     <div class="std-blank-10"></div>
     <div class="btn-group-center">
     
-      {% if not people.audit_step %}
+      {% if not people.audit_step or people.audit_step == 7 %}
       <form action="/edit/" method="post" style="display:inline">
         {% csrf_token %}
         <input type="hidden" name="people_id" value="{{ people.id }}" />
@@ -269,85 +269,4 @@
   </div>
   <div class="clearfix"></div>
 </div>
-{% endblock %}
-
-{% block js_block %}
-<script type="text/javascript">
-/*
-function fileDialogComplete(numFilesSelected, numFilesQueued) {
-    this.startUpload();
-}
-function uploadSuccess(file, serverData) {
-    try {
-        $('#avatar_thumb').prop("src", serverData);
-        $('input[name=avatar]').val(serverData);
-    } catch (ex) {}
-}
-var swfu;
-
-$(function(){
-    // 上传照片
-    var settings = {
-            post_params: {
-                "csrfmiddlewaretoken": "{{ csrf_token }}"
-            },
-            flash_url : "/static/flash/swfupload.swf",
-            upload_url: "/uploadimage/",
-            button_image_url: '/static/images/choice_picture.jpg', 
-            file_size_limit : "5 MB",
-            file_types : "*.gif;*.jpg;*.png",
-            file_queue_limit : 1,
-            file_post_name : 'avatar', 
-
-            //button_image_url : "XPButtonUploadText_61x22.png",
-            button_placeholder_id : "avatar_btn",
-            button_width: 90,
-            button_height: 24,
-            button_text_left_padding : 5,
-            button_text_top_padding: 3, 
-
-            file_dialog_complete_handler : fileDialogComplete,
-            upload_success_handler : uploadSuccess
-        };
-        swfu = new SWFUpload(settings);
-
-    // 籍贯
-    $("#id_hometown_city").html("<option value=''> -- </option>");
-    $("#hometown").citySelect({  
-        url:"/static/js/city.min.js",
-        prov_selector:"#id_hometown_prov",
-        city_selector:"#id_hometown_city",
-        prov:"{{ people.hometown_prov.value }}", 
-        city:"{{ people.hometown_city.value }}", 
-        nodata:"none"
-    });
-    // 户口
-    $("#id_residence_city").html("<option value=''> -- </option>");
-    $("#residence").citySelect({  
-        url:"/static/js/city.min.js",
-        prov_selector:"#id_residence_prov",
-        city_selector:"#id_residence_city",
-        prov:"{{ people.residence_prov.value }}", 
-        city:"{{ people.residence_city.value }}", 
-        nodata:"none"
-    });
-    //出生年月
-    var date = new Date();
-    $("#id_birthday").datepicker({
-        dateFormat:"yy-mm-dd", 
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(), 
-        changeMonth: true,
-        changeYear: true, 
-        yearRange: "1800:"+date.getFullYear(), 
-        defaultDate: 0});
-    $("#id_first_edu_start_date").datepicker({
-        dateFormat:"yy-mm-dd",
-        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
-        changeMonth: true,
-        changeYear: true, 
-        yearRange: "1800:"+date.getFullYear(), 
-        defaultDate: 0});
-});
-*/
-</script>
 {% endblock %}

@@ -95,6 +95,8 @@ table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;
 #id_other_edu_major {width:100px;}
 #id_special_skill {width: 810px;height: 60px;}
 
+.field-name {font-weight:bold;padding:5px 5px 5px 1px;}
+
 .another-edu {margin:5px 0px 5px 0px;;}
 .another-edu a {color:#000;}
 
