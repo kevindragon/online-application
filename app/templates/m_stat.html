@@ -12,35 +12,33 @@ table td {border:1px solid #cfcfcf;}
   <h4>{{ message }}</h4>
   {% endif %}
   <div>
-    <h3>岗位列表</h3>
-    <p>
-      <a href="/management/job/add/">添加岗位信息</a>
-    </p>
+    <h3>各岗位报考情况</h3>
   </div>
   <div style="clear:both;"></div>
   {% if jobs %}
   <table>
     <tr>
-      <td>岗位类型</td>
+      <td>序号</td>
       <td>招聘部门</td>
-      <td>专业需求</td>
-      <td>招聘人数</td>
+      <td>专业要求</td>
       <td>学历要求</td>
-      <td>详细要求</td>
-      <td>&nbsp;</td>
+      <td>岗位类别</td>
+      <td>计划人数</td>
+      <td>报考人数</td>
+      <td>招考比例</td>
+      <td>是否开考</td>
     </tr>
     {% for job in jobs %}
     <tr>
-      <td>{{ job.job_type }}</td>
+      <td>{{ forloop.counter }}</td>
       <td>{{ job.department }}</td>
       <td>{{ job.major }}</td>
-      <td>{{ job.count }}</td>
       <td>{{ job.degree_limit }}</td>
-      <td>{{ job.degree_des }}</td>
-      <td>
-        <a href="/management/job/{{ job.id }}/del/">删除</a>
-        <a href="/management/job/{{ job.id }}/edit/">编辑</a>
-      </td>
+      <td>{{ job.job_type }}</td>
+      <td>{{ job.count }}</td>
+      <td>{{ job.count_apply }}</td>
+      <td>{{ job.rate }}</td>
+      <td>{% if job.rate >= '1:3' %}是{% else %}否{% endif %}</td>
     </tr>
     {% endfor %}
   </table>

@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import HttpResponse
+from django.db.models import Count
 from app.models import People, Job, PeopleExtra
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
     PeopleSearchForm
@@ -310,6 +311,19 @@ def m_people_list(request, status):
 def m_people(request, people_id):
     people = People.objects.get(pk=people_id)
     return render_to_response('m_people.html', locals())
+
+@m_auth_check
+def m_stat(request):
+    jobs = Job.objects.all()
+    for (i, job) in enumerate(jobs):
+        count_apply = People.objects.filter(audit_step=1, job=jobs[i].id).count()
+        jobs[i].count_apply = count_apply
+        if count_apply:
+            jobs[i].rate = "1:%d" % (int(1/count_apply), )
+        else:
+            jobs[i].rate = "1:0"
+    menu_active = 'stat'
+    return render_to_response('m_stat.html', locals())
 
 @m_auth_check
 def m_admin(request):

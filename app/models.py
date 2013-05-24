@@ -69,11 +69,11 @@ class People(models.Model):
     residence_prov = models.CharField(max_length=50)
     residence_city = models.CharField(max_length=50)
     email = models.EmailField()
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, help_text=u'手机')
     other_contact = models.CharField(max_length=30, blank=True)
     foreign_language_level = models.CharField(max_length=50)
-    start_work_year = models.IntegerField(choices=year_choices)
-    start_work_month = models.IntegerField(choices=month_choices)
+    start_work_year = models.IntegerField(choices=[(0,u'无'),]+year_choices)
+    start_work_month = models.IntegerField(choices=[(0,u'无'),]+month_choices)
     query_password = models.CharField(max_length=32)
     # 专业技术资格
     technical_qualification = models.CharField(max_length=200, blank=True)
@@ -125,12 +125,16 @@ class People(models.Model):
     is_basic_attendant =  models.CharField(
         max_length=1, choices=((u'是',)*2, (u'否',)*2), blank=True)
     # 个人特长及奖惩情况
-    special_skill = models.TextField(blank=True)
+    special_skill = models.TextField(blank=True, help_text=u'个人特长及奖惩情况')
     # 照片路径
-    avatar = models.CharField(max_length=255)
+    avatar = models.CharField(max_length=255, help_text=u'照片路径')
     # 审核进度
     audit_step = models.PositiveSmallIntegerField(
         default=0, blank=True, null=True, help_text=u'0:未审核 1:通过初审 7:未过初审 8:不合格')
+    
+    test_paper_language = models.CharField(
+        max_length=10, choices=((u'汉文',)*2, (u'蒙文',)*2), 
+        help_text=u'初试选择何种文字作答')
     
     # 其他学习经历 - 起始时间
     other_edu_start_year = models.IntegerField(blank=True, null=True, choices=year_choices)

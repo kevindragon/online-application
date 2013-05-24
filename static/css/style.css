@@ -56,7 +56,7 @@ a {text-decoration: none;}
 .doctor-enter {margin-left:60px;}
 
 .tips-head {color:#0071bd;font-weight:bold;}
-.protocol {margin:20px;padding:10px;height:200px;overflow-y:scroll;border:1px solid #999;}
+.protocol {margin:20px;padding:10px;height:250px;overflow-y:scroll;border:1px solid #999;}
 
 table.job-list {width:800px;}
 table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;line-height:28px;}

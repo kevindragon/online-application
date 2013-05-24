@@ -92,6 +92,10 @@
     <td>&nbsp;</td>
   </tr>
   <tr>
+    <td>招聘详细要求</td>
+    <td colspan="6">{{ people.job.degree_des }}</td>
+  </tr>
+  <tr>
     <td></td>
     <td></td>
     <td>&nbsp;</td>
@@ -113,7 +117,7 @@
     <td>外语水平</td>
     <td>{{ people.foreign_language_level }}</td>
     <td>参加工作时间</td>
-    <td>{{ people.start_work_year }}-{{ people.start_work_month }}</td>
+    <td>{{ people.start_work_year }}{% if people.start_work_month %}/{{ people.start_work_month }}{% endif %}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -180,7 +184,7 @@
 </table>
 </p>
 
-{% if people.peopleextra.audit_step > 0 %}
+{% if people.peopleextra.audit_step and people.peopleextra.audit_step > 0 %}
 <p>审核状态：
 {% if people.peopleextra.audit_step < 1 %}
 <span>未审核</span>

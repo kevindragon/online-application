@@ -37,9 +37,9 @@
     <div class="block-title">[个人信息]</div>
     <table width="100%" bgcolor="#b3c8e3">
       <tr>
-        <td align="right" width="150" class="field-name">姓名</td>
+        <td align="right" width="120" class="field-name">姓名</td>
         <td>{{ people.name }}</td>
-        <td align="right" width="100" class="field-name">性别</td>
+        <td align="right" width="150" class="field-name">性别</td>
         <td>
           {{ people.gender }}
         </td>
@@ -73,31 +73,31 @@
       <tr>
         <td align="right" class="field-name">政治面貌</td>
         <td>{{ people.political_status }}</td>
+        <td align="right" class="field-name">选择初试作答文字</td>
+        <td>{{ people.test_paper_language }}</td>
+      </tr>
+      <tr>
         <td align="right" class="field-name">参加工作时间</td>
         <td>
           {{ people.start_work_year }}年
           {{ people.start_work_month }}月
         </td>
-      </tr>
-      <tr>
         <td align="right" class="field-name">手机</td>
         <td>{{ people.phone }}{{ people.phone.errors }}</td>
-        <td align="right" class="field-name">其他联系方式</td>
-        <td>{{ people.other_contact }}</td>
       </tr>
       <tr>
+        <td align="right" class="field-name">其他联系方式</td>
+        <td>{{ people.other_contact }}</td>
         <td align="right" class="field-name">计算机等级</td>
         <td>
           {{ people.compute_level }}
         </td>
-        <td align="right" class="field-name">是否蒙汉兼通</td>
-        <td>{{ people.is_han_mongolia_both }}</td>
       </tr>
       <tr>
+        <td align="right" class="field-name">是否蒙汉兼通</td>
+        <td>{{ people.is_han_mongolia_both }}</td>
         <td align="right" class="field-name">是否服务基层项目人员</td>
         <td>{{ people.is_basic_attendant }}</td>
-        <td></td>
-        <td></td>
       </tr>
     </table>
     <div class="block-title">[学历信息]</div>

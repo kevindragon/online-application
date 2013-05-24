@@ -73,9 +73,9 @@
     <div class="block-title">[个人信息]</div>
     <table width="100%" bgcolor="#b3c8e3" class="form-table">
       <tr>
-        <td class="control-label" width="150">姓名<font color="red">*</font></td>
-        <td>{{ peopleForm.name }}{{ peopleForm.name.errors }}</td>
-        <td class="control-label" width="100">性别<font color="red">*</font></td>
+        <td class="control-label" width="120">姓名<font color="red">*</font></td>
+        <td width="230">{{ peopleForm.name }}{{ peopleForm.name.errors }}</td>
+        <td class="control-label" width="140">性别<font color="red">*</font></td>
         <td>
           {{ peopleForm.gender }}
           {{ peopleForm.gender.errors }}
@@ -113,6 +113,10 @@
       <tr>
         <td class="control-label">政治面貌<font color="red">*</font></td>
         <td>{{ peopleForm.political_status }}{{ peopleForm.political_status.errors }}</td>
+        <td class="control-label">选择初试作答文字<font color="red">*</font></td>
+        <td>{{ peopleForm.test_paper_language }}</td>
+      </tr>
+      <tr>
         <td class="control-label">参加工作时间<font color="red">*</font></td>
         <td>
           {{ peopleForm.start_work_year }}
@@ -123,27 +127,23 @@
           {{ peopleForm.start_work_month.errors }}
           {% endif %}
         </td>
-      </tr>
-      <tr>
         <td class="control-label">手机<font color="red">*</font></td>
         <td>{{ peopleForm.phone }}{{ peopleForm.phone.errors }}</td>
-        <td class="control-label">其他联系方式</td>
-        <td>{{ peopleForm.other_contact }}</td>
       </tr>
       <tr>
+        <td class="control-label">其他联系方式</td>
+        <td>{{ peopleForm.other_contact }}</td>
         <td class="control-label">计算机等级</td>
         <td>
           {{ peopleForm.compute_level }}<span class="help-inline">(没有时请填"无")</span>
           {{ peopleForm.compute_level.errors }}
         </td>
-        <td class="control-label">是否蒙汉兼通</td>
-        <td>{{ peopleForm.is_han_mongolia_both }}{{ peopleForm.is_han_mongolia_both.errors }}</td>
       </tr>
       <tr>
+        <td class="control-label">是否蒙汉兼通</td>
+        <td>{{ peopleForm.is_han_mongolia_both }}{{ peopleForm.is_han_mongolia_both.errors }}</td>
         <td class="control-label">是否服务基层项目人员</td>
         <td>{{ peopleForm.is_basic_attendant }}{{ peopleForm.is_basic_attendant.errors }}</td>
-        <td></td>
-        <td></td>
       </tr>
     </table>
     <div class="block-title">[学历信息]</div>
@@ -357,8 +357,9 @@ var swfu;
 
 $(function(){
 	{% if 'edit' == operate %}
-	$('input[name=id_number], input[name=email]').attr('readonly', true)
-	                                             .css('background-color', '#f1f1f1');
+	$('input[name=id_number], input[name=email]')
+	.attr('readonly', true)
+    .css('background-color', '#f1f1f1');
 	{% endif %}
 	// 上传照片
     var settings = {
@@ -414,6 +415,14 @@ $(function(){
         changeYear: true, 
         yearRange: "1800:"+date.getFullYear(), 
         defaultDate: 0});
+    // 参加工作时间
+    $('#id_start_work_year').change(function(){
+    	if (0==$(this).val()) {
+    		$('#id_start_work_month').val(0);
+    	} else if (0==$('#id_start_work_month').val()) {
+    		$('#id_start_work_month').val('');
+    	}
+    });
     // 添加另一项其他学习
     $('#add-other-edu').click(function(){
     	if ('1' == $(this).attr('s')) {
@@ -421,6 +430,11 @@ $(function(){
             $(this).html('取消添加');
             $(this).attr('s', '0');
     	} else {
+            $(':input','.another-edu-form')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
             $('.another-edu-form').fadeOut('fast');
             $(this).html('添加另一项其他学习');
             $(this).attr('s', '1');
