@@ -6,48 +6,56 @@
   <div class="right-content right-line">
     <h3 class="std-color">[审核流程]</h3>
     <div class="audit-flow-show">
-      <span class="btn">1.填写信息</span>
-      <span style="font-size:10px;">--待初审--></span>
-      <span class="btn{% if not people.audit_step %} red-btn{% endif %}">2.初审阶段</span>
-      <span style="font-size:10px;">--初审通过--></span>
-      <span class="btn{% if people.audit_step == 1 %} red-btn{% endif %}">3.复审阶段</span>
-      <span style="font-size:10px;">--复审通过--></span>
-      <span class="btn{% if people.audit_step == 2 %} red-btn{% endif %}">打印准考证</span>
+      <span class="progress-block">1.填写信息</span>
+      <span class="progress-block-text"><span>提交成功</span></span>
+      <span class="progress-block{% if not people.audit_step %} progress-green-block{% endif %}">2.待初审</span>
+      <span class="progress-block-text"><span>待审核</span></span>
+      <span class="progress-block{% if people.audit_step == 1 %} progress-green-block{% endif %}">3.初审阶段</span>
+      <span class="progress-block-text"><span>初审结束</span></span>
+      <span class="progress-block{% if people.audit_step == 2 %} progress-green-block{% endif %}">4.打印准考证</span>
     </div>
     <div class="std-blank-60"></div>
     <div>
       <div>
         <div class="tips-head" style="">
-          <font size="3">当前审核状态：</font>
+          <font size="5">当前审核状态：
           {% if not people.audit_step %}
-          <span>未审核</span>
-          <div>您的报名信息已提交，还未进行初审</div>
+          未审核
           {% elif people.audit_step == 1%}
-          <span>通过初审</span>
-          <div>您的报名信息已经初审通过，还未进行复审</div>
+          通过初审
           {% elif people.audit_step == 2 %}
-          <span>复审通过</span>
-          <div>您的信息已经复审通过，现在您可以打印您的报考信息</div>
+          复审通过
           {% elif people.audit_step == 7 %}
-          <span>未通过初审</span>
-          <div>照片不符合要求，请更换您的照片</div>
+          未通过初审
           {% elif people.audit_step == 8 %}
-          <span>未通过复审</span>
-          <div>什么什么不符合要求</div>
+          未通过复审
           {% endif %}
+          </font>
         </div>
-        <div class="audit-desccription">说明：</div>
-      </div>
-      <div class="operate-group">
-        <a class="btn">查看 报名信息</a>
-        <a class="btn">修改 报名信息</a>
-        <a class="btn">修改 登录密码</a>
+        <div class="audit-desccription">
+          <p>说明：</p>
+          <p>
+            <div style="border:2px solid #e2dedf;width:600px;height:100px;padding:10px;">
+              <div>
+              {% if not people.peopleextra %}
+              您的报名信息已经提交成功，还未进行初审
+              {% elif people.audit_step == 1 %}
+              您已经通过初审
+              {% else %}
+              {{ people.peopleextra.reason }}
+              {% endif %}
+              </div>
+            </div>
+          </p>
+        </div>
       </div>
     </div>
-    {% if people.audit_step == 2 %}
+    {% if people.audit_step == 1 %}
     <div class="std-blank-20"></div>
-    <div>
-      <a href="/print/audit" class="btn">打印资格审查表</a>
+    <div class="operate-group">
+      {% if not people.audit_step or people.audit_step == 7 %}
+      <a class="btn">修改 报名信息</a>
+      {% endif %}
       <a href="/print/ticket" class="btn">打印准考证</a>
     </div>
     {% endif %}

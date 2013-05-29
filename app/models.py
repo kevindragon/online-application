@@ -199,9 +199,12 @@ class PeopleExtra(models.Model):
         default=0, blank=True, null=True,  
         help_text=u'0:未审核 1:通过初审 7:未过初审 8:不合格')
     reason = models.TextField(blank=True)
-
+    ticket_number = models.CharField(max_length=8)
+    exam_room = models.CharField(max_length=2)
+    seat = models.CharField(max_length=2)
     create_at = models.DateTimeField(auto_now_add = True)
     last_edit_at = models.DateTimeField(auto_now = True)
 
     def __unicode__(self):
         return self.people.name
+

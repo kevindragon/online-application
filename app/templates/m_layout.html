@@ -29,7 +29,10 @@
             <a href="/management/plist/search/">搜索</a>
           </li>
           <li{% if menu_active == 'stat' %} class="active"{% endif %}>
-            <a href="/management/stat/">统计</a>
+            <a href="/management/stat/">统计/分配准考证</a>
+          </li>
+          <li{% if menu_active == 'export' %} class="active"{% endif %}>
+            <a href="/management/export/">各种导出</a>
           </li>
           <li{% if menu_active == 'change_passwd' %} class="active"{% endif %}>
             <a href="/management/passwd/">修改密码</a>

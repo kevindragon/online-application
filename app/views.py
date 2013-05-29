@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, string, random, os, shutil, time, datetime
+import hashlib, string, random, os, shutil, time, datetime, csv
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -270,7 +271,7 @@ def m_audit(request, people_id=0):
     return render_to_response("m_audit.html", locals())
 
 @m_auth_check
-def m_people_list(request, status):
+def m_people_list(request, status, page=1):
     locals().update(csrf(request))
     status_dict = {
         'elementary': {'filter': {'audit_step__lt': 1}, 'tpl': 'm_elementary.html'}, 
@@ -282,6 +283,7 @@ def m_people_list(request, status):
     if not status_dict.has_key(status):
         return redirect("/management")
     params = status_dict[status]['filter']
+    all_people = None
     if request.method == 'POST':
         psForm = PeopleSearchForm(request.POST)
         psForm.is_valid()
@@ -296,11 +298,19 @@ def m_people_list(request, status):
                 params.update(job__major__contains=psForm.cleaned_data['major'])
             if psForm.cleaned_data['department']:
                 params.update(job__department__contains=psForm.cleaned_data['department'])
-            peoples = People.objects.filter(**params)
+            all_people = People.objects.filter(**params).order_by('-last_edit_at')
     else:
         psForm = PeopleSearchForm()
         if params:
-            peoples = People.objects.filter(**params).order_by('-last_edit_at')
+            all_people = People.objects.filter(**params).order_by('-last_edit_at')
+    if all_people:
+        paginator = Paginator(all_people, 30)
+        try:
+            peoples = paginator.page(page)
+        except PageNotAnInteger:
+            peoples = paginator.page(1)
+        except EmptyPage:
+            peoples = paginator.page(paginator.num_pages)
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
@@ -314,16 +324,79 @@ def m_people(request, people_id):
 
 @m_auth_check
 def m_stat(request):
+    locals().update(csrf(request))
+    if request.method == 'POST':
+        request.session['message'] = u'准考证号分配完毕，现在只有文字，还没有功能哦<br>我打算做成全部审核结束后再统一分配准考证号'
+        return redirect("/management/stat/")
     jobs = Job.objects.all()
     for (i, job) in enumerate(jobs):
         count_apply = People.objects.filter(audit_step=1, job=jobs[i].id).count()
         jobs[i].count_apply = count_apply
         if count_apply:
-            jobs[i].rate = "1:%d" % (int(1/count_apply), )
+            denominator = float(job.count) if job.count else 1.0
+            jobs[i].rate = "1:%.1f" % (count_apply/denominator, )
         else:
             jobs[i].rate = "1:0"
+    if request.session.has_key('message'):
+        message = request.session['message']
+        del request.session['message']
     menu_active = 'stat'
     return render_to_response('m_stat.html', locals())
+
+@m_auth_check
+def m_export(request, etype=None):
+    params = {}
+    print etype
+    if 'passed' == etype:
+        params.update(audit_step=1)
+        peoples = People.objects.filter(**params)
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="通过审核名单.csv"'
+    
+        writer = csv.writer(response)
+        writer.writerow([u"内蒙古工业大学2013年度公开招聘工作人员考试考生信息汇总表".encode('gbk')])
+        writer.writerow(
+            map(lambda x: x.encode('gbk'), 
+                [u'序号', u'岗位类型', u'招聘部门', u'专业要求', u'学历要求', u'姓名', u'性别', 
+                 u'民族', u'出生日期', u'身份证号', u'政治面貌', u'婚姻状况', u'是否蒙汉兼通', 
+                 u'是否服务基层人员', u'籍贯', u'户口所在地', u'电子邮件', u'手机号', 
+                 u'其他联系方式', u'外语及水平', u'参加工作时间', u'专业技术资格', 
+                 u'执业资格', u'其他资格', u'第一学历名称', u'第一学位', u'第一学历毕业院校', 
+                 u'第一学历所学专业', u'第一学历开始时间', u'第一学历结束时间', u'最高学历名称', 
+                 u'最高学位', u'最高学历毕业院校', u'最高学历所学专业', u'最高学历开始时间', 
+                 u'最高学历结束时间', u'其他学习经历一开始时间', u'其他学习经历一结束时间', 
+                 u'其他学习经历一学习形式', u'其他学习经历一学历', u'其他学习经历一学位', 
+                 u'其他学习经历一学习所学专业', u'其他学习经历一学习单位', u'其他学习经历二开始时间', 
+                 u'其他学习经历二结束时间', u'其他学习经历二学习形式', u'其他学习经历二学历', 
+                 u'其他学习经历二学位', u'其他学习经历二学习所学专业', u'其他学习经历二学习单位', 
+                 u'获奖情况、学术成果及个人特长']))
+        for (i, p) in enumerate(peoples):
+            line = [i+1, p.job.job_type, p.job.department, p.job.major, p.job.degree_limit, 
+                    p.name, p.gender, p.nation, p.birthday, p.id_number, p.political_status, 
+                    p.marital_status, p.is_han_mongolia_both, p.is_basic_attendant, 
+                    p.hometown_prov+u'-'+p.hometown_city, p.residence_prov+u'-'+p.residence_city, 
+                    p.email, (u"'%s" % p.phone), p.other_contact, p.foreign_language_level, 
+                    (u"%d/%d" % (p.start_work_year, p.start_work_month)), p.technical_qualification, 
+                    p.operation_qualification, p.other_qualification, p.first_edu_bkgrd, p.first_edu_degree, 
+                    p.first_edu_university, p.first_edu_major, (u"%d/%d" % (p.first_edu_start_year, p.first_edu_start_month)), 
+                    (u"%d/%d" % (p.first_edu_end_year, p.first_edu_end_month)), p.high_edu_bkgrd, p.high_edu_degree, 
+                    p.high_edu_university, p.high_edu_major, (u"%d/%d" % (p.high_edu_start_year, p.high_edu_start_month)), 
+                    (u"%d/%d" % (p.high_edu_edu_year, p.high_edu_edu_month)), 
+                    (u"%s/%s" % (p.other_edu_start_year, p.other_edu_start_month) if p.other_edu_start_year else u''), 
+                    (u"%s/%s" % (p.other_edu_edu_year, p.other_edu_edu_month) if p.other_edu_edu_year else u''), 
+                    p.other_edu_type, p.other_edu_bkgrd, 
+                    p.other_edu_degree, p.other_edu_major, p.other_edu_unit, 
+                    (u"%s/%s" % (p.other_edu_start_year_2, p.other_edu_start_month_2) if p.other_edu_start_year_2 else u''), 
+                    (u"%s/%s" % (p.other_edu_edu_year_2, p.other_edu_edu_month_2) if p.other_edu_edu_year_2 else u''), 
+                    p.other_edu_type_2, p.other_edu_bkgrd_2, 
+                    p.other_edu_degree_2, p.other_edu_major_2, p.other_edu_unit_2, p.special_skill]
+            print p.other_edu_edu_year
+            writer.writerow(map(lambda x: x.encode('gbk') if type(x) is unicode else x, line))
+    
+        return response
+    menu_active = 'export'
+    return render_to_response('m_export.html', locals())
 
 @m_auth_check
 def m_admin(request):

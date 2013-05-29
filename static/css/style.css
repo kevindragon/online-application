@@ -100,6 +100,29 @@ table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;
 .another-edu {margin:5px 0px 5px 0px;;}
 .another-edu a {color:#000;}
 
+.progress-block {
+	background-color:#03499e;
+	padding:0px 15px;
+	line-height:35px;
+	color:#fff;
+    font-weight:bold;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border:1px solid #03499e;
+}
+.progress-green-block {background-color:#30b041;border:1px solid #30b041;}
+.progress-block-text {
+	display:inline-block;
+	background:url(/static/images/bottom_arrow.jpg) 0px 20px;
+	height:20px;width:80px;
+	font-size:10px;
+}
+.progress-block-text * {display:inline-block;margin-left:10px;}
+.audit_desc {border:0px;}
+.audit_desc tr {margin:0px;padding:0px;}
+.audit_desc tr td {margin:0px;padding:0px;}
+
 .footer {padding:10px;font-size:12px;}
 .footer .copyright {text-align:right;margin-bottom:5px;}
 .footer .contact {float:left;}

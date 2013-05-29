@@ -9,7 +9,7 @@ table td {border:1px solid #cfcfcf;}
 
 <div class="content-container">
   {% if message %}
-  <h4>{{ message }}</h4>
+  <h4>{% autoescape off %}{{ message }}{% endautoescape %}</h4>
   {% endif %}
   <div>
     <h3>各岗位报考情况</h3>
@@ -43,6 +43,22 @@ table td {border:1px solid #cfcfcf;}
     {% endfor %}
   </table>
   {% endif %}
+  <p>
+    <form action="/management/stat/" method="post">
+      {% csrf_token %}
+      <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
+    </form>
+  </p>
 </div>
 
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+$(function(){
+	$('#assign-ticket').click(function(){
+		
+	});
+});
+</script>
 {% endblock %}

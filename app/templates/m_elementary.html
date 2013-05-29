@@ -4,7 +4,7 @@
 
 <div class="content-container">
 {% if message %}
-<p>{{ message }}</p>
+<p>{% autoescape off %}{{ message }}{% endautoescape %}</p>
 {% endif %}
 
 <h3>待审核列表</h3>
@@ -60,6 +60,19 @@
 	  </tr>
 	  {% endfor %}
 	</table>
+    {% if peoples %}
+    <div style="width:900px;padding-top:20px;">
+      <div style="text-align:right;">Page:{{ peoples.number }}/{{ peoples.paginator.num_pages }}&nbsp;&nbsp;&nbsp;&nbsp;
+        {% if peoples.has_previous %}
+          <a href="/management/plist/elementary/{{ peoples.previous_page_number }}/" class="page">{{ peoples.previous_page_number }}</a>
+        {% endif %}
+        <span class="page cur-page">{{ peoples.number }}</span> 
+        {% if peoples.has_next %}
+          <a href="/management/plist/elementary/{{ peoples.next_page_number }}/" class="page">{{ peoples.next_page_number }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
 	<p>
         <select name="operate">
             <option value="">----</option>

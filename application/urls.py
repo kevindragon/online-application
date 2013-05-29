@@ -40,8 +40,11 @@ urlpatterns = patterns('',
     url(r'^management/audit/$', 'app.views.m_audit'), 
     url(r'^management/audit/(?P<people_id>\d+)/', 'app.views.m_audit'), 
     url(r'^management/people/(?P<people_id>\d+)', 'app.views.m_people'), 
+    url(r'^management/plist/(?P<status>[^/]+)/(?P<page>\d+)/$', 'app.views.m_people_list'),
     url(r'^management/plist/(?P<status>.*)/$', 'app.views.m_people_list'),
-    url(r'^management/stat/', 'app.views.m_stat'),  
+    url(r'^management/stat/$', 'app.views.m_stat'), 
+    url(r'^management/export/$', 'app.views.m_export'),
+    url(r'^management/export/(?P<etype>.*)/', 'app.views.m_export'), 
     
     url(r'^admin/', include(admin.site.urls)), 
 ) + staticfiles_urlpatterns()

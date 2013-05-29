@@ -159,4 +159,7 @@ label {display: block;margin-bottom: 5px;}
 select.audit-def-choices {display:none;}
 option.audit-def {display:none;}
 
+.page {display:inline-block;padding:0px 5px;border:1px solid #999;text-decoration:none;}
+.cur-page {border:0px;}
+
 .footer {height:40px;}

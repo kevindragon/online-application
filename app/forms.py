@@ -4,6 +4,7 @@ from django import forms
 from app.models import People, Job, PeopleExtra
 from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
+from pkg_resources import require
 
 class PeopleNoPasswordForm(forms.ModelForm):
     '''
@@ -141,6 +142,9 @@ class JobForm(forms.ModelForm):
 class AuditForm(forms.ModelForm):
     audit_step = forms.ChoiceField(choices=((u'', u' -- '), (0, u'待审核'), 
                                             (1, u'通过'), (7, u'不通过'), (8, u'不合格')))
+    ticket_number = forms.CharField(required=False)
+    exam_room = forms.CharField(required=False)
+    seat = forms.CharField(required=False)
 
     def clean(self):
         d = self.cleaned_data
