@@ -67,7 +67,7 @@
       <tr>
         <td align="right" class="field-name">婚姻状况</td>
         <td>{{ people.marital_status }}</td>
-        <td align="right" class="field-name">外语及水平</td>
+        <td align="right" class="field-name">外语语种及水平</td>
         <td>{{ people.foreign_language_level }}</td>
       </tr>
       <tr>
@@ -229,9 +229,13 @@
     </table>
 
     <div class="block-title">[其他信息]</div>
-    <div style="margin:5px 0px;" class="field-name">个人特长及奖惩情况</div>
+    <div style="margin:5px 0px;" class="field-name">业绩成果、获奖经历及其他需要说明的情况</div>
     <div>
+      {% if people.special_skill %}
       {{ people.special_skill }}
+      {% else %}
+      无
+      {% endif %}
     </div>
     <div class="block-title">[资格信息]</div>
     <table width="100%" bgcolor="#b3c8e3">

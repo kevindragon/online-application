@@ -21,7 +21,7 @@ a {text-decoration: none;}
 	background-color:#03499e;cursor:pointer;padding:0px 20px;line-height:35px;color:#fff;
     font-weight:bold;display: inline-block;text-align: center;vertical-align: middle;
     border:1px solid #03499e;}
-.red-btn {background-color:#9b0608;border:1px solid #9b0608;}
+.red-btn {background-color:red;border:1px solid red;}
 .gray-btn {background-color:#999;border:1px solid #999;}
 .btn-group-center {text-align:center;}
 
@@ -48,18 +48,34 @@ a {text-decoration: none;}
 
 .left-flow {width:130px;float:left;}
 .right-content {width:820px;float:right;padding-left:20px;min-height:300px;}
-.import-tips {height:360px;}
 .work-flow {font-weight:bold;color:#666;}
 .work-flow li {line-height:40px;font-weight:bold;}
 .work-flow li.active {color:#9b0608;}
-.notice-content {margin-left:40px;}
+.notice-content {margin-left:40px;line-height:24px;}
 .doctor-enter {margin-left:60px;}
 
 .tips-head {color:#0071bd;font-weight:bold;}
 .protocol {margin:20px;padding:10px;height:250px;overflow-y:scroll;border:1px solid #999;}
 
 table.job-list {width:800px;}
-table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;line-height:28px;}
+table.job-list th {
+	padding:5px;
+	text-align:center;
+	height:28px;
+	line-height:28px;
+    border-bottom:1px solid #ccc;}
+table.job-list td {
+	padding:5px;
+	text-align:center;
+	height:20px;
+	line-height:20px;
+	border-bottom:1px solid #ccc;
+}
+.apply-btn {
+	padding:2px;
+	font-weight:bold;
+	color:#ff8a00;
+}
 
 .tip-text {display:none;}
 .tip-box {
@@ -99,6 +115,13 @@ table.job-list td, table.job-list th {padding:5px;text-align:center;height:28px;
 
 .another-edu {margin:5px 0px 5px 0px;;}
 .another-edu a {color:#000;}
+
+#add-other-edu {
+	width:24px;
+	height:23px;
+	background:url(/static/images/add_dev_btn.jpg) no-repeat;
+	display: inline-block;
+}
 
 .progress-block {
 	background-color:#03499e;

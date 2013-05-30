@@ -35,6 +35,8 @@ def jobs(request):
     return render_to_response("jobs.html", locals())
 
 def applyjob(request, job_id):
+    if request.session.has_key('profile'):
+        return redirect("/")
     locals().update(csrf(request))
     if request.method == 'POST':
         peopleForm = PeopleForm(request.POST)
@@ -57,8 +59,13 @@ def applyjob(request, job_id):
                 except Exception:
                     pass
             
-            People(**data).save()
-            return render_to_response("msg.html", {'message': u'信息提交成功<a href="/login/">登录</a>查看已提交的信息'})
+            people = People(**data)
+            people.save()
+            request.session['profile'] = people
+            request.session.set_expiry(3600)
+            return render_to_response("msg.html", 
+                                      {'message': u'信息提交成功<a href="/myinfo/">查看</a>已提交的信息'}, 
+                                      locals())
     else:
         peopleForm = PeopleForm(initial={'job': job_id})
     return render_to_response("apply.html", locals())
