@@ -30,8 +30,9 @@ def home(request):
     peoples = People.objects.all()
     return render_to_response("home.html", locals())
 
-def jobs(request):
-    jobs = Job.objects.all()
+def jobs(request, job_id=1):
+    degree_limit = {'1': u'硕士', '2': u'博士'}
+    jobs = Job.objects.filter(degree_limit=degree_limit[job_id])
     return render_to_response("jobs.html", locals())
 
 def applyjob(request, job_id):
@@ -63,9 +64,8 @@ def applyjob(request, job_id):
             people.save()
             request.session['profile'] = people
             request.session.set_expiry(3600)
-            return render_to_response("msg.html", 
-                                      {'message': u'信息提交成功<a href="/myinfo/">查看</a>已提交的信息'}, 
-                                      locals())
+            message = u'信息提交成功<a href="/myinfo/">查看</a>已提交的信息'
+            return render_to_response("msg.html", locals())
     else:
         peopleForm = PeopleForm(initial={'job': job_id})
     return render_to_response("apply.html", locals())
@@ -341,7 +341,7 @@ def m_stat(request):
         jobs[i].count_apply = count_apply
         if count_apply:
             denominator = float(job.count) if job.count else 1.0
-            jobs[i].rate = "1:%.1f" % (count_apply/denominator, )
+            jobs[i].rate = "1:%.0f" % (count_apply/denominator, )
         else:
             jobs[i].rate = "1:0"
     if request.session.has_key('message'):

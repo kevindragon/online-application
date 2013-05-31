@@ -20,7 +20,7 @@ class Job(models.Model):
     department = models.CharField(max_length=100)
     major = models.CharField(max_length=200)
     count = models.IntegerField(default=0)
-    degree_limit = models.CharField(max_length=255)
+    degree_limit = models.CharField(max_length=255, choices=((u'硕士',)*2, (u'博士',)*2))
     degree_des = models.TextField()
 
     def __unicode__(self):

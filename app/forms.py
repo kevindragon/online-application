@@ -4,7 +4,6 @@ from django import forms
 from app.models import People, Job, PeopleExtra
 from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
-from pkg_resources import require
 
 class PeopleNoPasswordForm(forms.ModelForm):
     '''

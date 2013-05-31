@@ -15,7 +15,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'app.views.home'),
     url(r'^protocol/(?P<type_id>\d)', 'app.views.protocol'), 
-    url(r'^job', 'app.views.jobs'),
+    url(r'^job/(?P<job_id>\d+)?', 'app.views.jobs'),
     url(r'^apply/(?P<job_id>\d+)?', 'app.views.applyjob'), 
     url(r'^edit', 'app.views.edit'), 
     url(r'^update/', 'app.views.update'),

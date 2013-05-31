@@ -40,7 +40,7 @@
               {% if not people.peopleextra %}
               您的报名信息已经提交成功，还未进行初审
               {% elif people.audit_step == 1 %}
-              您已经通过初审
+                {% if people.peopleextra.reason %}{{people.peopleextra.reason}}{% else %}您已经通过初审{% endif %}
               {% else %}
               {{ people.peopleextra.reason }}
               {% endif %}
