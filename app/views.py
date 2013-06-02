@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import HttpResponse
+from django.db import IntegrityError, transaction
 from django.db.models import Count
 from app.models import People, Job, PeopleExtra
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
@@ -118,6 +119,12 @@ def myinfo(request):
 @auth_check
 def progress(request):
     people = People.objects.get(pk=request.session['profile'].id)
+    can_print = True
+    if os.path.exists('run/ticket_assigned.lock'):
+        ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
+        for ta in ticket_assigned:
+            if len(ta) == 2 and int(ta[1]) == 0:
+                can_print = False
     return render_to_response("progress.html", locals())
 
 @auth_check
@@ -330,30 +337,86 @@ def m_people(request, people_id):
     return render_to_response('m_people.html', locals())
 
 @m_auth_check
+@transaction.commit_manually
+def m_ticket(request):
+    message = None
+    lines = []
+    seat_in_room = 30
+    if request.method == 'POST':
+        languages = (u'汉文', u'蒙文')
+        room = 1
+        for lang in languages:
+            pes = PeopleExtra.objects.filter(people__test_paper_language=lang, audit_step=1)
+            seat = 1
+            for pe in pes:
+                people_room = '%02d' % room
+                people_seat = '%02d' % seat
+                ticket = '%d%s%s' % (datetime.date.today().year, people_room, people_seat)
+                pe.ticket_number = ticket
+                pe.exam_room = people_room
+                pe.seat = people_seat
+                seat += 1
+                if seat > seat_in_room:
+                    room += 1
+                    seat = 1
+            room += 1
+            transaction.commit()
+            try:
+                for pe in pes:
+                    pe.save()
+            except:
+                transaction.rollback()
+                lines.append(u'%s:0' % lang)
+                message = u'<font color="red">分配准考证失败，请重试</font>'
+            else:
+                transaction.commit()
+                lines.append(u'%s:1' % lang)
+        if not message:
+            message = u'准考证号分配完毕'
+        fp = open('run/ticket_assigned.lock', 'w')
+        fp.write((u"\n".join(lines)).encode('utf-8'))
+        fp.close()
+        request.session['message'] = message
+    return redirect("/management/stat/")
+
+@m_auth_check
 def m_stat(request):
     locals().update(csrf(request))
-    if request.method == 'POST':
-        request.session['message'] = u'准考证号分配完毕，现在只有文字，还没有功能哦<br>我打算做成全部审核结束后再统一分配准考证号'
-        return redirect("/management/stat/")
-    jobs = Job.objects.all()
+    jobs = Job.objects.all().order_by('-degree_limit')
     for (i, job) in enumerate(jobs):
         count_apply = People.objects.filter(audit_step=1, job=jobs[i].id).count()
         jobs[i].count_apply = count_apply
         if count_apply:
             denominator = float(job.count) if job.count else 1.0
-            jobs[i].rate = "1:%.0f" % (count_apply/denominator, )
+            rate = count_apply/denominator
+            jobs[i].rate = "1:%d" % rate
+            if rate > 3:
+                jobs[i].is_exam_open = u'是'
+            else:
+                jobs[i].is_exam_open = u'否'
         else:
             jobs[i].rate = "1:0"
+            jobs[i].is_exam_open = u'否'
+    # 统计中文跟蒙文试卷人数
+    test_paper = {'han': People.objects.filter(test_paper_language=u'汉文').count(), 
+                  'meng': People.objects.filter(test_paper_language=u'蒙文').count()}
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
+    ticket_assigned = []
+    assign_failed, failed_lang = False, ''
+    if os.path.exists('run/ticket_assigned.lock'):
+        ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
+        for ta in ticket_assigned:
+            if len(ta) == 2 and int(ta[1]) == 0:
+                assign_failed = True
+                failed_lang = ta[0]
     menu_active = 'stat'
     return render_to_response('m_stat.html', locals())
 
 @m_auth_check
 def m_export(request, etype=None):
     params = {}
-    print etype
     if 'passed' == etype:
         params.update(audit_step=1)
         peoples = People.objects.filter(**params)

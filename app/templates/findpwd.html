@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<div class="std-blank-20"></div>
 <h1 class="text-center">找回密码</h1>
 <div class="std-blank-10"></div>
 <div class="account-form">
@@ -17,6 +18,7 @@
       <span>{{ form.email }}</span>
       {{ form.email.errors }}
     </div>
+    <div class="std-blank-10"></div>
     <div class="btn-group-center">
       <input type="submit" name="submit" value="找回密码" class="btn" />
       <input type="button" value="取消" class="btn gray-btn" style="margin-left:40px;" onclick="location.href='/'" />
@@ -24,4 +26,5 @@
   </form>
 </div>
 <div class="std-blank-60"></div>
+<div class="std-blank-40"></div>
 {% endblock %}

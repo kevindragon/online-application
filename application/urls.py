@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     url(r'^management/plist/(?P<status>[^/]+)/(?P<page>\d+)/$', 'app.views.m_people_list'),
     url(r'^management/plist/(?P<status>.*)/$', 'app.views.m_people_list'),
     url(r'^management/stat/$', 'app.views.m_stat'), 
+    url(r'^management/ticket/$', 'app.views.m_ticket'), 
     url(r'^management/export/$', 'app.views.m_export'),
     url(r'^management/export/(?P<etype>.*)/', 'app.views.m_export'), 
     

@@ -16,7 +16,11 @@
   <div class="clearfix"></div>
   <div class="menu-bar std-bg-color white-color">
     <div class="back-to-home">
+      {% if request.path == "/" %}
+      <a href="http://www.imut.edu.cn">查看招聘公告</a>
+      {% else %}
       <a href="/">返回首页</a>
+      {% endif %}
     </div>
     <ul class="right-menu">
       {% if request.session.profile %}

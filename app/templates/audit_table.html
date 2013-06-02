@@ -7,6 +7,10 @@
 table {border-collapse:collapse;}
 </style>
 <body>
+<p id="print-wrapper">
+  <button id="print-btn" style="font-size:16px;width:80px;height:40px;">打印</button>
+  <button id="print-back" style="font-size:16px;width:80px;height:40px;">返回</button>
+</p>
 <h2>内蒙古工业大学2013年度公开招聘工作人员考试报考资格审查表</h2>
 <table width="898" height="146" border="1">
   <tr>
@@ -23,8 +27,8 @@ table {border-collapse:collapse;}
     </td>
   </tr>
   <tr>
-    <td height="58" align="center">报考序号</td>
-    <td colspan="4">&nbsp;</td>
+    <td height="58" align="center">准考证号</td>
+    <td colspan="4">{{ people.peopleextra.ticket_number }}</td>
     <td align="center">身份证号</td>
     <td colspan="2">{{ people.id_number }}</td>
   </tr>
@@ -117,10 +121,7 @@ table {border-collapse:collapse;}
   <span style="font-weight:bold;">注：</span>
   <span>此表中考生基本信息为网上报名初审通过后根据考生所填信息自动生成，考生自行填写无效。</span>
 </div>
-<p id="print-wrapper">
-  <button id="print-btn" style="font-size:16px;width:80px;height:40px;">打印</button>
-  <button id="print-back" style="font-size:16px;width:80px;height:40px;">返回</button>
-</p>
+
 <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 <script>
 $(function(){

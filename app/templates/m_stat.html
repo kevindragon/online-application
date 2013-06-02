@@ -38,15 +38,37 @@ table td {border:1px solid #cfcfcf;}
       <td>{{ job.count }}</td>
       <td>{{ job.count_apply }}</td>
       <td>{{ job.rate }}</td>
-      <td>{% if job.rate >= '1:3' %}是{% else %}否{% endif %}</td>
+      <td>{{ job.is_exam_open }}</td>
     </tr>
     {% endfor %}
   </table>
   {% endif %}
+  <h3>考试试卷选择情况统计</h3>
   <p>
-    <form action="/management/stat/" method="post">
+    <table width="200">
+      <tr>
+        <td width="105">汉文考试人数：</td>
+        <td>{{ test_paper.han }}</td>
+      </tr>
+      <tr>
+        <td>蒙文考试人数：</td>
+        <td>{{ test_paper.meng }}</td>
+      </tr>
+    </table>
+  </p>
+  <p>
+    <form action="/management/ticket/" method="post">
       {% csrf_token %}
+      {% if ticket_assigned %}
+      {% if assign_failed %}
+      <p><strong>{{ failed_lang }}</strong>分配准考证失败，请重新分配</p>
+      {% else %}
+      <p>全部准考证号分配完成</p>
+      {% endif %}
+      <input type="submit" id="assign-ticket" value="重新分配准考证号" />
+      {% else %}
       <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
+      {% endif %}
     </form>
   </p>
 </div>
