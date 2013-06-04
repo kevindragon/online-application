@@ -46,6 +46,7 @@ urlpatterns = patterns('',
     url(r'^management/ticket/$', 'app.views.m_ticket'), 
     url(r'^management/export/$', 'app.views.m_export'),
     url(r'^management/export/(?P<etype>.*)/', 'app.views.m_export'), 
+    url(r'^management/lock/', 'app.views.m_lock'), 
     
     url(r'^admin/', include(admin.site.urls)), 
 ) + staticfiles_urlpatterns()

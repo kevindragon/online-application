@@ -186,8 +186,8 @@ class People(models.Model):
         choices=((u'全日制教育',)*2, (u'在职教育',)*2, 
                  (u'博士后',)*2, (u'其他',)*2))
 
-    create_at = models.DateTimeField(auto_now_add = True)
-    last_edit_at = models.DateTimeField(auto_now = True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    last_edit_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.name
@@ -207,4 +207,14 @@ class PeopleExtra(models.Model):
 
     def __unicode__(self):
         return self.people.name
+
+
+class LockedStatus(models.Model):
+    name = models.CharField(max_length=10, unique=True)
+    is_lock = models.BooleanField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __unicode(self):
+        return self.name
 

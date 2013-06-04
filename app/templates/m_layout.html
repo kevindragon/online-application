@@ -29,7 +29,10 @@
             <a href="/management/plist/search/">搜索</a>
           </li>
           <li{% if menu_active == 'stat' %} class="active"{% endif %}>
-            <a href="/management/stat/">统计/分配准考证</a>
+            <a href="/management/stat/">统计/准考证</a>
+          </li>
+          <li{% if menu_active == 'lock' %} class="active"{% endif %}>
+            <a href="/management/lock/">各种锁定</a>
           </li>
           <li{% if menu_active == 'export' %} class="active"{% endif %}>
             <a href="/management/export/">各种导出</a>

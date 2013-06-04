@@ -58,10 +58,14 @@
       {% endif %}
       {% if can_print %}
       <a href="/print/audit" class="btn">打印资格审查表</a>
-      <a href="/print/ticket" class="btn">打印准考证</a>
+        {% if can_print_ticket %}
+        <a href="/print/ticket" class="btn">打印准考证</a>
+        {% endif %}
       {% else %}
       <a href="javascript:void(0);" class="btn gray-btn" onclick="alert('未审核完，暂时不能打印');">打印资格审查表</a>
-      <a href="javascript:void(0);" class="btn gray-btn" onclick="alert('未审核完，暂时不能打印');">打印准考证</a>
+        {% if can_print_ticket %}
+        <a href="javascript:void(0);" class="btn gray-btn" onclick="alert('未审核完，暂时不能打印');">打印准考证</a>
+        {%endif%}
       {% endif %}
     </div>
     {% endif %}

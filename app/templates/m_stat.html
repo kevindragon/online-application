@@ -60,12 +60,12 @@ table td {border:1px solid #cfcfcf;}
     <form action="/management/ticket/" method="post">
       {% csrf_token %}
       {% if ticket_assigned %}
-      {% if assign_failed %}
-      <p><strong>{{ failed_lang }}</strong>分配准考证失败，请重新分配</p>
-      {% else %}
-      <p>全部准考证号分配完成</p>
-      {% endif %}
-      <input type="submit" id="assign-ticket" value="重新分配准考证号" />
+        {% if assign_failed %}
+        <p><strong>{{ failed_lang }}</strong>分配准考证失败，请重新分配</p>
+        {% else %}
+        <p>全部准考证号分配完成</p>
+        {% endif %}
+        <input type="submit" id="assign-ticket" value="重新分配准考证号" />
       {% else %}
       <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
       {% endif %}
@@ -75,12 +75,3 @@ table td {border:1px solid #cfcfcf;}
 
 {% endblock %}
 
-{% block js_block %}
-<script type="text/javascript">
-$(function(){
-	$('#assign-ticket').click(function(){
-		
-	});
-});
-</script>
-{% endblock %}

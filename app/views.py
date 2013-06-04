@@ -11,12 +11,15 @@ from django.contrib import auth
 from django.http import HttpResponse
 from django.db import IntegrityError, transaction
 from django.db.models import Count
-from app.models import People, Job, PeopleExtra
+from app.models import People, Job, PeopleExtra, LockedStatus
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
     PeopleSearchForm
 from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
 from app.forms import AuditForm
 from django.core.exceptions import ObjectDoesNotExist
+
+degree_limit = {'1': u'硕士', '2': u'博士'}
+lock_dict = {'1': u'master', '2': u'doctor'}
 
 def auth_check(func):
     def wrapper(*args, **kwargs):
@@ -29,11 +32,13 @@ def auth_check(func):
 
 def home(request):
     peoples = People.objects.all()
+    lock_status = {l.name: l for l in LockedStatus.objects.all()}
     return render_to_response("home.html", locals())
 
 def jobs(request, job_id=1):
-    degree_limit = {'1': u'硕士', '2': u'博士'}
     jobs = Job.objects.filter(degree_limit=degree_limit[job_id])
+    lss = LockedStatus.objects.filter(name=lock_dict[job_id])
+    ls = None if not lss else lss[0]
     return render_to_response("jobs.html", locals())
 
 def applyjob(request, job_id):
@@ -119,12 +124,18 @@ def myinfo(request):
 @auth_check
 def progress(request):
     people = People.objects.get(pk=request.session['profile'].id)
-    can_print = True
+    can_print_ticket = True and people.job.degree_limit==u'硕士'
+    lss = LockedStatus.objects.filter(name='print')
+    is_lock = True and lss and lss[0].is_lock
+    assign_end = True
     if os.path.exists('run/ticket_assigned.lock'):
         ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
         for ta in ticket_assigned:
             if len(ta) == 2 and int(ta[1]) == 0:
-                can_print = False
+                assign_end = False
+    else:
+        assign_end = False
+    can_print = is_lock and (assign_end or people.job.degree_limit==u'博士')
     return render_to_response("progress.html", locals())
 
 @auth_check
@@ -346,7 +357,9 @@ def m_ticket(request):
         languages = (u'汉文', u'蒙文')
         room = 1
         for lang in languages:
-            pes = PeopleExtra.objects.filter(people__test_paper_language=lang, audit_step=1)
+            pes = PeopleExtra.objects.filter(people__test_paper_language=lang, 
+                                             audit_step=1, 
+                                             people__job__degree_limit=u'硕士')
             seat = 1
             for pe in pes:
                 people_room = '%02d' % room
@@ -413,6 +426,23 @@ def m_stat(request):
                 failed_lang = ta[0]
     menu_active = 'stat'
     return render_to_response('m_stat.html', locals())
+
+@m_auth_check
+def m_lock(request):
+    menu_active = 'lock'
+    locals().update(csrf(request))
+    if (request.method == 'POST' and 
+        request.POST.get('lock_name') in ('doctor', 'master', 'print')):
+        ls = LockedStatus.objects.filter(name=request.POST.get('lock_name'))
+        if not ls:
+            ls = LockedStatus(name=request.POST.get('lock_name'), is_lock=True)
+        else:
+            ls = ls[0]
+            ls.is_lock = not ls.is_lock
+        ls.save()
+        return redirect("/management/lock/")
+    lock_status = {l.name: l for l in LockedStatus.objects.all()}
+    return render_to_response('m_lock.html', locals())
 
 @m_auth_check
 def m_export(request, etype=None):

@@ -1,0 +1,87 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+  {% if message %}
+  <h4>{% autoescape off %}{{ message }}{% endautoescape %}</h4>
+  {% endif %}
+  <h3>锁定各种状态</h3>
+
+  <form action="/management/lock/" method="post" id="lock-form">
+    {% csrf_token %}
+    <input type="hidden" name="lock_name" value="" /> 
+    <table border="1" cellspacing="0" rowspacing="0">
+      <tr>
+        <td width="100" height="35">锁定功能</td>
+        <td width="100">状态</td>
+        <td width="160">最后操作时间</td>
+        <td>锁定/解锁</td>
+      </tr>
+      <tr>
+        <td height="40">博士</td>
+        <td>{% if lock_status.doctor.is_lock %}不可报名{% else %}可报名{% endif %}</td>
+        <td>{{ lock_status.doctor.update_at|date:"Y-m-d H:i:s" }}</td>
+        <td>
+          {% if lock_status.doctor.is_lock %}
+          <input type="button" id="lock-doctor" value="开放博士报名" />
+          {% else %}
+          <input type="button" id="lock-doctor" value="锁定博士报名" />
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td height="40">硕士</td>
+        <td>{% if lock_status.master.is_lock %}不可报名{% else %}可报名{% endif %}</td>
+        <td>{{ lock_status.master.update_at|date:"Y-m-d H:i:s" }}</td>
+        <td>
+          {% if lock_status.master.is_lock %}
+          <input type="button" id="lock-master" value="开放硕士报名" />
+          {% else %}
+          <input type="button" id="lock-master" value="锁定硕士报名" />
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td height="40">打印</td>
+        <td>{% if lock_status.print.is_lock %}可打印{% else %}不可打印{% endif %}</td>
+        <td>{{ lock_status.print.update_at|date:"Y-m-d H:i:s" }}</td>
+        <td>
+          {% if lock_status.print.is_lock %}
+          <input type="button" id="lock-print" value="锁定打印" />
+          {% else %}
+          <input type="button" id="lock-print" value="开放打印" />
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+  </form>
+
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+$(function(){
+	$('#lock-doctor').click(function(){
+		if (confirm('你确定要'+$(this).val())) {
+	        $('input[name=lock_name]').val('doctor');
+	        $('#lock-form').submit();
+		}
+	});
+    $('#lock-master').click(function(){
+        if (confirm('你确定要'+$(this).val())) {
+            $('input[name=lock_name]').val('master');
+            $('#lock-form').submit();
+        }
+    });
+    $('#lock-print').click(function(){
+        if (confirm('你确定要'+$(this).val())) {
+            $('input[name=lock_name]').val('print');
+            $('#lock-form').submit();
+        }
+    });
+});
+</script>
+{% endblock %}
