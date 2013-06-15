@@ -11,6 +11,7 @@ from django.contrib import auth
 from django.http import HttpResponse
 from django.db import IntegrityError, transaction
 from django.db.models import Count
+from django import forms
 from app.models import People, Job, PeopleExtra, LockedStatus
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
     PeopleSearchForm
@@ -35,9 +36,9 @@ def home(request):
     lock_status = {l.name: l for l in LockedStatus.objects.all()}
     return render_to_response("home.html", locals())
 
-def jobs(request, job_id=1):
-    jobs = Job.objects.filter(degree_limit=degree_limit[job_id])
-    lss = LockedStatus.objects.filter(name=lock_dict[job_id])
+def jobs(request, job_type_id=1):
+    jobs = Job.objects.filter(degree_limit=degree_limit[job_type_id])
+    lss = LockedStatus.objects.filter(name=lock_dict[job_type_id])
     ls = None if not lss else lss[0]
     return render_to_response("jobs.html", locals())
 
@@ -73,7 +74,13 @@ def applyjob(request, job_id):
             message = u'信息提交成功<a href="/myinfo/">查看</a>已提交的信息'
             return render_to_response("msg.html", locals())
     else:
+        job = Job.objects.get(pk=job_id)
+        job_one_type = ((x.pk, x) for x in Job.objects.filter(degree_limit=job.degree_limit))
         peopleForm = PeopleForm(initial={'job': job_id})
+        peopleForm.fields['job'] = forms.ChoiceField(
+            widget=forms.Select(), 
+            choices=tuple([('', '---------')] + list(job_one_type)), 
+            initial=job)
     return render_to_response("apply.html", locals())
 
 @auth_check

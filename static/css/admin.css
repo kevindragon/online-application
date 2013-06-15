@@ -83,7 +83,7 @@ legend {
     transition: height .35s ease;
 }
 .nav-collapse.collapse {height: auto; overflow: visible;}
-.nav {margin-bottom: 20px; margin-left: 0; list-style: none;}
+.nav {margin-bottom: 20px; margin-left: 0; list-style: none;padding-left:10px;}
 .navbar .nav {position: relative; left: 0; display: block; float: left; margin: 0 10px 0 0;}
 li {line-height: 20px;}
 .navbar .nav li {float: left;}
