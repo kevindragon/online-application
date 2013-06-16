@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from app.models import People, Job, PeopleExtra
+from app.models import People, Job, PeopleExtra, ImportantPrompt
 from django.core.exceptions import ValidationError
 from app.functions import id_number_validator
 
@@ -170,3 +170,9 @@ class PeopleSearchForm(forms.Form):
                 d['department'] or d['major']):
             return False
         return d
+
+
+class ImportantPromptForm(forms.Form):
+    type = forms.IntegerField(widget=forms.HiddenInput, required=False)
+    content = forms.CharField(widget=forms.Textarea, label=u'提示内容')
+

@@ -9,12 +9,11 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import HttpResponse
-from django.db import IntegrityError, transaction
-from django.db.models import Count
+from django.db import transaction
 from django import forms
-from app.models import People, Job, PeopleExtra, LockedStatus
+from app.models import People, Job, PeopleExtra, LockedStatus, ImportantPrompt
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
-    PeopleSearchForm
+    PeopleSearchForm, ImportantPromptForm
 from app.forms import ChangepwdForm, AdminLoginForm, AdminChangePasswd, JobForm
 from app.forms import AuditForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,6 +33,10 @@ def auth_check(func):
 def home(request):
     peoples = People.objects.all()
     lock_status = {l.name: l for l in LockedStatus.objects.all()}
+    try:
+        ip = ImportantPrompt.objects.get(type=1)
+    except Exception, e:
+        ip = None
     return render_to_response("home.html", locals())
 
 def jobs(request, job_type_id=1):
@@ -45,7 +48,10 @@ def jobs(request, job_type_id=1):
 def applyjob(request, job_id):
     if request.session.has_key('profile'):
         return redirect("/")
+    timestamp = time.time()
     locals().update(csrf(request))
+    job = Job.objects.get(pk=job_id)
+    job_one_type = ((x.pk, x) for x in Job.objects.filter(degree_limit=job.degree_limit))
     if request.method == 'POST':
         peopleForm = PeopleForm(request.POST)
         if peopleForm.is_valid():
@@ -73,15 +79,21 @@ def applyjob(request, job_id):
             request.session.set_expiry(3600)
             message = u'信息提交成功<a href="/myinfo/">查看</a>已提交的信息'
             return render_to_response("msg.html", locals())
+        else:
+            peopleForm.fields['job'] = forms.ChoiceField(
+                widget=forms.Select(), 
+                choices=tuple([('', '---------')] + list(job_one_type)), 
+                initial=job)
     else:
-        job = Job.objects.get(pk=job_id)
-        job_one_type = ((x.pk, x) for x in Job.objects.filter(degree_limit=job.degree_limit))
         peopleForm = PeopleForm(initial={'job': job_id})
         peopleForm.fields['job'] = forms.ChoiceField(
             widget=forms.Select(), 
             choices=tuple([('', '---------')] + list(job_one_type)), 
             initial=job)
-    return render_to_response("apply.html", locals())
+    response = render_to_response("apply.html", locals())
+    response['Pragma'] = 'no-cache'
+    response['Cache-Control'] = 'no-cache must-revalidate proxy-revalidate'
+    return response
 
 @auth_check
 def edit(request):
@@ -556,6 +568,29 @@ def m_job_edit(request, job_id):
     edit = True
     menu_active = 'job'
     return render_to_response("m_job_add.html", locals())
+
+@m_auth_check
+def m_prompt(request, type_id=1):
+    menu_active = 'prompt'
+    locals().update(csrf(request))
+    ips = ImportantPrompt.objects.filter(type=type_id)
+    if request.method == 'POST':
+        form = ImportantPromptForm(request.POST)
+        if form.is_valid():
+            if request.POST.get('type'):
+                ip = ImportantPrompt.objects.get(type=request.POST.get('type'))
+                ip.content = form.cleaned_data['content']
+                ip.save()
+            else:
+                ip = ImportantPrompt(type=type_id, content=form.cleaned_data['content'])
+                ip.save()
+        return redirect("/management/prompt/%s" % type_id)
+    else:
+        if ips:
+            form = ImportantPromptForm(initial={'type': ips[0].type, 'content': ips[0].content})
+        else:
+            form = ImportantPromptForm()
+    return render_to_response("m_prompt.html", locals())
 
 def m_change_passwd(request):
     locals().update(csrf(request))

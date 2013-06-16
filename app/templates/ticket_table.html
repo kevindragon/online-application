@@ -17,7 +17,7 @@ table.notice {border:1px double #999;}
 <script type="text/javascript">
 function ticket_print() {
 	$('#print-btn').hide();
-	alert("请设置打印方向为“横向”打印。");
+	alert("请设置打印方向为“横向”打印。\n\n打印前请在【文件】--->【页面设置】中将纸张分别设置为：A4纸打印，页边距设置成：上下：31.8mm，左右：25.4mm。");
 	window.print();
 }
 </script>
@@ -27,13 +27,15 @@ function ticket_print() {
 </p>
 <table width="980" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="490" height="300">
+    <td width="480" height="300">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="people-info">
         <tr>
           <td width="82" rowspan="2" align="center" valign="middle">
             <img border="0" src="/static/images/badge.jpg" width="80" />
           </td>
-          <td colspan="2" height="26" align="center"><strong style='font-family:"楷体_gb2312";'>内蒙古工业大学2013年度公开招聘工作人员考试</strong></td>
+          <td colspan="2" height="26" align="center">
+            <strong style='font-family:"楷体_gb2312";font-size:16px;'>内蒙古工业大学2013年度公开招聘工作人员考试</strong>
+          </td>
           </tr>
         <tr>
           <td height="46" colspan="2" align="center">
@@ -84,7 +86,7 @@ function ticket_print() {
       </table>
     </td>
     <td width="30">&nbsp;</td>
-    <td rowspan="3" valign="top">
+    <td rowspan="3" valign="top" width="470">
       <p align="center" style="margin-top:0px;"><strong>考生须知</strong></p>
       <p align="left" class="instructions">
         &nbsp;&nbsp;&nbsp;一、考生须在开考前30分钟凭准考证、二代居民身份证有序进入考场，并自觉服从考试管理，主动接受考试工作人员使用反作弊器材对其进行贴身检查。<br>

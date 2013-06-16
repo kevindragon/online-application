@@ -12,7 +12,7 @@
   <div class="left-flow">{% include 'left-flow.html' with workflow_step=3 %}</div>
   <div class="right-content right-line">
     <p>带 <font color="red">*</font> 的为必填项</p>
-    <form action="/{% if 'edit' == operate %}update{% else %}apply{% endif %}/" method="post">
+    <form action="/{% if 'edit' == operate %}update{% else %}apply/{{job_id}}{% endif %}/" method="post">
     {% csrf_token %}
     {{ peopleForm.non_field_errors }}
     <table width="100%" class="form-table">
@@ -91,30 +91,24 @@
         </td>
       </tr>
       <tr>
-        <td class="control-label">户口所在地<font color="red">*</font></td>
-        <td id="residence">
-          {{ peopleForm.residence_prov }}
-          {{ peopleForm.residence_city }}
-          {{ peopleForm.residence_prov.errors }}
-        </td>
+        <td class="control-label">政治面貌<font color="red">*</font></td>
+        <td>{{ peopleForm.political_status }}{{ peopleForm.political_status.errors }}</td>
+        <td class="control-label">婚姻状况<font color="red">*</font></td>
+        <td>{{ peopleForm.marital_status }}{{ peopleForm.marital_status.errors }}</td>
+      </tr>
+      <tr>
         <td class="control-label">籍贯<font color="red">*</font></td>
         <td id="hometown">
           {{ peopleForm.hometown_prov }}
           {{ peopleForm.hometown_city }}
           {{ peopleForm.hometown_prov.errors }}
         </td>
-      </tr>
-      <tr>
-        <td class="control-label">婚姻状况<font color="red">*</font></td>
-        <td>{{ peopleForm.marital_status }}{{ peopleForm.marital_status.errors }}</td>
-        <td class="control-label">外语语种及水平<font color="red">*</font></td>
-        <td>{{ peopleForm.foreign_language_level }}{{ peopleForm.foreign_language_level.errors }}</td>
-      </tr>
-      <tr>
-        <td class="control-label">政治面貌<font color="red">*</font></td>
-        <td>{{ peopleForm.political_status }}{{ peopleForm.political_status.errors }}</td>
-        <td class="control-label">选择初试作答文字<font color="red">*</font></td>
-        <td>{{ peopleForm.test_paper_language }}</td>
+        <td class="control-label">户口所在地<font color="red">*</font></td>
+        <td id="residence">
+          {{ peopleForm.residence_prov }}
+          {{ peopleForm.residence_city }}
+          {{ peopleForm.residence_prov.errors }}
+        </td>
       </tr>
       <tr>
         <td class="control-label">参加工作时间<font color="red">*</font></td>
@@ -127,8 +121,8 @@
           {{ peopleForm.start_work_month.errors }}
           {% endif %}
         </td>
-        <td class="control-label">手机<font color="red">*</font></td>
-        <td>{{ peopleForm.phone }}{{ peopleForm.phone.errors }}</td>
+        <td class="control-label">答题拟用文字<font color="red">*</font></td>
+        <td>{{ peopleForm.test_paper_language }}{{ peopleForm.test_paper_language.errors }}</td>
       </tr>
       <tr>
         <td class="control-label">计算机等级<font color="red">*</font></td>
@@ -136,6 +130,12 @@
           {{ peopleForm.compute_level }}<span class="help-inline">(没有时请填"无")</span>
           {{ peopleForm.compute_level.errors }}
         </td>
+        <td class="control-label">外语语种及水平<font color="red">*</font></td>
+        <td>{{ peopleForm.foreign_language_level }}{{ peopleForm.foreign_language_level.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">手机<font color="red">*</font></td>
+        <td>{{ peopleForm.phone }}{{ peopleForm.phone.errors }}</td>
         <td class="control-label">其他联系方式</td>
         <td>{{ peopleForm.other_contact }}</td>
       </tr>
@@ -363,28 +363,28 @@ $(function(){
 	{% endif %}
 	// 上传照片
     var settings = {
-    	    post_params: {
-    	        "csrfmiddlewaretoken": "{{ csrf_token }}"
-    	    },
-            flash_url : "/static/flash/swfupload.swf",
-            upload_url: "/uploadimage/",
-            button_image_url: '/static/images/choice_picture.jpg', 
-            file_size_limit : "5 MB",
-            file_types : "*.gif;*.jpg;*.png",
-            file_queue_limit : 1,
-            file_post_name : 'avatar', 
+  	    post_params: {
+  	        "csrfmiddlewaretoken": "{{ csrf_token }}"
+  	    },
+        flash_url : "/static/flash/swfupload.swf?v=1",
+        upload_url: "/uploadimage/",
+        button_image_url: '/static/images/choice_picture.jpg', 
+        file_size_limit : "5 MB",
+        file_types : "*.gif;*.jpg;*.png",
+        file_queue_limit : 1,
+        file_post_name : 'avatar', 
 
-            //button_image_url : "XPButtonUploadText_61x22.png",
-            button_placeholder_id : "avatar_btn",
-            button_width: 90,
-            button_height: 24,
-            button_text_left_padding : 5,
-            button_text_top_padding: 3, 
+        //button_image_url : "XPButtonUploadText_61x22.png",
+        button_placeholder_id : "avatar_btn",
+        button_width: 90,
+        button_height: 24,
+        button_text_left_padding : 5,
+        button_text_top_padding: 3, 
 
-            file_dialog_complete_handler : fileDialogComplete,
-            upload_success_handler : uploadSuccess
-        };
-        swfu = new SWFUpload(settings);
+        file_dialog_complete_handler : fileDialogComplete,
+        upload_success_handler : uploadSuccess
+      };
+      swfu = new SWFUpload(settings);
 
     // 籍贯
     $("#id_hometown_city").html("<option value=''> -- </option>");

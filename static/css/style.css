@@ -48,7 +48,7 @@ a {text-decoration: none;}
 
 .left-flow {width:130px;float:left;}
 .right-content {width:820px;float:right;padding-left:20px;min-height:300px;}
-.work-flow {font-weight:bold;color:#666;}
+.work-flow {font-weight:bold;color:#666;list-style:none;}
 .work-flow li {line-height:40px;font-weight:bold;}
 .work-flow li.active {color:#9b0608;}
 .notice-content {margin-left:20px;line-height:24px;}

@@ -1,0 +1,42 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<style>
+table {border-collapse: collapse;border:1px solid #cfcfcf;}
+table td {border:1px solid #cfcfcf;}
+.left-item a {text-decoration:none;color:blue;}
+.left-item li.active {font-weight:bold;font-size:16px;}
+#id_content {width:600px;height:300px;}
+</style>
+
+<div class="content-container">
+  {% if message %}
+  <h4>{{ message }}</h4>
+  {% endif %}
+  <div>
+    <h3>各种提示</h3>
+  </div>
+  <div style="width:1010px;">
+    <div style="float:left;width:200px;" class="left-item">
+      <ul style="list-style:none;padding:0px;">
+        <li style="line-height:30px;"{% if type_id == 1 %} class="active"{% endif %}>
+          <a href="/management/prompt/1">首页重要提示</a>
+        </li>
+      </ul>
+    </div>
+    <div style="float:right;text-align:left;width: 800px;">
+      <form action="/management/prompt/{{ type_id }}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" name="submit" value="保存" />
+      </form>
+    </div>
+  </div>
+  <div style="float:left;margin-left:50px;">
+    <div id="notice-text"></div>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+{% endblock %}

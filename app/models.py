@@ -218,3 +218,12 @@ class LockedStatus(models.Model):
     def __unicode(self):
         return self.name
 
+
+class ImportantPrompt(models.Model):
+    '''前后台的一些提示信息，用type字段来区分是哪一个地方的提示
+    1: 表示首页的重要提示'''
+    type = models.SmallIntegerField(unique=True)
+    content = models.TextField(verbose_name=u'提示内容')
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+

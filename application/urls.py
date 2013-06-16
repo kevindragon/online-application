@@ -47,6 +47,8 @@ urlpatterns = patterns('',
     url(r'^management/export/$', 'app.views.m_export'),
     url(r'^management/export/(?P<etype>.*)/', 'app.views.m_export'), 
     url(r'^management/lock/', 'app.views.m_lock'), 
+    url(r'^management/prompt/$', 'app.views.m_prompt'), 
+    url(r'^management/prompt/(?P<type_id>\d+)$', 'app.views.m_prompt'), 
     
     url(r'^admin/', include(admin.site.urls)), 
 ) + staticfiles_urlpatterns()
