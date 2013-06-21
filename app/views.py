@@ -101,11 +101,17 @@ def edit(request):
     if request.POST.get('id_number')==profile.id_number:
         peopleForm = PeopleNoPasswordForm(instance=profile)
         peopleForm.fields['id_number'].widget.attrs['readonly'] = True
+        # 限制岗位为某一类型（硕士或者博士）
+        job = Job.objects.get(pk=profile.job_id)
+        job_one_type = ((x.pk, x) for x in Job.objects.filter(degree_limit=job.degree_limit))
+        peopleForm.fields['job'] = forms.ChoiceField(
+            widget=forms.Select(), 
+            choices=tuple([('', '---------')] + list(job_one_type)), 
+            initial=job)
         locals().update(csrf(request), operate='edit')
         return render_to_response("apply.html", locals())
     else:
         return redirect('/myinfo/')
-    locals().update(csrf(request))
 
 @auth_check
 def update(request):
@@ -147,7 +153,7 @@ def progress(request):
     lss = LockedStatus.objects.filter(name='print')
     is_lock = True and lss and lss[0].is_lock
     assign_end = True
-    if os.path.exists('run/ticket_assigned.lock'):
+    if os.path.exists('run/ticket_assigned.lock') and people.peopleextra.ticket_number:
         ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
         for ta in ticket_assigned:
             if len(ta) == 2 and int(ta[1]) == 0:
@@ -155,6 +161,8 @@ def progress(request):
     else:
         assign_end = False
     can_print = is_lock and (assign_end or people.job.degree_limit==u'博士')
+    lock_status = {l.name: l for l in LockedStatus.objects.all()}
+    print lock_status['master']
     return render_to_response("progress.html", locals())
 
 @auth_check
