@@ -32,33 +32,33 @@
   </form>
 </p>
 
-<form action="/management/people/del/" method="post">
-{% csrf_token %}
-	<table border="1" width="900">
-	  <tr>
-	    <td width="60"><input type="checkbox" id="check-all" />全选</td>
-	    <td>应聘岗位</td>
-	    <td>毕业院校</td>
-	    <td>所学专业</td>
-	    <td>姓名</td>
-	    <td width="100"></td>
-	  </tr>
-	  {% for people in peoples %}
-	  <tr>
-	    <td>
-	      <input type="checkbox" name="people_id" value="{{ people.id }}" />
-	      <span>{{ forloop.counter }}</span>
-	    </td>
-	    <td>{{ people.job }}</td>
-	    <td>{{ people.high_edu_university }}</td>
-	    <td>{{ people.high_edu_major }}</td>
-	    <td>{{ people.name }}</td>
-	    <td>
-	      <a href="/management/audit/{{ people.id }}">审核</a>
-	    </td>
-	  </tr>
-	  {% endfor %}
-	</table>
+<form action="/management/people/del/" method="post" onsubmit="return confirmopt();">
+  {% csrf_token %}
+  <table border="1" width="900">
+    <tr>
+      <td width="60"><input type="checkbox" id="check-all" />全选</td>
+      <td>应聘岗位</td>
+      <td>毕业院校</td>
+      <td>所学专业</td>
+      <td>姓名</td>
+      <td width="100"></td>
+    </tr>
+    {% for people in peoples %}
+    <tr>
+      <td>
+        <input type="checkbox" name="people_id" value="{{ people.id }}" />
+        <span>{{ forloop.counter }}</span>
+      </td>
+      <td>{{ people.job }}</td>
+      <td>{{ people.high_edu_university }}</td>
+      <td>{{ people.high_edu_major }}</td>
+      <td>{{ people.name }}</td>
+      <td>
+        <a href="/management/audit/{{ people.id }}">审核</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
     {% if peoples %}
     <div style="width:900px;padding-top:20px;">
       <div style="text-align:right;">Page:{{ peoples.number }}/{{ peoples.paginator.num_pages }}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -72,13 +72,13 @@
       </div>
     </div>
     {% endif %}
-	<p>
-        <select name="operate">
-            <option value="">----</option>
-            <option value="del">删除所选</option>
-        </select>
-        <input type="submit" name="submit" value="提交" />
-	</p>
+  <p>
+      <select name="operate">
+        <option value="">----</option>
+        <option value="del">删除所选</option>
+      </select>
+      <input type="submit" name="submit" value="提交" />
+  </p>
 </form>
 </div>
 
@@ -91,5 +91,8 @@ $(function(){
         $('input[name=people_id]').prop('checked', $(this).prop('checked'));
     });
 });
+function confirmopt() {
+	return confirm('确定要删除所选项？');
+}
 </script>
 {% endblock %}

@@ -5,6 +5,7 @@
 <title>内蒙古工业大学2013年度公开招聘工作人员考试报考资格审查表</title>
 <style>
 table {border-collapse:collapse;}
+table th {font-weight:bold;}
 body {padding-left:15px;}
 </style>
 <body>
@@ -15,29 +16,29 @@ body {padding-left:15px;}
 <h2 style="width:880px;text-align:center;">内蒙古工业大学2013年度公开招聘工作人员考试报考资格审查表</h2>
 <table width="880" height="146" border="1">
   <tr>
-    <td width="40" height="36" align="center">姓名</td>
+    <th width="40" height="52" align="center">姓名</th>
     <td width="141">{{ people.name }}</td>
-    <td width="44" align="center">性别</td>
-    <td width="83">{{ people.gender }}</td>
-    <td width="36" align="center">民族</td>
-    <td width="81">{{ people.nation }}</td>
-    <td width="67" align="center">出生日期</td>
-    <td width="228">{{ people.birthday|date:"Y/m/d" }}</td>
+    <th width="44" align="center">性别</th>
+    <td width="50">{{ people.gender }}</td>
+    <th width="36" align="center">民族</th>
+    <td width="182">{{ people.nation }}</td>
+    <th width="67" align="center">出生日期</th>
+    <td width="160">{{ people.birthday|date:"Y/m/d" }}</td>
     <td width="120" rowspan="3">
         <img width="120px" src="{{ people.avatar }}" />
     </td>
   </tr>
   <tr>
-    <td height="58" align="center">准考证号</td>
-    <td colspan="4">{{ people.peopleextra.ticket_number }}</td>
-    <td align="center">身份证号</td>
-    <td colspan="2">{{ people.id_number }}</td>
+    <th height="52" align="center">准考<br>证号</th>
+    <td colspan="5">{{ people.peopleextra.ticket_number }}</td>
+    <th align="center">身份证号</th>
+    <td>{{ people.id_number }}</td>
   </tr>
   <tr>
-    <td height="42" align="center">报考岗位</td>
-    <td colspan="4">{{ people.job.major }} - {{ people.job.job_type }}</td>
-    <td align="center">手机号码</td>
-    <td colspan="2">{{ people.phone }}</td>
+    <th height="52" align="center">报考<br>岗位</th>
+    <td colspan="5">{{ people.job.major }} - {{ people.job.job_type }}</td>
+    <th align="center">手机号码</th>
+    <td>{{ people.phone }}</td>
   </tr>
 </table>
 <table width="880" height="231" border="1" style="border-top:0px;">
@@ -45,40 +46,40 @@ body {padding-left:15px;}
     <td height="38" colspan="9" align="center" style="border-top:0px;">第一学历相关信息</td>
   </tr>
   <tr>
-    <td width="77" height="33">学&nbsp;&nbsp;历</td>
+    <th width="77" height="33">学&nbsp;&nbsp;历</th>
     <td width="263">{{ people.first_edu_bkgrd }}</td>
-    <td width="57">学&nbsp;&nbsp;位</td>
+    <th width="57">学&nbsp;&nbsp;位</th>
     <td width="204">{{ people.first_edu_degree }}</td>
-    <td width="69">毕业院校</td>
+    <th width="69">毕业院校</th>
     <td width="188">{{ people.first_edu_university }}</td>
   </tr>
   <tr>
-    <td height="41">所学专业</td>
+    <th height="41">所学专业</th>
     <td colspan="3">{{ people.first_edu_major }}</td>
-    <td>毕业时间</td>
+    <th>毕业时间</th>
     <td>{{ people.first_edu_end_year }}-{{ people.first_edu_end_month }}</td>
   </tr>
   <tr>
     <td height="32" colspan="6" align="center">最高学历相关信息</td>
   </tr>
   <tr>
-    <td height="38">学&nbsp;&nbsp;历</td>
+    <th height="38">学&nbsp;&nbsp;历</th>
     <td>{{ people.high_edu_bkgrd }}</td>
-    <td>学&nbsp;&nbsp; 位</td>
+    <th>学&nbsp;&nbsp;位</th>
     <td>{{ people.high_edu_degree }}</td>
-    <td>毕业院校</td>
+    <th>毕业院校</th>
     <td>{{ people.high_edu_university }}</td>
   </tr>
   <tr>
-    <td height="33">所学专业</td>
+    <th height="33">所学专业</th>
     <td colspan="3">{{ people.high_edu_major }}</td>
-    <td>毕业时间</td>
+    <th>毕业时间</th>
     <td>{{ people.high_edu_edu_year }}-{{ people.high_edu_edu_month }}</td>
   </tr>
 </table>
 <table width="880" border="1" style="border-top:0px;">
   <tr>
-    <td width="27" height="231" style="border-top:0px;">考生确认结果</td>
+    <th width="27" height="231" style="border-top:0px;">考生确认结果</th>
     <td width="855" valign="top" style="border-top:0px;">
       <table width="100%" border="0">
         <tr>
@@ -99,7 +100,7 @@ body {padding-left:15px;}
     </td>
   </tr>
   <tr>
-    <td>招聘单位审查结果</td>
+    <th>招聘单位审查结果</th>
     <td><table width="100%" border="0">
       <tr>
         <td colspan="2">（招聘单位人事部门在此处填写审查结果，并加盖人事部门公章）</td>
@@ -128,7 +129,8 @@ body {padding-left:15px;}
 $(function(){
 	$('#print-btn').click(function(){
 		$('#print-wrapper').hide();
-		window.print();
+		alert("请设置打印方向为“纵向”打印。\n\n打印前请在【文件】--->【页面设置】中将纸张分别设置为：A4纸打印，页边距设置成：上下：31.8mm，左右：25.4mm。");
+	    window.print();
 	});
 	$('#print-back').click(function(){
 		history.go(-1);

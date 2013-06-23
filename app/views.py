@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, string, random, os, shutil, time, datetime, csv
+import hashlib, string, random, os, shutil, time, datetime
 from django.shortcuts import render_to_response, redirect
+from django.utils.http import urlquote
 from django.core.context_processors import csrf
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -284,7 +285,7 @@ def m_people_del(request):
         peoples = People.objects.filter(pk__in=people_ids)
         peoples.delete()
         request.session['message'] = u'删除成功'
-        return redirect('/management/elementary/')
+        return redirect(request.META['HTTP_REFERER'])
 
 @m_auth_check
 def m_audit(request, people_id=0):
@@ -384,9 +385,9 @@ def m_ticket(request):
         languages = (u'汉文', u'蒙文')
         room = 1
         for lang in languages:
-            pes = PeopleExtra.objects.filter(people__test_paper_language=lang, 
-                                             audit_step=1, 
-                                             people__job__degree_limit=u'硕士')
+            pes = PeopleExtra.objects.filter(
+                people__test_paper_language=lang, audit_step=1, 
+                people__job__degree_limit=u'硕士')
             seat = 1
             for pe in pes:
                 people_room = '%02d' % room
@@ -476,28 +477,31 @@ def m_export(request, etype=None):
     params = {}
     if 'passed' == etype:
         params.update(audit_step=1)
-        peoples = People.objects.filter(**params)
+        peoples = People.objects.filter(**params).order_by('job__degree_limit')
         
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="通过审核名单.csv"'
-    
-        writer = csv.writer(response)
-        writer.writerow([u"内蒙古工业大学2013年度公开招聘工作人员考试考生信息汇总表".encode('gbk')])
-        writer.writerow(
-            map(lambda x: x.encode('gbk'), 
-                [u'序号', u'岗位类型', u'招聘部门', u'专业要求', u'学历要求', u'姓名', u'性别', 
-                 u'民族', u'出生日期', u'身份证号', u'政治面貌', u'婚姻状况', u'是否蒙汉兼通', 
-                 u'是否服务基层人员', u'籍贯', u'户口所在地', u'电子邮件', u'手机号', 
-                 u'其他联系方式', u'外语及水平', u'参加工作时间', u'专业技术资格', 
-                 u'执业资格', u'其他资格', u'第一学历名称', u'第一学位', u'第一学历毕业院校', 
-                 u'第一学历所学专业', u'第一学历开始时间', u'第一学历结束时间', u'最高学历名称', 
-                 u'最高学位', u'最高学历毕业院校', u'最高学历所学专业', u'最高学历开始时间', 
-                 u'最高学历结束时间', u'其他学习经历一开始时间', u'其他学习经历一结束时间', 
-                 u'其他学习经历一学习形式', u'其他学习经历一学历', u'其他学习经历一学位', 
-                 u'其他学习经历一学习所学专业', u'其他学习经历一学习单位', u'其他学习经历二开始时间', 
-                 u'其他学习经历二结束时间', u'其他学习经历二学习形式', u'其他学习经历二学历', 
-                 u'其他学习经历二学位', u'其他学习经历二学习所学专业', u'其他学习经历二学习单位', 
-                 u'获奖情况、学术成果及个人特长']))
+        response = HttpResponse(mimetype="application/ms-excel")
+        response['Content-Disposition'] = u'attachment; filename="%s.xls"' % urlquote(u'通过审核名单')
+
+        import xlwt
+        excel = xlwt.Workbook(encoding='unicode')
+        table = excel.add_sheet(u'全部')
+
+        table_header = [
+            u'序号', u'岗位类型', u'招聘部门', u'专业要求', u'学历要求', u'姓名', u'性别', 
+            u'民族', u'出生日期', u'身份证号', u'政治面貌', u'婚姻状况', u'是否蒙汉兼通', 
+            u'是否服务基层人员', u'籍贯', u'户口所在地', u'电子邮件', u'手机号', 
+            u'其他联系方式', u'外语及水平', u'参加工作时间', u'专业技术资格', 
+            u'执业资格', u'其他资格', u'第一学历名称', u'第一学位', u'第一学历毕业院校', 
+            u'第一学历所学专业', u'第一学历开始时间', u'第一学历结束时间', u'最高学历名称', 
+            u'最高学位', u'最高学历毕业院校', u'最高学历所学专业', u'最高学历开始时间', 
+            u'最高学历结束时间', u'其他学习经历一开始时间', u'其他学习经历一结束时间', 
+            u'其他学习经历一学习形式', u'其他学习经历一学历', u'其他学习经历一学位', 
+            u'其他学习经历一学习所学专业', u'其他学习经历一学习单位', u'其他学习经历二开始时间', 
+            u'其他学习经历二结束时间', u'其他学习经历二学习形式', u'其他学习经历二学历', 
+            u'其他学习经历二学位', u'其他学习经历二学习所学专业', u'其他学习经历二学习单位', 
+            u'获奖情况、学术成果及个人特长']
+        for (column, v) in enumerate(table_header):
+            table.write(0, column, v)
         for (i, p) in enumerate(peoples):
             line = [i+1, p.job.job_type, p.job.department, p.job.major, p.job.degree_limit, 
                     p.name, p.gender, p.nation, p.birthday, p.id_number, p.political_status, 
@@ -518,9 +522,10 @@ def m_export(request, etype=None):
                     (u"%s/%s" % (p.other_edu_edu_year_2, p.other_edu_edu_month_2) if p.other_edu_edu_year_2 else u''), 
                     p.other_edu_type_2, p.other_edu_bkgrd_2, 
                     p.other_edu_degree_2, p.other_edu_major_2, p.other_edu_unit_2, p.special_skill]
-            print p.other_edu_edu_year
-            writer.writerow(map(lambda x: x.encode('gbk') if type(x) is unicode else x, line))
-    
+
+            for (column, v) in enumerate(line):
+                table.write(i+1, column, v)
+        excel.save(response)
         return response
     menu_active = 'export'
     return render_to_response('m_export.html', locals())

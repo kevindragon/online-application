@@ -56,7 +56,8 @@ class People(models.Model):
     nation = models.CharField(max_length=50, choices=nation_choices, verbose_name=u'民族 *')
     birthday = models.DateField(verbose_name=u'出生年月 *')
     id_number = models.CharField(
-        max_length=18, verbose_name=u'身份证号', validators=[id_number_validator])
+        max_length=18, verbose_name=u'身份证号', unique=True, 
+        validators=[id_number_validator], error_messages={'unique':"此身份证号码已经被使用。"})
     job = models.ForeignKey(Job, verbose_name=u'申请岗位 *', help_text=u'请选择岗位')
     political_status = models.CharField(max_length=50, choices=political_status_choices, 
                                         verbose_name=u'政治面貌')
@@ -68,7 +69,7 @@ class People(models.Model):
     # 户口
     residence_prov = models.CharField(max_length=50)
     residence_city = models.CharField(max_length=50)
-    email = models.EmailField()
+    email = models.EmailField(unique=True, error_messages={'unique':"此邮箱已经被使用。"})
     phone = models.CharField(max_length=20, help_text=u'手机')
     other_contact = models.CharField(max_length=30, blank=True)
     foreign_language_level = models.CharField(max_length=50)
