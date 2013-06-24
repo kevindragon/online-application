@@ -17,7 +17,7 @@
   <div class="menu-bar std-bg-color white-color">
     <div class="back-to-home">
       {% if request.path == "/" %}
-      <a href="http://www.imut.edu.cn">查看招聘公告</a>
+      <a href="http://www.imut.edu.cn" target="_blank">查看招聘公告</a>
       {% else %}
       <a href="/">返回首页</a>
       {% endif %}
@@ -25,7 +25,7 @@
     <ul class="right-menu">
       {% if request.session.profile %}
       <li><a href="/myinfo/">查看报名信息</a></li>
-      <li><a href="/progress/">查看审核进度</a></li>
+      <li><a href="/progress/">查看报名进度</a></li>
       <li> | </li>
       <li>{{ request.session.profile.name }}, 您好！</li>
       <li><a href="/changepwd/">修改密码</a></li>

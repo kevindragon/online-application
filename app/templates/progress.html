@@ -8,9 +8,9 @@
     <div class="audit-flow-show">
       <span class="progress-block">1.填写信息</span>
       <span class="progress-block-text"><span>待初审</span></span>
-      <span class="progress-block{% if not people.audit_step %} progress-green-block{% endif %}">2.初审阶段</span>
+      <span class="progress-block{% if not people.audit_step or not can_print %} progress-green-block{% endif %}">2.初审阶段</span>
       <span class="progress-block-text"><span>初审通过</span></span>
-      <span class="progress-block{% if people.audit_step == 1 and not lock_status.master.is_lock %} progress-green-block{% endif %}">3.表单打印</span>
+      <span class="progress-block{% if people.audit_step == 1 and not lock_status.master.is_lock and can_print %} progress-green-block{% endif %}">3.表单打印</span>
       <span class="progress-block-text"><span>复审通过</span></span>
       <span class="progress-block{% if lock_status.master.is_lock %} progress-green-block{% endif %}">4.报名结束</span>
     </div>
@@ -61,7 +61,12 @@
     <div class="std-blank-20"></div>
     <div class="operate-group">
       {% if not people.audit_step or people.audit_step == 7 %}
-      <a class="btn">修改 报名信息</a>
+      <form action="/edit/" method="post" style="display:inline">
+        {% csrf_token %}
+        <input type="hidden" name="people_id" value="{{ people.pk }}">
+        <input type="hidden" name="id_number" value="{{ people.id_number }}">
+        <input type="submit" name="submit" value="修改 报名信息" class="btn">
+      </form>
       {% endif %}
       
       {% if can_print and people.audit_step == 1 and assign_end %}

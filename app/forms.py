@@ -80,13 +80,14 @@ class PeopleForm(PeopleNoPasswordForm):
             self._errors['query_password2'] = self.error_class([errmsg])
             raise ValidationError(errmsg)
         return pwd2
-    '''
+
     def clean(self):
-        if People.objects.filter(id_number=self.cleaned_data.get('id_number'), 
-                                 name=self.cleaned_data.get('name')):
-            self._errors['__all__'] = self.error_class(['此姓名和身份证号已经填写过申请'])
+        if People.objects.filter(id_number=self.cleaned_data.get('id_number')):
+            self._errors['__all__'] = self.error_class(['此身份证号已经填写过申请'])
+        if People.objects.filter(id_number=self.cleaned_data.get('email')):
+            self._errors['__all__'] = self.error_class(['此邮箱地址已经填写过申请'])
         return self.cleaned_data
-    '''
+
 
 class LoginForm(forms.Form):
     id_number = forms.CharField(validators=[id_number_validator])

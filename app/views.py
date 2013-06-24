@@ -149,12 +149,16 @@ def myinfo(request):
 
 @auth_check
 def progress(request):
+    locals().update(csrf(request))
     people = People.objects.get(pk=request.session['profile'].id)
     can_print_ticket = True and people.job.degree_limit==u'硕士'
     lss = LockedStatus.objects.filter(name='print')
     is_lock = True and lss and lss[0].is_lock
     assign_end = True
-    if os.path.exists('run/ticket_assigned.lock') and people.peopleextra.ticket_number:
+    pes = PeopleExtra.objects.filter(people=people)
+    if (os.path.exists('run/ticket_assigned.lock') and 
+        pes and
+        pes[0].ticket_number):
         ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
         for ta in ticket_assigned:
             if len(ta) == 2 and int(ta[1]) == 0:
@@ -162,8 +166,11 @@ def progress(request):
     else:
         assign_end = False
     can_print = is_lock and (assign_end or people.job.degree_limit==u'博士')
+    if people.job.degree_limit==u'博士':
+        can_print_ticket = False
+        assign_end = True
+        can_print = True
     lock_status = {l.name: l for l in LockedStatus.objects.all()}
-    print lock_status['master']
     return render_to_response("progress.html", locals())
 
 @auth_check
