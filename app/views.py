@@ -40,6 +40,9 @@ def home(request):
         ip = None
     return render_to_response("home.html", locals())
 
+def howto(request):
+    return render_to_response("help.html")
+
 def jobs(request, job_type_id=1):
     jobs = Job.objects.filter(degree_limit=degree_limit[job_type_id])
     lss = LockedStatus.objects.filter(name=lock_dict[job_type_id])

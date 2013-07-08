@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^findpwd/$', 'app.views.findpwd'), 
     url(r'^changepwd/$', 'app.views.changepwd'),
     url(r'^uploadimage/$', 'app.views.uploadimage'), 
+    url(r'^help/$', 'app.views.howto'), 
     
     url(r'^management/$', 'app.views.m_admin'), 
     url(r'^management/login/$', 'app.views.m_login'), 

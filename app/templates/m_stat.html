@@ -57,6 +57,7 @@ table td {border:1px solid #cfcfcf;}
     </table>
   </p>
   <p>
+    {% if request.user.username == 'admin' %}
     <form action="/management/ticket/" method="post">
       {% csrf_token %}
       {% if ticket_assigned %}
@@ -70,6 +71,9 @@ table td {border:1px solid #cfcfcf;}
       <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
       {% endif %}
     </form>
+    {% else %}
+    <input type="button" id="assign-ticket" value="审核结束，分配准考证号" disabled="disabled" />
+    {% endif %}
   </p>
 </div>
 

@@ -12,13 +12,13 @@
     <div class="std-blank-40"></div>
     <div class="btn-group-center">
       {% if lock_status.master.is_lock %}
-      <a href="javascript:void(0);" class="master-enter btn gray-btn" onclick="alert('报名已经被锁定');">硕士报名入口</a>
+      <a href="javascript:void(0);" class="master-enter btn gray-btn" onclick="alert('当前非报名时间');">硕士报名入口</a>
       {% else %}
       <a href="/protocol/1" class="master-enter btn red-btn">硕士报名入口</a>
       {% endif %}
       <!-- 是否锁定博士报名入口 -->
       {% if lock_status.doctor.is_lock %}
-      <a href="javascript:void(0);" class="doctor-enter btn gray-btn" onclick="alert('报名已经被锁定');">博士报名入口</a>
+      <a href="javascript:void(0);" class="doctor-enter btn gray-btn" onclick="alert('当前非报名时间');">博士报名入口</a>
       {% else %}
       <a href="/protocol/2" class="doctor-enter btn">博士报名入口</a>
       {% endif %}

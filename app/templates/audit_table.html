@@ -94,7 +94,7 @@ body {padding-left:15px;}
         </tr>
         <tr>
           <td width="71%">&nbsp;</td>
-          <td width="29%">年&nbsp;&nbsp;月&nbsp; 日&nbsp;</td>
+          <td width="29%">年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</td>
         </tr>
       </table>
     </td>
@@ -114,7 +114,7 @@ body {padding-left:15px;}
       </tr>
       <tr>
         <td width="71%">&nbsp;</td>
-        <td width="29%">年&nbsp;&nbsp;月&nbsp; 日&nbsp;</td>
+        <td width="29%">年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</td>
       </tr>
     </table></td>
   </tr>
@@ -129,7 +129,7 @@ body {padding-left:15px;}
 $(function(){
 	$('#print-btn').click(function(){
 		$('#print-wrapper').hide();
-		alert("请设置打印方向为“纵向”打印。\n\n打印前请在【文件】--->【页面设置】中将纸张分别设置为：A4纸打印，页边距设置成：上下：31.8mm，左右：25.4mm。");
+		alert("请设置打印方向为“纵向”打印。\n\n打印前请在【文件】--->【页面设置】中将纸张分别设置为：A4纸打印，页边距设置成：左右各：15mm；上下各：25mm。");
 	    window.print();
 	});
 	$('#print-back').click(function(){

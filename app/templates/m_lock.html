@@ -24,9 +24,9 @@
         <td>{{ lock_status.doctor.update_at|date:"Y-m-d H:i:s" }}</td>
         <td>
           {% if lock_status.doctor.is_lock %}
-          <input type="button" id="lock-doctor" value="开放博士报名" />
+          <input type="button" id="lock-doctor" value="开放博士报名"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% else %}
-          <input type="button" id="lock-doctor" value="锁定博士报名" />
+          <input type="button" id="lock-doctor" value="锁定博士报名"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% endif %}
         </td>
       </tr>
@@ -36,9 +36,9 @@
         <td>{{ lock_status.master.update_at|date:"Y-m-d H:i:s" }}</td>
         <td>
           {% if lock_status.master.is_lock %}
-          <input type="button" id="lock-master" value="开放硕士报名" />
+          <input type="button" id="lock-master" value="开放硕士报名"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% else %}
-          <input type="button" id="lock-master" value="锁定硕士报名" />
+          <input type="button" id="lock-master" value="锁定硕士报名"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% endif %}
         </td>
       </tr>
@@ -48,9 +48,9 @@
         <td>{{ lock_status.print.update_at|date:"Y-m-d H:i:s" }}</td>
         <td>
           {% if lock_status.print.is_lock %}
-          <input type="button" id="lock-print" value="锁定打印" />
+          <input type="button" id="lock-print" value="锁定打印"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% else %}
-          <input type="button" id="lock-print" value="开放打印" />
+          <input type="button" id="lock-print" value="开放打印"{% if request.user.username != 'admin' %} disabled="disabled"{% endif %} />
           {% endif %}
         </td>
       </tr>
