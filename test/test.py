@@ -1,14 +1,10 @@
-def auth(func):
-    def wrapper(*args, **kwargs):
-        #print request
-        print args
-        print kwargs
-        func(*args, **kwargs)
-    return wrapper
+# -*- coding: utf-8 -*-
 
-@auth
-def x(request):
-    print request
+import sys
+from app.models import People, PeopleExtra
 
+sys.path.append("../application")
 
-x(5)
+people = People.objects.get(1)
+
+print people

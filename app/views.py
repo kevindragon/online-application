@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, string, random, os, shutil, time, datetime
+import hashlib, string, random, os, shutil, time, datetime, math
 from django.shortcuts import render_to_response, redirect
 from django.utils.http import urlquote
 from django.core.context_processors import csrf
@@ -157,15 +157,10 @@ def progress(request):
     can_print_ticket = True and people.job.degree_limit==u'硕士'
     lss = LockedStatus.objects.filter(name='print')
     is_lock = True and lss and lss[0].is_lock
-    assign_end = True
     pes = PeopleExtra.objects.filter(people=people)
     if (os.path.exists('run/ticket_assigned.lock') and 
-        pes and
-        pes[0].ticket_number):
-        ticket_assigned = [l.strip().split(':') for l in open('run/ticket_assigned.lock').readlines()]
-        for ta in ticket_assigned:
-            if len(ta) == 2 and int(ta[1]) == 0:
-                assign_end = False
+        pes and pes[0].ticket_number):
+        assign_end = True
     else:
         assign_end = False
     can_print = is_lock and (assign_end or people.job.degree_limit==u'博士')
@@ -386,48 +381,74 @@ def m_people(request, people_id):
     return render_to_response('m_people.html', locals())
 
 @m_auth_check
-@transaction.commit_manually
 def m_ticket(request):
     message = None
     lines = []
-    seat_in_room = 30
-    if request.method == 'POST':
-        languages = (u'汉文', u'蒙文')
-        room = 1
-        for lang in languages:
-            pes = PeopleExtra.objects.filter(
-                people__test_paper_language=lang, audit_step=1, 
-                people__job__degree_limit=u'硕士')
-            seat = 1
-            for pe in pes:
-                people_room = '%02d' % room
-                people_seat = '%02d' % seat
-                ticket = '%d%s%s' % (datetime.date.today().year, people_room, people_seat)
-                pe.ticket_number = ticket
-                pe.exam_room = people_room
-                pe.seat = people_seat
-                seat += 1
-                if seat > seat_in_room:
-                    room += 1
-                    seat = 1
+    chineseExtra = list(PeopleExtra.objects.filter(
+            people__test_paper_language=u'汉文', audit_step=1, 
+            people__job__degree_limit=u'硕士'))
+    mongolianExtra = list(PeopleExtra.objects.filter(
+            people__test_paper_language=u'蒙文', audit_step=1, 
+            people__job__degree_limit=u'硕士'))
+    chinese_rest_count = len(chineseExtra)%30
+    mongolian_rest_count = len(mongolianExtra)%30
+    
+    pes = []
+    if chinese_rest_count+mongolian_rest_count <= 30:
+        pes += chineseExtra[:len(chineseExtra)-chinese_rest_count]
+        pes += mongolianExtra[:len(mongolianExtra)-mongolian_rest_count]
+        pes += chineseExtra[len(chineseExtra[:len(chineseExtra)-chinese_rest_count]):]
+        pes += mongolianExtra[len(mongolianExtra[:len(mongolianExtra)-mongolian_rest_count]):]
+        diff = False
+    else:
+        pes = chineseExtra+mongolianExtra
+        diff = True
+    
+    last_lang = None
+    room, seat, seat_in_room = 1, 1, 30
+    for index in range(len(pes)):
+        lang = pes[index].people.test_paper_language
+        if last_lang == None:
+            last_lang = lang
+        if last_lang != lang and diff:
             room += 1
-            transaction.commit()
-            try:
-                for pe in pes:
-                    pe.save()
-            except:
-                transaction.rollback()
-                lines.append(u'%s:0' % lang)
-                message = u'<font color="red">分配准考证失败，请重试</font>'
-            else:
-                transaction.commit()
-                lines.append(u'%s:1' % lang)
-        if not message:
-            message = u'准考证号分配完毕'
-        fp = open('run/ticket_assigned.lock', 'w')
-        fp.write((u"\n".join(lines)).encode('utf-8'))
-        fp.close()
-        request.session['message'] = message
+            seat = 1
+        last_lang = lang
+        people_room = '%02d' % room
+        people_seat = '%02d' % seat
+        ticket = '%d%s%s' % (datetime.date.today().year, people_room, people_seat)
+        pes[index].ticket_number = ticket
+        pes[index].exam_room = people_room
+        pes[index].seat = people_seat
+        
+        seat += 1
+        
+        if seat > seat_in_room:
+            room += 1
+            seat = 1
+    
+    langpe = None
+    try:
+        for pe in pes:
+            langpe = pe
+            pe.save()
+    except:
+        lines.append(u'%s:0' % langpe.people.test_paper_language)
+        message = u'<font color="red">分配准考证失败，请重试</font>'
+    else:
+        lines.append(u'%s:1' % langpe.people.test_paper_language)
+
+    if not message:
+        message = (u'准考证号分配完毕。<br>总共%s个考场' % (room, ))
+        if not diff:
+            message += (u'，第%d考场为混合考场，汉文：%d，蒙文：%d' % 
+                        (room, chinese_rest_count, mongolian_rest_count))
+        else:
+            message += u'，没有混合考场'
+    fp = open('run/ticket_assigned.lock', 'w')
+    fp.write((u"\n".join(lines)).encode('utf-8'))
+    fp.close()
+    request.session['message'] = message
     return redirect("/management/stat/")
 
 @m_auth_check
@@ -449,8 +470,12 @@ def m_stat(request):
             jobs[i].rate = "1:0"
             jobs[i].is_exam_open = u'否'
     # 统计中文跟蒙文试卷人数
-    test_paper = {'han': People.objects.filter(test_paper_language=u'汉文').count(), 
-                  'meng': People.objects.filter(test_paper_language=u'蒙文').count()}
+    test_paper = {'han': People.objects.filter(
+                        test_paper_language=u'汉文', audit_step=1, 
+                        job__degree_limit=u'硕士').count(), 
+                  'meng': People.objects.filter(
+                        test_paper_language=u'蒙文', audit_step=1, 
+                        job__degree_limit=u'硕士').count()}
     if request.session.has_key('message'):
         message = request.session['message']
         del request.session['message']
@@ -463,6 +488,14 @@ def m_stat(request):
                 assign_failed = True
                 failed_lang = ta[0]
     menu_active = 'stat'
+    
+    room_num = math.ceil((test_paper['han']+test_paper['meng'])/30.0)
+    if test_paper['han']%30+test_paper['meng']%30 <= 30:
+        mixed_exam_msg = (u'总共有%d个考场，第%d考场为混合考场，汉文：%d，蒙文：%d' % 
+                          (room_num, room_num, test_paper['han']%30, test_paper['meng']%30))
+    else:
+        mixed_exam_msg = u'总共有%d个考场，没有混合考场' % room_num
+    
     return render_to_response('m_stat.html', locals())
 
 @m_auth_check
@@ -649,3 +682,36 @@ def m_logout(request):
 
 
 
+#def test(request):
+#    people = People.objects.get(id=1)
+#    peopleExtra = PeopleExtra.objects.filter(people=people)[0]
+#    
+#    old_pid = people.id
+#    people.pk = None
+##    people.test_paper_language = u'汉文'
+#    people.save()
+#    
+#    old_pe_id = peopleExtra.id
+#    peopleExtra.pk = None
+#    peopleExtra.people_id = people.id
+#    peopleExtra.save()
+#    
+#    max_id = People.objects.all().order_by("-id")[0]
+#
+#    return render_to_response("test.html", locals())
+#
+#def testshow(request):
+##    pp = People.objects.all()[2:]
+##    for xx in pp:
+##        xx.delete()
+##    pepe = PeopleExtra.objects.all()[2:]
+##    for xexe in pepe:
+##        xexe.delete()
+#    
+#    people = People.objects.filter(
+#            audit_step=1, 
+#            job__degree_limit=u'硕士').order_by('peopleextra__ticket_number')
+#    peopleExtra = PeopleExtra.objects.all()
+#    
+#    
+#    return render_to_response("testshow.html", locals())

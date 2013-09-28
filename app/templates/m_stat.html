@@ -65,8 +65,13 @@ table td {border:1px solid #cfcfcf;}
         <p><strong>{{ failed_lang }}</strong>分配准考证失败，请重新分配</p>
         {% else %}
         <p>全部准考证号分配完成</p>
+        <p><strong>
+        {{ mixed_exam_msg }}
+        </strong></p>
         {% endif %}
+        {% if test_paper.han > 0 or test_paper.meng > 0 %}
         <input type="submit" id="assign-ticket" value="重新分配准考证号" />
+        {% endif %}
       {% else %}
       <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
       {% endif %}

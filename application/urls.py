@@ -52,4 +52,7 @@ urlpatterns = patterns('',
     url(r'^management/prompt/(?P<type_id>\d+)$', 'app.views.m_prompt'), 
     
     url(r'^admin/', include(admin.site.urls)), 
+    
+#    url(r'^test$', 'app.views.test'), 
+#    url(r'^testshow$', 'app.views.testshow')
 ) + staticfiles_urlpatterns()
