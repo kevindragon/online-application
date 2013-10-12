@@ -2,5 +2,5 @@
 .pydevproject
 .settings
 *.pyc
-static/upload/[0-9]+[xX]?$
-static/upload/tmp/[a-zA-Z0-9]+.*
+static/upload/[0-9]*
+static/upload/tmp/[a-zA-Z0-9]*

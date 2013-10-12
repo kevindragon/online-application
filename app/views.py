@@ -41,7 +41,7 @@ def home(request):
     return render_to_response("home.html", locals())
 
 def howto(request):
-    return render_to_response("help.html")
+    return render_to_response("help.html", locals())
 
 def jobs(request, job_type_id=1):
     jobs = Job.objects.filter(degree_limit=degree_limit[job_type_id])
@@ -191,7 +191,7 @@ def login(request):
             if people:
                 request.session['profile'] = people[0]
                 request.session.set_expiry(3600)
-                return redirect('/')
+                return redirect('/progress/')
     else:
         loginForm = LoginForm()
     return render_to_response('login.html', locals())
@@ -386,10 +386,10 @@ def m_ticket(request):
     lines = []
     chineseExtra = list(PeopleExtra.objects.filter(
             people__test_paper_language=u'汉文', audit_step=1, 
-            people__job__degree_limit=u'硕士'))
+            people__job__degree_limit=u'硕士').order_by("people__job"))
     mongolianExtra = list(PeopleExtra.objects.filter(
             people__test_paper_language=u'蒙文', audit_step=1, 
-            people__job__degree_limit=u'硕士'))
+            people__job__degree_limit=u'硕士').order_by("people__job"))
     chinese_rest_count = len(chineseExtra)%30
     mongolian_rest_count = len(mongolianExtra)%30
     
