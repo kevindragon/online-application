@@ -313,10 +313,12 @@ def m_audit(request, people_id=0):
                 form.save()
             people.audit_step = form.cleaned_data['audit_step']
             people.save()
-            request.session['message'] = u'%s的审核状态保存成功' % (people.name, )
+            request.session['message'] = (u'<strong><a href="/management/people/%d">%s</a> 的审核状态保存成功</strong>' % 
+                                          (people.id, people.name))
             
             status_dict = {0: 'elementary', 1: 'passed', 7: 'notpass', 8: 'unqualified'}
-            return redirect('/management/plist/%s/' % (status_dict[int(form.cleaned_data['audit_step'])],))
+            #return redirect('/management/plist/%s/' % (status_dict[int(form.cleaned_data['audit_step'])],))
+            return redirect('/management/plist/elementary/')
     else:
         people = People.objects.get(pk=people_id)
         initail = {'audit_step': people.audit_step}
