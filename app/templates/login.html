@@ -18,8 +18,12 @@
     </div>
     <div class="std-blank-10"></div>
     <div class="btn-group-center">
+      {% if loginLocked %}
+      <input type="button" class="btn gray-btn" value="登录" onclick="alert('登录已经处理锁定状态，此时您不能登录，请等待开放！');return false;" />
+      {% else %}
       <input type="submit" name="submit" value="登录" class="btn" />
-      <button class="btn second-btn" style="margin-left:40px;" onclick="location.href='/'">取消</button>
+      {% endif %}
+      <input type="button" class="btn second-btn" style="margin-left:40px;" onclick="location.href='/'" value="取消" />
     </div>
   </form>
 </div>

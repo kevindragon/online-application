@@ -181,7 +181,11 @@ def printinfo(request, ptype):
 
 def login(request):
     locals().update(csrf(request))
-    if request.method == 'POST':
+    ls = LockedStatus.objects.filter(name='login')
+    loginLocked = False
+    if ls and ls[0].is_lock:
+        loginLocked = True
+    if request.method == 'POST' and not loginLocked:
         loginForm = LoginForm(request.POST)
         if loginForm.is_valid():
             people = People.objects.filter(
@@ -505,7 +509,7 @@ def m_lock(request):
     menu_active = 'lock'
     locals().update(csrf(request))
     if (request.method == 'POST' and 
-        request.POST.get('lock_name') in ('doctor', 'master', 'print')):
+        request.POST.get('lock_name') in ('doctor', 'master', 'print', 'login')):
         ls = LockedStatus.objects.filter(name=request.POST.get('lock_name'))
         if not ls:
             ls = LockedStatus(name=request.POST.get('lock_name'), is_lock=True)
@@ -532,7 +536,7 @@ def m_export(request, etype=None):
         table = excel.add_sheet(u'全部')
 
         table_header = [
-            u'序号', u'岗位类型', u'招聘部门', u'专业要求', u'学历要求', u'姓名', u'性别', 
+            u'序号', u'ID(数据库)', u'岗位类型', u'招聘部门', u'专业要求', u'学历要求', u'姓名', u'性别', 
             u'民族', u'出生日期', u'身份证号', u'政治面貌', u'婚姻状况', u'是否蒙汉兼通', 
             u'是否服务基层人员', u'籍贯', u'户口所在地', u'电子邮件', u'手机号', 
             u'其他联系方式', u'外语及水平', u'参加工作时间', u'专业技术资格', 
@@ -544,15 +548,15 @@ def m_export(request, etype=None):
             u'其他学习经历一学习所学专业', u'其他学习经历一学习单位', u'其他学习经历二开始时间', 
             u'其他学习经历二结束时间', u'其他学习经历二学习形式', u'其他学习经历二学历', 
             u'其他学习经历二学位', u'其他学习经历二学习所学专业', u'其他学习经历二学习单位', 
-            u'获奖情况、学术成果及个人特长']
+            u'获奖情况、学术成果及个人特长', u'试卷类型', u'准号证号', u'考场号', u'座位号']
         for (column, v) in enumerate(table_header):
             table.write(0, column, v)
         for (i, p) in enumerate(peoples):
-            line = [i+1, p.job.job_type, p.job.department, p.job.major, p.job.degree_limit, 
+            line = [i+1, p.pk, p.job.job_type, p.job.department, p.job.major, p.job.degree_limit, 
                     p.name, p.gender, p.nation, p.birthday, p.id_number, p.political_status, 
                     p.marital_status, p.is_han_mongolia_both, p.is_basic_attendant, 
                     p.hometown_prov+u'-'+p.hometown_city, p.residence_prov+u'-'+p.residence_city, 
-                    p.email, (u"'%s" % p.phone), p.other_contact, p.foreign_language_level, 
+                    p.email, (u"%s" % p.phone), p.other_contact, p.foreign_language_level, 
                     (u"%d/%d" % (p.start_work_year, p.start_work_month)), p.technical_qualification, 
                     p.operation_qualification, p.other_qualification, p.first_edu_bkgrd, p.first_edu_degree, 
                     p.first_edu_university, p.first_edu_major, (u"%d/%d" % (p.first_edu_start_year, p.first_edu_start_month)), 
@@ -566,7 +570,8 @@ def m_export(request, etype=None):
                     (u"%s/%s" % (p.other_edu_start_year_2, p.other_edu_start_month_2) if p.other_edu_start_year_2 else u''), 
                     (u"%s/%s" % (p.other_edu_edu_year_2, p.other_edu_edu_month_2) if p.other_edu_edu_year_2 else u''), 
                     p.other_edu_type_2, p.other_edu_bkgrd_2, 
-                    p.other_edu_degree_2, p.other_edu_major_2, p.other_edu_unit_2, p.special_skill]
+                    p.other_edu_degree_2, p.other_edu_major_2, p.other_edu_unit_2, p.special_skill, 
+                    p.test_paper_language, p.peopleextra.ticket_number, p.peopleextra.exam_room, p.peopleextra.seat]
 
             for (column, v) in enumerate(line):
                 table.write(i+1, column, v)

@@ -148,6 +148,5 @@ table.job-list td {
 .audit_desc tr td {margin:0px;padding:0px;}
 
 .footer {padding:10px;font-size:12px;}
-.footer .copyright {text-align:right;margin-bottom:5px;}
-.footer .contact {float:left;}
-.footer .icp {float:right;}
+.footer .copyright {text-align:center;margin-bottom:5px;}
+.footer .contact {text-align: center;}

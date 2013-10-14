@@ -17,7 +17,7 @@
   <div class="menu-bar std-bg-color white-color">
     <div class="back-to-home">
       {% if request.path == "/" %}
-      <a href="http://www.imut.edu.cn" target="_blank">查看招聘公告</a>
+      <a href="http://www.imut.edu.cn/rcyj" target="_blank">查看招聘公告</a>
       {% else %}
       <a href="/">返回首页</a>
       {% endif %}
@@ -31,7 +31,7 @@
       <li><a href="/changepwd/">修改密码</a></li>
       <li><a href="/logout/">退出</a></li>
       {% else %}
-      <li><a href="/login/">登录</a></li>
+      {% if lock_status.login.is_lock or lock_status.login.is_lock == None %}<li><a href="/login/">登录</a></li>{% endif %}
       <li><a href="/findpwd/">找回密码</a></li>
       {% endif %}
       <li><a href="/help/">帮助</a></li>
@@ -44,10 +44,9 @@
 
   <div class="std-blank-20"></div>
   <div class="footer std-bg-color white-color">
-    <div class="copyright">Copyright&copy;2010-{% now "Y" %} www.imut.edu.cn All Rights Reserved</div>
+    <div class="copyright">电子邮件：rsch@imut.edu.cn &nbsp; 联系地址：内蒙古自治区呼和浩特市新城区爱民街49号</div>
     <div class="other-info">
-      <div class="contact">咨询电话：0471-1111111 联系地址：内蒙古自治区呼和浩特市新城区爱民街49号</div>
-      <div class="icp">蒙ICP备05000412 网络中心 未经授权不得转载</div>
+      <div class="contact">Copyright&copy;2010-{% now "Y" %} rsch.imut.edu.cn All Rights Reserved &nbsp;&nbsp; 未经授权不得转载</div>
       <div class="clearfix"></div>
     </div>
   </div>
