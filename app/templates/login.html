@@ -4,6 +4,7 @@
 <h1 class="text-center">登录</h1>
 <div class="std-blank-10"></div>
 <div class="account-form">
+{{ loginForm.non_field_errors }}
   <form action="/login/" method="post">
     {% csrf_token %}
     <div class="control-group">

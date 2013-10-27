@@ -31,7 +31,7 @@
       <li><a href="/changepwd/">修改密码</a></li>
       <li><a href="/logout/">退出</a></li>
       {% else %}
-      {% if lock_status.login.is_lock or lock_status.login.is_lock == None %}<li><a href="/login/">登录</a></li>{% endif %}
+      {% if lock_status.login.is_lock == 0 or lock_status.login.is_lock == None %}<li><a href="/login/">登录</a></li>{% endif %}
       <li><a href="/findpwd/">找回密码</a></li>
       {% endif %}
       <li><a href="/help/">帮助</a></li>

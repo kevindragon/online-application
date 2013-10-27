@@ -12,6 +12,7 @@ from django.contrib import auth
 from django.http import HttpResponse
 from django.db import transaction
 from django import forms
+from django.forms.forms import NON_FIELD_ERRORS
 from app.models import People, Job, PeopleExtra, LockedStatus, ImportantPrompt
 from app.forms import PeopleForm, LoginForm, PeopleNoPasswordForm, FindpwdForm ,\
     PeopleSearchForm, ImportantPromptForm
@@ -126,11 +127,26 @@ def update(request):
             peopleForm.is_valid()):
             data = peopleForm.cleaned_data
             data['audit_step'] = 0
+            
+            # 复制图片到相应目录
+            avatar_path = "/".join(('static/upload/', peopleForm.cleaned_data["id_number"]))
+            if not os.path.exists(avatar_path):
+                os.mkdir(avatar_path)
+            src_file = peopleForm.cleaned_data["avatar"][1:]
+            dst_file = "/".join((avatar_path, os.path.basename(peopleForm.cleaned_data["avatar"])))
+            if src_file!=dst_file:
+                try:
+                    shutil.move(src_file, dst_file)
+                    peopleForm.cleaned_data["avatar"] = '/%s' % (dst_file, )
+                except Exception:
+                    pass
+            
             # 把不需要更新的字段去掉
             del data['id_number'], data['query_password']
             people = People.objects.get(pk=request.session['profile'].id)
             for k, v in data.items():
                 setattr(people, k, v)
+            
             people.save()
             try:
                 people.peopleextra.delete()
@@ -196,6 +212,8 @@ def login(request):
                 request.session['profile'] = people[0]
                 request.session.set_expiry(3600)
                 return redirect('/progress/')
+            else:
+                loginForm._errors[NON_FIELD_ERRORS] = loginForm.error_class([u'用户名或密码错误'])
     else:
         loginForm = LoginForm()
     return render_to_response('login.html', locals())
