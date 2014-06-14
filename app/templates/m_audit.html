@@ -1,0 +1,305 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+{% if message %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endif %}
+<h3>{{ people.name }} 的初审信息</h3>
+<p>
+<table width="900" border="1">
+  <tr>
+    <td width="11%">姓名</td>
+    <td width="18%">{{ people.name }}</td>
+    <td width="13%">性别</td>
+    <td width="18%">{{ people.gender }}</td>
+    <td width="9%">民族</td>
+    <td width="15%">{{ people.nation }}</td>
+    <td width="16%" rowspan="5" align="center" valign="middle">
+      <img src="{{ people.avatar }}" width="100" />
+    </td>
+  </tr>
+  <tr>
+    <td>出生年月</td>
+    <td>{{ people.birthday|date:"Y-m-d" }}</td>
+    <td>籍贯</td>
+    <td>{{ people.hometown_prov }} {{ people.hometown_city }}</td>
+    <td>政治面貌</td>
+    <td>{{ people.political_status }}</td>
+  </tr>
+  <tr>
+    <td>报考岗位</td>
+    <td colspan="5">{{ people.job.major }} - {{ people.job.job_type }}</td>
+  </tr>
+  <tr>
+    <td>第一学历</td>
+    <td>{{ people.first_edu_bkgrd }}</td>
+    <td>所需第一学历</td>
+    <td>本科</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">第一学历毕业院校及所学专业</td>
+    <td colspan="3">{{ people.first_edu_university }} - {{ people.first_edu_major }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>最高学历</td>
+    <td>{{ people.high_edu_bkgrd }}</td>
+    <td>所需最高学历</td>
+    <td>{{ people.job.degree_limit }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>最高学位</td>
+    <td>{{ people.high_edu_degree }}</td>
+    <td>所需最高学位</td>
+    <td>{{ people.job.degree_limit }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">最高学历起始时间</td>
+    <td>
+      <span>{{ people.high_edu_start_year }}/{{ people.high_edu_start_month }}</span>
+      <span> - </span>
+      <span>{{ people.high_edu_edu_year }}/{{ people.high_edu_edu_month }}</span>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">最高学历毕业院校及所学专业</td>
+    <td colspan="3">{{ people.high_edu_university }} - {{ people.high_edu_major }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>是否蒙汉兼通</td>
+    <td>{{ people.is_han_mongolia_both }}</td>
+    <td colspan="2">是否服务基层项目人员</td>
+    <td>{{ people.is_basic_attendant }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>招聘详细要求</td>
+    <td colspan="6">{{ people.job.degree_des }}</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>身份证号</td>
+    <td>{{ people.id_number }}</td>
+    <td>婚姻状况</td>
+    <td>{{ people.marital_status }}</td>
+    <td>户口所在地</td>
+    <td>{{ people.residence_prov }} {{ people.residence_city }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>外语语种及水平</td>
+    <td>{{ people.foreign_language_level }}</td>
+    <td>计算机等级</td>
+    <td>{{ people.compute_level }}</td>
+    <td>参加工作时间</td>
+    <td>{{ people.start_work_year }}{% if people.start_work_month %}/{{ people.start_work_month }}{% endif %}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">第一学历起始时间</td>
+    <td colspan="5">
+      <span>{{ people.first_edu_start_year }}/{{ people.first_edu_start_month }}</span>
+      <span> - </span>
+      <span>{{ people.first_edu_end_year }}/{{ people.first_edu_end_month }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>其他学习经历 - 起始时间</td>
+    <td>
+      {% if people.other_edu_start_year %}{
+      <span>{ people.other_edu_start_year }}/{{ people.other_edu_start_mont }}</span>
+      <span> - </span>
+      <span>{{ people.other_edu_edu_year }}/{{ people.other_edu_edu_mont }}</span>
+      {% endif %}
+    </td>
+    <td>其他学习经历 - 学位</td>
+    <td>{{ people.other_edu_degree }}</td>
+    <td>其他学习经历 - 学历</td>
+    <td>{{ people.other_edu_bkgrd }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>其他学习经历 - 学习单位</td>
+    <td>{{ people.other_edu_unit }}</td>
+    <td>其他学习经历 - 所学专业</td>
+    <td>{{ people.other_edu_major }}</td>
+    <td>其他学习经历 - 学习形式</td>
+    <td>{{ people.other_edu_type }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>专业技术资格</td>
+    <td>{{ people.technical_qualification }}</td>
+    <td>执业资格</td>
+    <td>{{ people.operation_qualification }}</td>
+    <td>其他资格</td>
+    <td>{{ people.other_qualification }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>电子邮件</td>
+    <td>{{ people.email }}</td>
+    <td>手机</td>
+    <td>{{ people.phone }}</td>
+    <td>其他联系方式</td>
+    <td>{{ people.other_contact }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>个人特长</td>
+    <td>{{ people.special_skill }}</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</p>
+
+{% if people.peopleextra.audit_step and people.peopleextra.audit_step > 0 %}
+<p>审核状态：
+{% if people.peopleextra.audit_step < 1 %}
+<span>未审核</span>
+{% elif people.peopleextra.audit_step == 1 %}
+<span>已通过审核</span>
+{% elif people.peopleextra.audit_step == 7 %}
+<span>未通过审核</span>
+{% elif people.peopleextra.audit_step == 8 %}
+<span>不合格</span>
+{% endif %}
+</p>
+{% endif %}
+
+{{ form.non_field_errors }}
+<form action="/management/audit/" method="post" onsubmit="return audit_check(this);">
+  {% csrf_token %}
+  <input type="hidden" name="people" value="{{ people.id }}" />
+  <p>
+    <div>
+      <span>是否通过：</span>
+      <span>{{ form.audit_step }}</span>
+      <span>
+        <select class="audit-def-choices">
+          <option value="0"> -- </option>
+          <option value="1" class="audit-def audit-pass">通过初审，请打印资格审查表（1式2份）</option>
+
+          <option value="2" class="audit-def audit-failed">照片不符合要求，应为1寸正面免冠近照</option>
+          <option value="3" class="audit-def audit-failed">照片不符合要求，请更换较清晰的证件照</option>
+          <option value="4" class="audit-def audit-failed">照片不符合要求，高宽比应为16：9</option>
+          <option value="5" class="audit-def audit-failed">所学专业不符合报考要求，请查看岗位需求详情，选择适合的岗位</option>
+          <option value="6" class="audit-def audit-failed">最高学历不符合要求，请查看岗位需求详情，选择适合的岗位</option>
+          <option value="7" class="audit-def audit-failed">性别不符合要求，请查看岗位需求详情，选择适合的岗位</option>
+          <option value="8" class="audit-def audit-failed">民族不符合要求，请查看岗位需求详情，选择适合的岗位</option>
+          <option value="9" class="audit-def audit-failed">政治面貌不符合要求，请查看岗位需求详情，选择适合的岗位</option>
+
+          <option value="10" class="audit-def audit-block">出生年月不符合要求，请查看招聘公告对出生年月的要求。您可以继续关注本校的其他招聘信息</option>
+          <option value="11" class="audit-def audit-block">第一学历不符合要求，请查看招聘公告对第一学历的要求。您可以继续关注本校的其他招聘信息</option>
+          <option value="12" class="audit-def audit-block">最高学历不符合要求，请查看所聘岗位对学历的要求。您可以继续关注本校的其他招聘信息</option>
+        </select>
+      </span>
+      {{ form.audit_step.errors }}
+    </div>
+  </p>
+  <div id="reason" style="display:none;">
+    <span>理由：</span>
+    <span>{{ form.reason }}</span>{{ form.reason.errors }}
+  </div>
+  <p>
+    <input type="hidden" name="last_edit_at" value="{{ people.last_edit_at|date:"U" }}" />
+    <input type="submit" name="submit" value="提交" />
+    <input type="button" name="cancel" value="取消返回" onclick="history.go(-1);" />
+  </p>
+</form>
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script>
+function audit_check(form) {
+    var e = $('#id_audit_step');
+    var e2 = $('#id_reason');
+    if (-1 != $.inArray(parseInt(e.val()), [7, 8]) && !$.trim(e2.val())) {
+        alert('请填写不通过的理由');
+        $('textarea[name=reason]').focus();
+        return false;
+    }
+}
+function auditSelectChange(id) {
+    if (1 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-failed, option.audit-block').hide();
+        $('.audit-pass').show();
+    } else if (7 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-pass, option.audit-block').hide();
+        $('.audit-failed').show();
+    } else if (8 == id) {
+        $('.audit-def-choices').show().val(0);
+        $('option.audit-pass, option.audit-failed').hide();
+        $('.audit-block').show();
+    } else {
+        $('.audit-def-choices').hide();
+    }
+}
+var reason = {}
+$(function(){
+	if ($('#id_audit_step option:selected').val()) {
+		var audit_step = parseInt($('#id_audit_step').val());
+        $('#reason').show();
+        auditSelectChange(audit_step);
+        if ($('textarea[name=reason]').val()) {
+        	reason[audit_step] = $('textarea[name=reason]').val();
+        }
+	}
+    $('#id_audit_step').change(function(){
+    	var audit_step = parseInt($(this).val());
+        if (audit_step >= 0) {
+            $('#reason').show();
+            if (reason[audit_step]) {
+            	$('textarea[name=reason]').val(reason[audit_step]);
+            } else {
+            	$('textarea[name=reason]').val('');
+            }
+        } else {
+            $('#reason').hide();
+        }
+        auditSelectChange(audit_step);
+    });
+    $('.audit-def-choices').change(function(){
+    	var v = parseInt($(this).val());
+    	if (0 != v) {
+    		$('textarea[name=reason]').val($(this).find('option:selected').text());
+    	}
+    });
+});
+</script>
+{% endblock %}

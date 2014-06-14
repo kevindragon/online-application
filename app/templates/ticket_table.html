@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>准考证</title>
+<style type="text/css">
+body {margin-top:40px;padding-left:20px;}
+table.notice {border:1px double #999;}
+.instructions {font-size:12px;line-height:20px;}
+.instructions-notice {font-size:12px;line-height:20px;margin:5px;}
+.ticket-info td {height:32px;}
+.pinfo {font-size:14px;}
+</style>
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+function ticket_print() {
+	$('#print-btn').hide();
+	alert("请设置打印方向为“横向”打印。\n\n打印前请在【文件】--->【页面设置】中将纸张分别设置为：A4纸打印，页边距设置成：上下：15mm，左右：20mm。");
+	window.print();
+}
+</script>
+<p id="print-btn">
+  <button style="width:90px;height:40px;" onclick="ticket_print();">打印</button>
+  <button style="width:90px;height:40px;" onclick="history.go(-1);">返回</button>
+</p>
+<table width="980" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="480" height="300">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="people-info">
+        <tr>
+          <td width="82" rowspan="2" align="center" valign="middle">
+            <img border="0" src="/static/images/badge.jpg" width="80" />
+          </td>
+          <td colspan="2" height="26" align="center">
+            <strong style='font-family:"楷体_gb2312";font-size:16px;'>内蒙古工业大学2013年度公开招聘工作人员考试</strong>
+          </td>
+          </tr>
+        <tr>
+          <td height="46" colspan="2" align="center">
+            <h2 style="margin:0px;">准&nbsp;&nbsp;考&nbsp;&nbsp;证</h2>
+          </td>
+          </tr>
+        <tr>
+          <td colspan="2">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ticket-info">
+              <tr>
+                <td width="95"><strong>准号证号：</strong></td>
+                <td class="pinfo">{{ people.peopleextra.ticket_number }}</td>
+              </tr>
+              <tr>
+                <td><strong>姓&nbsp;&nbsp;名：</strong></td>
+                <td class="pinfo">{{ people.name }}</td>
+              </tr>
+              <tr>
+                <td><strong>性&nbsp;&nbsp;别：</strong></td>
+                <td class="pinfo">{{ people.gender }}</td>
+              </tr>
+              <tr>
+                <td><strong>身份证号：</strong></td>
+                <td class="pinfo">{{ people.id_number }}</td>
+              </tr>
+              <tr>
+                <td><strong>报考岗位：</strong></td>
+                <td class="pinfo">{{ people.job.major }} - {{ people.job.job_type }}</td>
+              </tr>
+              <tr>
+                <td><strong>作答文字：</strong></td>
+                <td class="pinfo">{{ people.test_paper_language }}</td>
+              </tr>
+              <tr>
+                <td><strong>考场号：</strong></td>
+                <td class="pinfo">{{ people.peopleextra.exam_room }}</td>
+              </tr>
+              <tr>
+                <td><strong>座位号：</strong></td>
+                <td class="pinfo">{{ people.peopleextra.seat }}</td>
+              </tr>
+            </table>
+          </td>
+          <td width="24%" colspan="-1" align="center" valign="middle">
+            <img src="{{ request.session.profile.avatar }}" border="0" width="120" />
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="30">&nbsp;</td>
+    <td rowspan="3" valign="top" width="470">
+      <p align="center" style="margin-top:0px;"><strong>考生须知</strong></p>
+      <p align="left" class="instructions">
+        &nbsp;&nbsp;&nbsp;一、考生须在开考前30分钟凭准考证、二代居民身份证有序进入考场，并自觉服从考试管理，主动接受考试工作人员使用反作弊器材对其进行贴身检查。<br>
+        &nbsp;&nbsp;&nbsp;二、禁止携带手机、手表，照相、摄像、扫描等电子设备以及涂改液、修正带、考试资料等参加考试。否则，按零分处理。<br>
+        &nbsp;&nbsp;&nbsp;三、考生在考场内不得吸烟、喧哗、交头接耳、左顾右盼、打手势、做暗号，不得夹带、旁窥、抄袭或有意让他人抄袭等，禁止将试卷、答题卡或草稿纸等考试材料带出考场，禁止擅自传递文具用品，禁止传抄答案或交换试卷、答题卡等。<br>
+        &nbsp;&nbsp;&nbsp;四、考试实施过程中各时间节点一律以考点统一发出的相应信号为准。考场内时钟仅供考生参考。<br>
+        &nbsp;&nbsp;&nbsp;五、考生对号入座后，将准考证及身份证放在桌子左上角，以便核验。开考信号发出后，方可答题。<br>
+        &nbsp;&nbsp;&nbsp;六、每科开考15分钟后，迟到考生不准进入考点参加考试。考试结束后待监考员发出离场指令后方可离开考场。<br>
+        &nbsp;&nbsp;&nbsp;七、考生拿到试卷和答题卡（或答题纸）后，须认真检查试卷和答题卡（或答题纸）是否正确完整，试题有无漏印或字迹不清等。若发现问题立即举手报告监考员进行更换。开考后再要求更换试卷和答题卡的，耽误的考试时间不予补偿。涉及试题内容的疑问，不得向监考员询问。<br>
+        &nbsp;&nbsp;&nbsp;八、要认真阅读试卷、答题卡（或答题纸）上的作答要求<br>
+        &nbsp;&nbsp;&nbsp;九、考生必须使用规定的文字作答，在同一科目试卷、答题卡（或答题纸）上不得同时使用蒙、汉两种文字答卷。 <br>
+        &nbsp;&nbsp;&nbsp;十、考生对因考场突发或偶发事件而按规定采取的相关考务措施要服从和配合。按规定顺延考试时间的，按顺延后的时间结束考试。<br>
+        &nbsp;&nbsp;&nbsp;十一、考试终了信号发出后，考生须立即停止作答，并将试卷、答题卡（或答题纸）整理好，放在桌上，双手放在桌下，待监考员将试卷、答题卡等收齐发出退场指令后，依次退出考场。<br>
+        &nbsp;&nbsp;&nbsp;十二、考生如有违规行为（含电子监控录像回放及评卷中认定的违规行为），按有关规定进行处理。使用无线电作弊、替考、恶意破坏考场秩序、威胁侮辱贿赂考试工作人员、强行撕毁试卷或任意将试答卷等考试材料带出考场的，3年内一律不得参加本单位的任何招聘考试，构成犯罪的移交司法机关处理。<br>
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" border="1" cellspacing="1" cellpadding="1" class="notice">
+        <tr>
+          <td><p><strong>注意事项：</strong>
+          <p class="instructions-notice">
+            1.笔试时间：2013年11月9日，上午9:00--12:20； <br>
+            2.笔试成绩及专业测试名单公布时间：2013年11月9日晚；<br>
+            3.专业测试时间：2013年11月10日，上午9:00-12:00；<br>
+            4.准考证是考生参加整个招聘考试各场考试的凭证之一，应妥善保存；<br>
+            5.考试成绩通过<a href="http://www.imut.edu.cn/rcyj/gkzp" style="color:#000;">http://www.imut.edu.cn/rcyj/gkzp</a>（内蒙古工业大学网站首页--->人才引进--->公开招聘）发布。 <br>
+            6.请考生随时关注内蒙古工业大学网站“公开招聘”专栏所发布的相关公告信息。
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</body>
+</html>

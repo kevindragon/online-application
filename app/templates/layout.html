@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}内蒙古工业大学网上报名系统{% endblock %}</title>
+<link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+{% block css_block %}{% endblock %}
+</head>
+<body>
+
+<div class="container">
+  <div class="logo-line">
+    <div class="logo"></div>
+    <div class="logo-text std-color">在线报名系统</div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="menu-bar std-bg-color white-color">
+    <div class="back-to-home">
+      {% if request.path == "/" %}
+      <a href="http://www.imut.edu.cn/rcyj" target="_blank">查看招聘公告</a>
+      {% else %}
+      <a href="/">返回首页</a>
+      {% endif %}
+    </div>
+    <ul class="right-menu">
+      {% if request.session.profile %}
+      <li><a href="/myinfo/">查看报名信息</a></li>
+      <li><a href="/progress/">查看报名进度</a></li>
+      <li> | </li>
+      <li>{{ request.session.profile.name }}, 您好！</li>
+      <li><a href="/changepwd/">修改密码</a></li>
+      <li><a href="/logout/">退出</a></li>
+      {% else %}
+      {% if lock_status.login.is_lock == 0 or lock_status.login.is_lock == None %}<li><a href="/login/">登录</a></li>{% endif %}
+      <li><a href="/findpwd/">找回密码</a></li>
+      {% endif %}
+      <li><a href="/help/">帮助</a></li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+  <div class="std-blank-40"></div>
+  
+{% block content %}{% endblock %}
+
+  <div class="std-blank-20"></div>
+  <div class="footer std-bg-color white-color">
+    <div class="copyright">电子邮件：rsch@imut.edu.cn &nbsp; 联系地址：内蒙古自治区呼和浩特市新城区爱民街49号</div>
+    <div class="other-info">
+      <div class="contact">Copyright&copy;2010-{% now "Y" %} rsch.imut.edu.cn All Rights Reserved &nbsp;&nbsp; 未经授权不得转载</div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+{% block js_block %}{% endblock %}
+</body>
+</html>

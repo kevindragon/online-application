@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center">登录</h1>
+<div class="std-blank-10"></div>
+<div class="account-form">
+{{ loginForm.non_field_errors }}
+  <form action="/login/" method="post">
+    {% csrf_token %}
+    <div class="control-group">
+      <label>身份证号：</label>
+      <div>{{ loginForm.id_number }}</div>
+      {{ loginForm.id_number.errors }}
+    </div>
+    <div class="control-group">
+      <label>密  码：</label>
+      <span>{{ loginForm.password }}</span>
+      {{ loginForm.password.errors }}
+    </div>
+    <div class="std-blank-10"></div>
+    <div class="btn-group-center">
+      {% if loginLocked %}
+      <input type="button" class="btn gray-btn" value="登录" onclick="alert('登录已经处理锁定状态，此时您不能登录，请等待开放！');return false;" />
+      {% else %}
+      <input type="submit" name="submit" value="登录" class="btn" />
+      {% endif %}
+      <input type="button" class="btn second-btn" style="margin-left:40px;" onclick="location.href='/'" value="取消" />
+    </div>
+  </form>
+</div>
+<div class="std-blank-60"></div>
+
+{% endblock %}

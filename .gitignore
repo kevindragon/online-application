@@ -1,4 +1,6 @@
+.project
+.pydevproject
+.settings
 *.pyc
-*~
-#*#
-*.bak
+static/upload/[0-9]*
+static/upload/tmp/[a-zA-Z0-9]*

@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div>
+  <div class="left-flow">{% include 'left-flow.html' with workflow_step=5 %}</div>
+  <div class="right-content right-line">
+    <h3 class="std-color">[报名流程]</h3>
+    <div class="audit-flow-show">
+      <span class="progress-block">1.填写信息</span>
+      <span class="progress-block-text"><span>待初审</span></span>
+      <span class="progress-block{% if people.audit_step != 8 %}{% if not people.audit_step or not can_print %} progress-green-block{% endif %}{% endif %}">2.初审阶段</span>
+      <span class="progress-block-text"><span>初审通过</span></span>
+      <span class="progress-block{% if people.audit_step == 1 and not lock_status.master.is_lock and can_print %} progress-green-block{% endif %}">3.表单打印</span>
+      <span class="progress-block-text"><span>复审通过</span></span>
+      <span class="progress-block{% if lock_status.master.is_lock or people.audit_step == 8 %} progress-green-block{% endif %}">4.报名结束</span>
+    </div>
+    <div class="std-blank-60"></div>
+    <div>
+      <div>
+        <div class="tips-head" style="">
+          <font size="5">当前审核状态：
+          {% if not people.audit_step %}
+          未审核
+          {% elif people.audit_step == 1%}
+          通过初审
+          {% elif people.audit_step == 2 %}
+          复审通过
+          {% elif people.audit_step == 7 %}
+          未通过初审
+          {% elif people.audit_step == 8 %}
+          未通过复审
+          {% endif %}
+          </font>
+        </div>
+        <div class="audit-desccription">
+          <p>说明：</p>
+          <p>
+            <div style="border:2px solid #e2dedf;width:600px;height:100px;padding:10px;">
+              <div>
+              {% if not people.peopleextra %}
+              <span>您的报名信息已经提交成功，还未进行初审</span>
+              {% elif people.audit_step == 1 %}
+                {% if people.peopleextra.reason %}
+                  {{people.peopleextra.reason}}
+                {% else %}
+                  <span>您已经通过初审</span>
+                {% endif %}
+              {% else %}
+                {% if people.peopleextra.reason %}
+                  {{ people.peopleextra.reason }}
+                {% else %}
+                  <span>您的报名信息已经提交成功，还未进行初审</span>
+                {%endif%}
+              {% endif %}
+              </div>
+            </div>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="std-blank-20"></div>
+    <div class="operate-group">
+      {% if not people.audit_step or people.audit_step == 7 %}
+      <form action="/edit/" method="post" style="display:inline">
+        {% csrf_token %}
+        <input type="hidden" name="people_id" value="{{ people.pk }}">
+        <input type="hidden" name="id_number" value="{{ people.id_number }}">
+        <input type="submit" name="submit" value="修改 报名信息" class="btn">
+      </form>
+      {% endif %}
+      
+      {% if can_print and people.audit_step == 1 and assign_end %}
+      <a href="/print/audit" class="btn">打印资格审查表</a>
+        {% if can_print_ticket %}
+        <a href="/print/ticket" class="btn">打印准考证</a>
+        {% endif %}
+      {% else %}
+        <a href="javascript:void(0);" class="btn gray-btn second-btn" onclick="alert('当前状态不可打印!');">打印资格审查表</a>
+        {% if can_print_ticket %}
+        <a href="javascript:void(0);" class="btn gray-btn second-btn" onclick="alert('当前状态不可打印!');">打印准考证</a>
+        {%endif%}
+      {% endif %}
+    </div>
+    
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+
+{% endblock %}

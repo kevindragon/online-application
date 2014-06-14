@@ -1,7 +1,141 @@
 /* Override some defaults */
 html, body {
     background-color: #eee;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    margin:0px;
+    padding:0px;
 }
+fieldset {padding: 0; margin: 0; border: 0;}
+legend {
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin-bottom: 20px;
+	font-size: 21px;
+	line-height: 40px;
+	color: #333;
+	border: 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.errorlist {color:red;}
+
+.navbar {margin-bottom: 20px; overflow: visible;}
+.navbar-fixed-top, .navbar-fixed-bottom {position: fixed; right: 0; left: 0; z-index: 1030; margin-bottom: 0;}
+.navbar-fixed-top {top: 0;}
+.navbar-inner:before, .navbar-inner:after {display: table; line-height: 0; content: "";}
+.navbar-inner:after {clear: both;}
+.navbar-inner:before, .navbar-inner:after {display: table; line-height: 0; content: "";}
+.navbar-inner {
+    min-height: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: #fafafa;
+    background-image: -moz-linear-gradient(top,#fff,#f2f2f2);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#f2f2f2));
+    background-image: -webkit-linear-gradient(top,#fff,#f2f2f2);
+    background-image: -o-linear-gradient(top,#fff,#f2f2f2);
+    background-image: linear-gradient(to bottom,#fff,#f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#fff2f2f2',GradientType=0);
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+}
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {border-width: 0 0 1px;}
+.navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
+    padding-right: 0;
+    padding-left: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {
+    -webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+}
+.navbar-inverse .navbar-inner {
+    background-color: #1b1b1b;
+    background-image: -moz-linear-gradient(top,#222,#111);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#222),to(#111));
+    background-image: -webkit-linear-gradient(top,#222,#111);
+    background-image: -o-linear-gradient(top,#222,#111);
+    background-image: linear-gradient(to bottom,#222,#111);
+    background-repeat: repeat-x;
+    border-color: #252525;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff222222',endColorstr='#ff111111',GradientType=0);
+}
+.collapse {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height .35s ease;
+    -moz-transition: height .35s ease;
+    -o-transition: height .35s ease;
+    transition: height .35s ease;
+}
+.nav-collapse.collapse {height: auto; overflow: visible;}
+.nav {margin-bottom: 20px; margin-left: 0; list-style: none;padding-left:10px;}
+.navbar .nav {position: relative; left: 0; display: block; float: left; margin: 0 10px 0 0;}
+li {line-height: 20px;}
+.navbar .nav li {float: left;}
+.nav li a {display: block;}
+.navbar .nav li a {float: none; padding: 10px ; color: #777; text-decoration: none; text-shadow: 0 1px 0 #fff;}
+.navbar-inverse .brand, .navbar-inverse .nav li a {color: #999; text-shadow: 0 -1px 0 rgba(0,0,0,0.25);}
+.navbar .nav .active a, .navbar .nav .active a:hover, .navbar .nav .active a:focus {
+    color: #555;
+    text-decoration: none;
+    background-color: #e5e5e5;
+    -webkit-box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+    -moz-box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+}
+.navbar-inverse .nav .active a, .navbar-inverse .nav .active a:hover, .navbar-inverse .nav .active a:focus {
+    color: #fff;
+    background-color: #111;
+}
+
+.content-container {margin:20px;margin-top:60px;}
+.well {
+	min-height: 20px;
+	padding: 19px;
+	margin-bottom: 20px;
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+}
+.center {text-align:center;}
+.top-buffer-100 {margin-top:100px;}
+
+label, select, button, input[type="button"], input[type="reset"], input[type="submit"], input[type="radio"], input[type="checkbox"] {cursor: pointer;}
+label, input, button, select, textarea {font-size: 14px;font-weight: normal;line-height: 20px;}
+label {display: block;margin-bottom: 5px;}
+.form-horizontal .control-label {float: left;width: 120px;padding-top: 5px;text-align: right;}
+.form-horizontal .control-group {margin-bottom: 20px;clear:both;}
+.form-horizontal .controls {margin-left: 140px;}
+.form-horizontal .controls .text {padding-top:8px;}
+.radio.inline, .checkbox.inline {display: inline-block;padding-top: 5px;margin-bottom: 0;vertical-align: middle;}
+
+.control-group .help-inline {color:red;display:none;}
+
+.message {font-weight:bold; color:red;}
+
+.content-container table {border-collapse:collapse;border:1px solid #cccccc;}
+.content-container table tr th {padding:3px;}
+.content-container table tr td {padding:3px;}
 
 /* The white background content wrapper */
 .login-form-content {
@@ -16,3 +150,16 @@ html, body {
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
     box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
+
+.people-info {margin-left:50px;}
+.people-info tr {height:40px;}
+
+.btns {margin-top:20px;padding-left:100px;}
+
+select.audit-def-choices {display:none;}
+option.audit-def {display:none;}
+
+.page {display:inline-block;padding:0px 5px;border:1px solid #999;text-decoration:none;}
+.cur-page {border:0px;}
+
+.footer {height:40px;}

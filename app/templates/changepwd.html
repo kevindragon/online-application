@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center">修改密码</h1>
+<div class="std-blank-10"></div>
+<div class="account-form">
+  <form action="/changepwd/" method="post">
+    {% csrf_token %}
+    <div class="control-group">
+      <label>原始密码：</label>
+      <span>{{ form.old_password }}</span>
+      {{ form.old_password.errors }}
+    </div>
+    <div class="control-group">
+      <label>新密码：</label>
+      <span>{{ form.new_password }}</span>
+      {{ form.new_password.errors }}
+    </div>
+    <div class="control-group">
+      <label>确认新密码：</label>
+      <span>{{ form.confirm_password }}</span>
+      {{ form.confirm_password.errors }}
+    </div>
+    <div class="btn-group-center">
+      <input type="submit" name="submit" value="确认" class="btn" />
+      <a href="/progress/" class="btn gray-btn second-btn">取消</a>
+    </div>
+  </form>
+</div>
+<div class="std-blank-40"></div>
+{% endblock %}

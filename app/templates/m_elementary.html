@@ -1,0 +1,98 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+{% if message %}
+<p>{% autoescape off %}{{ message }}{% endautoescape %}</p>
+{% endif %}
+
+<h3>待审核列表</h3>
+
+<p>
+  <form action="/management/plist/elementary/" method="post">
+    <table>
+      <tr>
+        <td>身份证号</td>
+        <td>{{ psForm.id_number }}</td>
+        <td>姓名</td>
+        <td>{{ psForm.name }}</td>
+        <td>性别</td>
+        <td>{{ psForm.gender }}</td>
+        <td>招聘部门</td>
+        <td>{{ psForm.department }}</td>
+        <td>专业</td>
+        <td>{{ psForm.major }}</td>
+        <td>
+          {% csrf_token %}
+          <input type="submit" name="submit" value="搜索" />
+        </td>
+      </tr>
+    </table>
+  </form>
+</p>
+
+<form action="/management/people/del/" method="post" onsubmit="return confirmopt();">
+  {% csrf_token %}
+  <table border="1" width="900">
+    <tr>
+      <td width="60"><input type="checkbox" id="check-all" />全选</td>
+      <td>应聘岗位</td>
+      <td>毕业院校</td>
+      <td>所学专业</td>
+      <td>姓名</td>
+      <td width="100"></td>
+    </tr>
+    {% for people in peoples %}
+    <tr>
+      <td>
+        <input type="checkbox" name="people_id" value="{{ people.id }}" />
+        <span>{{ forloop.counter }}</span>
+      </td>
+      <td>{{ people.job }}</td>
+      <td>{{ people.high_edu_university }}</td>
+      <td>{{ people.high_edu_major }}</td>
+      <td>{{ people.name }}</td>
+      <td>
+        <a href="/management/audit/{{ people.id }}">审核</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+    {% if peoples %}
+    <div style="width:900px;padding-top:20px;">
+      <div style="text-align:right;">Page:{{ peoples.number }}/{{ peoples.paginator.num_pages }}&nbsp;&nbsp;&nbsp;&nbsp;
+        {% if peoples.has_previous %}
+          <a href="/management/plist/elementary/{{ peoples.previous_page_number }}/" class="page">{{ peoples.previous_page_number }}</a>
+        {% endif %}
+        <span class="page cur-page">{{ peoples.number }}</span> 
+        {% if peoples.has_next %}
+          <a href="/management/plist/elementary/{{ peoples.next_page_number }}/" class="page">{{ peoples.next_page_number }}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  <p>
+      <select name="operate">
+        <option value="">----</option>
+        <option value="del">删除所选</option>
+      </select>
+      <input type="submit" name="submit" value="提交" />
+  </p>
+</form>
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+$(function(){
+    $('#check-all').click(function(){
+        $('input[name=people_id]').prop('checked', $(this).prop('checked'));
+    });
+});
+function confirmopt() {
+	return confirm('确定要删除所选项？');
+}
+</script>
+{% endblock %}

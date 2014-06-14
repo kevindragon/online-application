@@ -1,0 +1,50 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+  <h3>岗位管理</h3>
+  <form action="/management/job/add/" method="post">
+    {% csrf_token %}
+    {% if edit %}
+    <input type="hidden" name="edit" value="1" />
+    <input type="hidden" name="job_id" value="{{ job_id }}" />
+    {% endif %}
+    <p>
+      <span>岗位类型：</span>
+      <span>{{ form.job_type }}</span>
+      {{ form.job_type.errors }}
+    </p>
+    <p>
+      <span>招聘部门：</span>
+      <span>{{ form.department }}</span>
+      {{ form.department.errors }}
+    </p>
+    <p>
+      <span>专业需求：</span>
+      <span>{{ form.major }}</span>
+      {{ form.major.errors }}
+    </p>
+    <p>
+      <span>招聘人数：</span>
+      <span>{{ form.count }}</span>
+      {{ form.count.errors }}
+    </p>
+    <p>
+      <span>学历要求：</span>
+      <span>{{ form.degree_limit }}</span>
+      {{ form.degree_limit.errors }}
+    </p>
+    <p>
+      <span>详细要求：</span>
+      <span>{{ form.degree_des }}</span>
+      {{ form.degree_des.errors }}
+    </p>
+    <p>
+      <input type="submit" name="submit" value="添加" />
+      <a href="/management/job/">返回</a>
+    </p>
+  </form>
+</div>
+
+{% endblock %}

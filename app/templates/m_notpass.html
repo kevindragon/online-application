@@ -1,0 +1,74 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<div class="content-container">
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+<h3>未通过审核列表</h3>
+<p>
+  <form action="/management/plist/notpass/" method="post">
+    <table>
+      <tr>
+        <td>身份证号</td>
+        <td>{{ psForm.id_number }}</td>
+        <td>姓名</td>
+        <td>{{ psForm.name }}</td>
+        <td>性别</td>
+        <td>{{ psForm.gender }}</td>
+        <td>招聘部门</td>
+        <td>{{ psForm.department }}</td>
+        <td>专业</td>
+        <td>{{ psForm.major }}</td>
+        <td>
+          {% csrf_token %}
+          <input type="submit" name="submit" value="搜索" />
+        </td>
+      </tr>
+    </table>
+  </form>
+</p>
+
+<table border="1" width="900">
+  <tr>
+    <td width="60"></td>
+    <td>应聘岗位</td>
+    <td>毕业院校</td>
+    <td>所学专业</td>
+    <td>姓名</td>
+    <td width="160"></td>
+  </tr>
+  {% for people in peoples %}
+  <tr>
+    <td>
+      <span>{{ forloop.counter }}</span>
+    </td>
+    <td>{{ people.job }}</td>
+    <td>{{ people.high_edu_university }}</td>
+    <td>{{ people.high_edu_major }}</td>
+    <td>{{ people.name }}</td>
+    <td>
+      <a href="/management/audit/{{ people.id }}">修改审核</a>&nbsp;
+      <a href="/management/people/{{ people.id }}">详细信息</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+  {% if peoples %}
+  <div style="width:900px;padding-top:20px;">
+    <div style="text-align:right;">Page:{{ peoples.number }}/{{ peoples.paginator.num_pages }}&nbsp;&nbsp;&nbsp;&nbsp;
+      {% if peoples.has_previous %}
+        <a href="/management/plist/elementary/{{ peoples.previous_page_number }}/" class="page">{{ peoples.previous_page_number }}</a>
+      {% endif %}
+      <span class="page cur-page">{{ peoples.number }}</span> 
+      {% if peoples.has_next %}
+        <a href="/management/plist/elementary/{{ peoples.next_page_number }}/" class="page">{{ peoples.next_page_number }}</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

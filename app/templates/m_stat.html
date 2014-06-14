@@ -1,0 +1,86 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<style>
+table {border-collapse: collapse;border:1px solid #cfcfcf;}
+table td {border:1px solid #cfcfcf;}
+</style>
+
+<div class="content-container">
+  {% if message %}
+  <h4>{% autoescape off %}{{ message }}{% endautoescape %}</h4>
+  {% endif %}
+  <div>
+    <h3>各岗位报考情况</h3>
+  </div>
+  <div style="clear:both;"></div>
+  {% if jobs %}
+  <table>
+    <tr>
+      <td>序号</td>
+      <td>招聘部门</td>
+      <td>专业要求</td>
+      <td>学历要求</td>
+      <td>岗位类别</td>
+      <td>计划人数</td>
+      <td>报考人数</td>
+      <td>招考比例</td>
+      <td>是否开考</td>
+    </tr>
+    {% for job in jobs %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ job.department }}</td>
+      <td>{{ job.major }}</td>
+      <td>{{ job.degree_limit }}</td>
+      <td>{{ job.job_type }}</td>
+      <td>{{ job.count }}</td>
+      <td>{{ job.count_apply }}</td>
+      <td>{{ job.rate }}</td>
+      <td>{{ job.is_exam_open }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  <h3>考试试卷选择情况统计</h3>
+  <p>
+    <table width="200">
+      <tr>
+        <td width="105">汉文考试人数：</td>
+        <td>{{ test_paper.han }}</td>
+      </tr>
+      <tr>
+        <td>蒙文考试人数：</td>
+        <td>{{ test_paper.meng }}</td>
+      </tr>
+    </table>
+  </p>
+  <p>
+    {% if request.user.username == 'admin' %}
+    <form action="/management/ticket/" method="post">
+      {% csrf_token %}
+      {% if ticket_assigned %}
+        {% if assign_failed %}
+        <p><strong>{{ failed_lang }}</strong>分配准考证失败，请重新分配</p>
+        {% else %}
+        <p>全部准考证号分配完成</p>
+        <p><strong>
+        {{ mixed_exam_msg }}
+        </strong></p>
+        {% endif %}
+        {% if test_paper.han > 0 or test_paper.meng > 0 %}
+        <input type="submit" id="assign-ticket" value="重新分配准考证号" />
+        {% endif %}
+      {% else %}
+      <input type="submit" id="assign-ticket" value="审核结束，分配准考证号" />
+      {% endif %}
+    </form>
+    {% else %}
+    <input type="button" id="assign-ticket" value="审核结束，分配准考证号" disabled="disabled" />
+    {% endif %}
+  </p>
+</div>
+
+{% endblock %}
+

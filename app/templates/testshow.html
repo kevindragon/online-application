@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test Show</title>
+</head>
+<body>
+<!-- 
+{% for pe in peopleExtra %}
+{{ pe.ticket_number }}<br>
+{% endfor %}
+ -->
+<table width="500">
+{% for p in people %}
+<tr>
+<td>{{p.id}}</td>
+<td>{{p}}</td>
+{% for pe in peopleExtra %}
+  {% if pe.people_id == p.id %}
+  <td>{{ pe.ticket_number }}</td>
+  <td>{{ p.test_paper_language }}</td>
+  <td>{{ p.job }}</td>
+  {% endif %}
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+<table width="300">
+{% for xp in peprint %}
+<tr><td>{{ xp.ticket_number }}</td><td>{{ xp.exam_room }}</td><td>{{ xp.seat }}</td></tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+{% block css_block %}
+<link rel="stylesheet" href="{% static 'jquery-ui/css/cupertino/jquery-ui-1.10.3.custom.min.css' %}" type="text/css" media="screen" />
+{% endblock %}
+
+{% block content %}
+
+<div>
+  <div class="left-flow">{% include 'left-flow.html' with workflow_step=2 %}</div>
+  <div class="right-content right-line">
+    <table class="job-list" border="0" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>岗 位</th>
+          <th>招聘部门</th>
+          <th>专业需求</th>
+          <th>招聘人数</th>
+          <th>学历要求</th>
+          <th width="120">{% if not request.session.profile and not ls.is_lock %}申请岗位{% endif %}</th>
+        </tr>
+      </thead>
+      {% for job in jobs %}
+      <tr class="job-item">
+        <td>{{job.job_type}}</td>
+        <td>{{ job.department }}</td>
+        <td>{{ job.major }}</td>
+        <td>{{job.count}}</td>
+        <td>
+          <span>{{ job.degree_limit }}</span>
+          <a class="tip-link" href="javascript:void(0);">详情</a>
+          <span class="tip-text">{{job.degree_des}}</span>
+        </td>
+        <td>
+          {% if not request.session.profile and not ls.is_lock %}
+          <a href="/apply/{{job.id}}" class="apply-btn">立即申请</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="tip-box">
+  <div class="tip-box-head">
+    <div class="tip-box-title">岗位招聘详细要求</div>
+    <div class="tip-box-close">关闭</div>
+  </div>
+  <div class="std-blank-10"></div>
+  <div class="tip-box-body"></div>
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript" src="{% static 'jquery-ui/js/jquery-ui-1.10.3.custom.min.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+	$('.tip-link').click(function(event){
+		var e = $(this), t = $('.tip-box');
+		$('.tip-box-body').html(e.next('.tip-text').html());
+		t.css('position', 'absolute')
+		 .css('left', e.position().left - t.width()/2)
+		 .css('top', e.position().top + e.height() + 2)
+		 .show();
+	});
+	$('.tip-box-close').click(function(){
+		$('.tip-box').hide();
+	});
+	$('.job-item').hover(function(){
+		$(this).css('background-color', '#efefef');
+	}, function(){
+		$(this).css('background-color', '');
+	});
+});
+</script>
+{% endblock %}

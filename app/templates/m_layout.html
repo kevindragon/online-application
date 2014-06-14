@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Administrator</title>
+  <link rel="stylesheet" href="/static/css/admin.css" type="text/css" />
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li{% if menu_active == 'job' %} class="active"{% endif %}>
+            <a href="/management/job/">岗位管理</a>
+          </li>
+          <li{% if menu_active == 'elementary' %} class="active"{% endif %}>
+            <a href="/management/plist/elementary/">待审核</a>
+          </li>
+          <li{% if menu_active == 'passed' %} class="active"{% endif %}>
+            <a href="/management/plist/passed/">已通过</a>
+          </li>
+          <li{% if menu_active == 'notpass' %} class="active"{% endif %}>
+            <a href="/management/plist/notpass/">不通过</a>
+          </li>
+          <li{% if menu_active == 'unqualified' %} class="active"{% endif %}>
+            <a href="/management/plist/unqualified/">不合格</a>
+          </li>
+          <li{% if menu_active == 'search' %} class="active"{% endif %}>
+            <a href="/management/plist/search/">搜索</a>
+          </li>
+          <li{% if menu_active == 'stat' %} class="active"{% endif %}>
+            <a href="/management/stat/">统计/准考证</a>
+          </li>
+          <li{% if menu_active == 'lock' %} class="active"{% endif %}>
+            <a href="/management/lock/">各种锁定</a>
+          </li>
+          <li{% if menu_active == 'export' %} class="active"{% endif %}>
+            <a href="/management/export/">各种导出</a>
+          </li>
+          <li{% if menu_active == 'prompt' %} class="active"{% endif %}>
+            <a href="/management/prompt/">修改提示</a>
+          </li>
+          <li{% if menu_active == 'change_passwd' %} class="active"{% endif %}>
+            <a href="/management/passwd/">修改密码</a>
+          </li>
+          <li><a href="/management/logout/">退出</a></li>
+        </ul>
+        <!-- 
+        <ul class="nav" style="float:right;">
+          <li><a href="/admin/">超级后台</a></li>
+        </ul>
+         -->
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block content %}{% endblock %}
+
+<div class="footer"></div>
+
+<script src="/static/js/jquery-1.9.1.min.js"></script>
+{% block js_block %}
+{% endblock %}
+</body>
+</html>

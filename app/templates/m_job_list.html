@@ -1,0 +1,50 @@
+{% extends 'm_layout.html' %}
+
+{% block content %}
+
+<style>
+table {border-collapse: collapse;border:1px solid #cfcfcf;}
+table td {border:1px solid #cfcfcf;}
+</style>
+
+<div class="content-container">
+  {% if message %}
+  <h4>{{ message }}</h4>
+  {% endif %}
+  <div>
+    <h3>岗位列表</h3>
+    <p>
+      <a href="/management/job/add/">添加岗位信息</a>
+    </p>
+  </div>
+  <div style="clear:both;"></div>
+  {% if jobs %}
+  <table>
+    <tr>
+      <td>岗位类型</td>
+      <td>招聘部门</td>
+      <td>专业需求</td>
+      <td>招聘人数</td>
+      <td>学历要求</td>
+      <td>详细要求</td>
+      <td>&nbsp;</td>
+    </tr>
+    {% for job in jobs %}
+    <tr>
+      <td>{{ job.job_type }}</td>
+      <td>{{ job.department }}</td>
+      <td>{{ job.major }}</td>
+      <td>{{ job.count }}</td>
+      <td>{{ job.degree_limit }}</td>
+      <td>{{ job.degree_des }}</td>
+      <td>
+        <a href="/management/job/{{ job.id }}/del/" onclick="return confirm('确定要删除？');">删除</a>
+        <a href="/management/job/{{ job.id }}/edit/">编辑</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</div>
+
+{% endblock %}

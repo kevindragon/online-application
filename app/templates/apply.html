@@ -1,0 +1,454 @@
+{% extends 'layout.html' %}
+
+{% load staticfiles %}
+
+{% block css_block %}
+<link rel="stylesheet" href="{% static 'jquery-ui/css/cupertino/jquery-ui-1.10.2.custom.min.css' %}" type="text/css" media="screen" />
+{% endblock %}
+
+{% block content %}
+
+<div>
+  <div class="left-flow">{% include 'left-flow.html' with workflow_step=3 %}</div>
+  <div class="right-content right-line">
+    <p>带 <font color="red">*</font> 的为必填项</p>
+    <form action="/{% if 'edit' == operate %}update{% else %}apply/{{job_id}}{% endif %}/" method="post">
+    {% csrf_token %}
+    {{ peopleForm.non_field_errors }}
+    <table width="100%" class="form-table">
+      <tr>
+        <td>
+          <table>
+            <tr>
+              <td class="control-label" width="150">岗位<font color="red">*</font></td>
+              <td>{{ peopleForm.job }}{{ peopleForm.job.errors }}</td>
+            </tr>
+            <tr>
+              <td class="control-label">身份证号<font color="red">*</font></td>
+              <td>
+                {{ peopleForm.id_number }}
+                <span class="help-inline">(请务必填写真实身份证号码，用于登录系统)</span>
+                {{ peopleForm.id_number.errors }}
+              </td>
+            </tr>
+            <tr>
+              <td class="control-label">电子邮件<font color="red">*</font></td>
+              <td>
+                {{ peopleForm.email }}
+                <span class="help-inline">(请填写常用邮箱地址，用于发送信息及找回密码)</span>
+                {{ peopleForm.email.errors }}
+              </td>
+            </tr>
+            {% if 'edit' != operate %}
+            <tr>
+              <td class="control-label">设置登录密码<font color="red">*</font></td>
+              <td>
+                {{ peopleForm.query_password }}
+                <span class="help-inline">(用于登录系统，请牢记)</span>
+                {{ peopleForm.query_password.errors }}
+              </td>
+            </tr>
+            <tr>
+              <td class="control-label">确认登录密码<font color="red">*</font></td>
+              <td>
+                {{ peopleForm.query_password2 }}
+                {{ peopleForm.query_password2.errors }}
+              </td>
+            </tr>
+            {% endif %}
+          </table>
+        </td>
+        <td width="110">
+          <div>
+            <img src="{% if peopleForm.avatar.value %}{{peopleForm.avatar.value}}{% else %}/static/images/blank_picture.jpg{% endif %}" width="100" id="avatar_thumb" />
+            {{ peopleForm.avatar }}
+          </div>
+          <div>
+            <span id="avatar_btn">上传照片</span>
+            {{ peopleForm.avatar.errors }}
+            </div>
+        </td>
+      </tr>
+    </table>
+    <div class="block-title">[个人信息]</div>
+    <table width="100%" bgcolor="#b3c8e3" class="form-table">
+      <tr>
+        <td class="control-label" width="120">姓名<font color="red">*</font></td>
+        <td width="280">{{ peopleForm.name }}{{ peopleForm.name.errors }}</td>
+        <td class="control-label" width="140">性别<font color="red">*</font></td>
+        <td>
+          {{ peopleForm.gender }}
+          {{ peopleForm.gender.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">民族<font color="red">*</font></td>
+        <td>{{ peopleForm.nation }}{{ peopleForm.nation.errors }}</td>
+        <td class="control-label">出生日期<font color="red">*</font></td>
+        <td>
+          {{ peopleForm.birthday }}
+          {{ peopleForm.birthday.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">政治面貌<font color="red">*</font></td>
+        <td>{{ peopleForm.political_status }}{{ peopleForm.political_status.errors }}</td>
+        <td class="control-label">婚姻状况<font color="red">*</font></td>
+        <td>{{ peopleForm.marital_status }}{{ peopleForm.marital_status.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">籍贯<font color="red">*</font></td>
+        <td id="hometown">
+          {{ peopleForm.hometown_prov }}
+          {{ peopleForm.hometown_city }}
+          {{ peopleForm.hometown_prov.errors }}
+        </td>
+        <td class="control-label">户口所在地<font color="red">*</font></td>
+        <td id="residence">
+          {{ peopleForm.residence_prov }}
+          {{ peopleForm.residence_city }}
+          {{ peopleForm.residence_prov.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">参加工作时间<font color="red">*</font></td>
+        <td>
+          {{ peopleForm.start_work_year }}
+          {{ peopleForm.start_work_month }}
+          {% if peopleForm.start_work_year.errors %}
+          {{ peopleForm.start_work_year.errors }}
+          {% else %}
+          {{ peopleForm.start_work_month.errors }}
+          {% endif %}
+        </td>
+        <td class="control-label">答题拟用文字<font color="red">*</font></td>
+        <td>{{ peopleForm.test_paper_language }}{{ peopleForm.test_paper_language.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">计算机等级<font color="red">*</font></td>
+        <td>
+          {{ peopleForm.compute_level }}<span class="help-inline">(没有时请填"无")</span>
+          {{ peopleForm.compute_level.errors }}
+        </td>
+        <td class="control-label">外语语种及水平<font color="red">*</font></td>
+        <td>{{ peopleForm.foreign_language_level }}{{ peopleForm.foreign_language_level.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">手机<font color="red">*</font></td>
+        <td>{{ peopleForm.phone }}{{ peopleForm.phone.errors }}</td>
+        <td class="control-label">其他联系方式</td>
+        <td>{{ peopleForm.other_contact }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">是否蒙汉兼通</td>
+        <td>{{ peopleForm.is_han_mongolia_both }}{{ peopleForm.is_han_mongolia_both.errors }}</td>
+        <td class="control-label">是否服务基层项目人员</td>
+        <td>{{ peopleForm.is_basic_attendant }}{{ peopleForm.is_basic_attendant.errors }}</td>
+      </tr>
+    </table>
+    <div class="block-title">[学历信息]</div>
+    <table width="100%" bgcolor="#b3c8e3" class="form-table">
+      <tr>
+        <td rowspan="3" valign="top" width="80">
+          <div style="margin-top:4px;width:80px;">第一学历<font color="red">*</font></div>
+        </td>
+        <td class="control-label" width="70">起始时间</td>
+        <td width="330">
+          {{ peopleForm.first_edu_start_year }} {{ peopleForm.first_edu_start_month }}
+          {% if peopleForm.first_edu_start_year.errors %}
+          {{ peopleForm.first_edu_start_year.errors }}
+          {% else %}
+          {{ peopleForm.first_edu_start_month.errors }}
+          {% endif %}
+        </td>
+        <td class="control-label" width="70">结束时间</td>
+        <td>
+          {{ peopleForm.first_edu_end_year }}{{ peopleForm.first_edu_end_month }}
+          {% if peopleForm.first_edu_end_year.errors %}
+          {{ peopleForm.first_edu_end_year.errors }}
+          {% else %}
+          {{ peopleForm.first_edu_end_month.errors }}
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">获得学位</td>
+        <td>{{ peopleForm.first_edu_degree }}{{ peopleForm.first_edu_degree.errors }}</td>
+        <td class="control-label">获得学历</td>
+        <td>{{ peopleForm.first_edu_bkgrd }}{{ peopleForm.first_edu_bkgrd.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">毕业院校</td>
+        <td>{{ peopleForm.first_edu_university }}{{ peopleForm.first_edu_university.errors }}</td>
+        <td class="control-label">所学专业</td>
+        <td>{{ peopleForm.first_edu_major }}{{ peopleForm.first_edu_major.errors }}</td>
+      </tr>
+    </table>
+    <table width="100%" class="form-table">
+      <tr>
+        <td rowspan="3" valign="top" width="80">
+          <div style="margin-top:4px;width:80px;">最高学历<font color="red">*</font></div>
+        </td>
+        <td class="control-label" width="70">起始时间</td>
+        <td width="330">
+          {{ peopleForm.high_edu_start_year }}{{ peopleForm.high_edu_start_month }}
+          {% if peopleForm.high_edu_start_year.errors %}
+          {{ peopleForm.high_edu_start_year.errors }}
+          {% else %}
+          {{ peopleForm.high_edu_start_month.errors }}
+          {% endif %}
+          
+        </td>
+        <td class="control-label" width="70">结束时间</td>
+        <td>
+          {{ peopleForm.high_edu_edu_year }}
+          {{ peopleForm.high_edu_edu_month }}
+          {% if peopleForm.high_edu_edu_year.errors %}
+          {{ peopleForm.high_edu_edu_year.errors }}
+          {% else %}
+          {{ peopleForm.high_edu_edu_month.errors }}
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">获得学位</td>
+        <td>{{ peopleForm.high_edu_degree }}{{ peopleForm.high_edu_degree.errors }}</td>
+        <td class="control-label">获得学历</td>
+        <td>{{ peopleForm.high_edu_bkgrd }}{{ peopleForm.high_edu_bkgrd.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">毕业院校</td>
+        <td>{{ peopleForm.high_edu_university }}{{ peopleForm.high_edu_university.errors }}</td>
+        <td class="control-label">所学专业</td>
+        <td>{{ peopleForm.high_edu_major }}{{ peopleForm.high_edu_major.errors }}</td>
+      </tr>
+    </table>
+    <table width="100%" bgcolor="#b3c8e3" class="form-table">
+      <tr>
+        <td rowspan="4" valign="top" width="80">
+          <div style="margin-top:4px;width:80px;">其他学习</div>
+        </td>
+        <td class="control-label" width="70">起始时间</td>
+        <td width="330">
+          {{ peopleForm.other_edu_start_year }}{{ peopleForm.other_edu_start_month }}
+          {% if peopleForm.other_edu_start_year.errors %}
+          {{ peopleForm.other_edu_start_year.errors }}
+          {% else %}
+          {{ peopleForm.other_edu_start_month.errors }}
+          {% endif %}
+        </td>
+        <td class="control-label" width="70">结束时间</td>
+        <td>
+          {{ peopleForm.other_edu_edu_year }}{{ peopleForm.other_edu_edu_month }}
+          {{ peopleForm.other_edu_edu_year.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">获得学位</td>
+        <td>{{ peopleForm.other_edu_degree }}{{ peopleForm.other_edu_degree.errors }}</td>
+        <td class="control-label">获得学历</td>
+        <td>{{ peopleForm.other_edu_bkgrd }}{{ peopleForm.other_edu_bkgrd.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">学习单位</td>
+        <td>{{ peopleForm.other_edu_unit }}{{ peopleForm.other_edu_unit.errors }}</td>
+        <td class="control-label">所学专业</td>
+        <td>{{ peopleForm.other_edu_major }}{{ peopleForm.other_edu_major.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">学习形式</td>
+        <td>{{ peopleForm.other_edu_type }}{{ peopleForm.other_edu_type.errors }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    <div class="another-edu">
+      <a href="javascript:void(0);" id="add-other-edu" s='1' title="添加另一项其他学习"></a>
+    </div>
+    <table width="100%" style="display:none;" class="form-table another-edu-form">
+      <tr>
+        <td rowspan="4" valign="top" width="80">
+          <div style="margin-top:4px;width:80px;">其他学习</div>
+        </td>
+        <td class="control-label" width="70">起始时间</td>
+        <td width="330">
+          {{ peopleForm.other_edu_start_year_2 }}{{ peopleForm.other_edu_start_month_2 }}
+          {% if peopleForm.other_edu_start_year_2.errors %}
+          {{ peopleForm.other_edu_start_year_2.errors }}
+          {% else %}
+          {{ peopleForm.other_edu_start_month_2.errors }}
+          {% endif %}
+        </td>
+        <td class="control-label" width="70">结束时间</td>
+        <td>
+          {{ peopleForm.other_edu_edu_year_2 }}{{ peopleForm.other_edu_edu_month_2 }}
+          {{ peopleForm.other_edu_edu_year_2.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td class="control-label">获得学位</td>
+        <td>{{ peopleForm.other_edu_degree_2 }}{{ peopleForm.other_edu_degree.errors_2 }}</td>
+        <td class="control-label">获得学历</td>
+        <td>{{ peopleForm.other_edu_bkgrd_2 }}{{ peopleForm.other_edu_bkgrd_2.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">学习单位</td>
+        <td>{{ peopleForm.other_edu_unit_2 }}{{ peopleForm.other_edu_unit_2.errors }}</td>
+        <td class="control-label">所学专业</td>
+        <td>{{ peopleForm.other_edu_major_2 }}{{ peopleForm.other_edu_major_2.errors }}</td>
+      </tr>
+      <tr>
+        <td class="control-label">学习形式</td>
+        <td>{{ peopleForm.other_edu_type_2 }}{{ peopleForm.other_edu_type_2.errors }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <div class="block-title">[其他信息]</div>
+    <div style="margin:5px 0px;">业绩成果、获奖经历及其他需要说明的情况</div>
+    <div>
+      {{ peopleForm.special_skill }}
+      {{ peopleForm.special_skill.errors }}
+    </div>
+    <div class="block-title">[资格信息]</div>
+    <table width="100%" bgcolor="#b3c8e3" class="form-table">
+      <tr>
+        <td class="control-label" width="120">专业技术资格</td>
+        <td>{{ peopleForm.technical_qualification }}{{ peopleForm.technical_qualification.errors }}</td>
+      </tr>
+    </table>
+    <table width="100%">
+      <tr>
+        <td class="control-label" width="120">执业资格</td>
+        <td colspan="3">{{ peopleForm.operation_qualification }}{{ peopleForm.operation_qualification.errors }}</td>
+      </tr>
+    </table>
+    <table width="100%" bgcolor="#b3c8e3">
+      <tr>
+        <td class="control-label" width="120">其他资格</td>
+        <td colspan="3">{{ peopleForm.other_qualification }}{{ peopleForm.other_qualification.errors }}</td>
+      </tr>
+    </table>
+    <div class="std-blank-10"></div>
+    <div class="btn-group-center">
+      <input type="submit" value="提交" name="submit" class="btn" />
+      {% if 'edit' == operate %}
+      <a href="/myinfo" class="btn second-btn">返回</a>
+      {% else %}
+      <a href="/" class="btn second-btn">取消</a>
+      {% endif %}
+    </div>
+    </form>
+      
+    <div class="std-blank-20"></div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript" src="{% static 'js/jquery.cityselect.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/swfupload.js' %}"></script>
+<script type="text/javascript">
+
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+    this.startUpload();
+}
+function uploadSuccess(file, serverData) {
+    try {
+        $('#avatar_thumb').prop("src", serverData);
+        $('input[name=avatar]').val(serverData);
+    } catch (ex) {}
+}
+var swfu;
+
+$(function(){
+	{% if 'edit' == operate %}
+	$('input[name=id_number], input[name=email]')
+	.attr('readonly', true)
+    .css('background-color', '#f1f1f1');
+	{% endif %}
+	// 上传照片
+    var settings = {
+  	    post_params: {
+  	        "csrfmiddlewaretoken": "{{ csrf_token }}"
+  	    },
+        flash_url : "/static/flash/swfupload.swf?v=1",
+        upload_url: "/uploadimage/",
+        button_image_url: '/static/images/choice_picture.jpg', 
+        file_size_limit : "5 MB",
+        file_types : "*.gif;*.jpg;*.png",
+        file_queue_limit : 1,
+        file_post_name : 'avatar', 
+
+        //button_image_url : "XPButtonUploadText_61x22.png",
+        button_placeholder_id : "avatar_btn",
+        button_width: 90,
+        button_height: 24,
+        button_text_left_padding : 5,
+        button_text_top_padding: 3, 
+
+        file_dialog_complete_handler : fileDialogComplete,
+        upload_success_handler : uploadSuccess
+      };
+      swfu = new SWFUpload(settings);
+
+    // 籍贯
+    $("#id_hometown_city").html("<option value=''> -- </option>");
+    $("#hometown").citySelect({  
+        url:"/static/js/city.min.js",
+        prov_selector:"#id_hometown_prov",
+        city_selector:"#id_hometown_city",
+        prov:"{{ peopleForm.hometown_prov.value }}", 
+        city:"{{ peopleForm.hometown_city.value }}", 
+        nodata:"none"
+    });
+    // 户口
+    $("#id_residence_city").html("<option value=''> -- </option>");
+    $("#residence").citySelect({  
+        url:"/static/js/city.min.js",
+        prov_selector:"#id_residence_prov",
+        city_selector:"#id_residence_city",
+        prov:"{{ peopleForm.residence_prov.value }}", 
+        city:"{{ peopleForm.residence_city.value }}", 
+        nodata:"none"
+    });
+    //出生年月
+    var date = new Date();
+    $("#id_birthday").datepicker({
+        dateFormat:"yy-mm-dd", 
+        maxDate:date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(), 
+        changeMonth: true,
+        changeYear: true, 
+        yearRange: "1800:"+date.getFullYear(), 
+        defaultDate: 0});
+    // 参加工作时间
+    $('#id_start_work_year').change(function(){
+    	if (0==$(this).val()) {
+    		$('#id_start_work_month').val(0);
+    	} else if (0==$('#id_start_work_month').val()) {
+    		$('#id_start_work_month').val('');
+    	}
+    });
+    // 添加另一项其他学习
+    $('#add-other-edu').click(function(){
+    	if ('1' == $(this).attr('s')) {
+            $('.another-edu-form').fadeIn();
+            $(this).css('background-position', '-26px 0px').attr('s', '0')
+            .attr('title', '取消另一项其他学习');
+    	} else {
+            $(':input','.another-edu-form')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+            $('.another-edu-form').fadeOut('fast');
+            $(this).css('background-position', '0px 0px').attr('s', '1')
+            .attr('title', '添加另一项其他学习');
+    	}
+    });
+});
+</script>
+{% endblock %}
