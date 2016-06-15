@@ -306,12 +306,24 @@ def m_auth_check(func):
     return wrapper
 
 @m_auth_check
-def m_people_del(request):
+def m_people_handle(request):
     if request.method == 'POST' and request.POST.get('operate') == 'del':
         people_ids = request.POST.getlist('people_id')
         peoples = People.objects.filter(pk__in=people_ids)
         peoples.delete()
         request.session['message'] = u'删除成功'
+        return redirect(request.META['HTTP_REFERER'])
+    elif request.method == 'POST' and request.POST.get('operate') == 'pass':
+        people_ids = request.POST.getlist('people_id')
+        for people_id in people_ids:
+            people = People.objects.get(pk=people_id)
+
+            people.peopleextra.audit_step
+            people.peopleextra.reason = "通过初审，请打印资格审查表（1式2份）"
+            people.peopleextra.save()
+
+            people.audit_step = 1
+            people.save()
         return redirect(request.META['HTTP_REFERER'])
 
 @m_auth_check
